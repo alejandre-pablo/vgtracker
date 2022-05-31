@@ -1,0 +1,566 @@
+@import "~bootstrap/scss/bootstrap";
+
+html {
+    background: rgb(177, 177, 177);
+    display: flex;
+    height: 100%;
+    background: linear-gradient(#181d20fa,
+            #181d20fa),
+        url(../public/img/background.png);
+    background-size: auto;
+    background-repeat: repeat-y;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: none;
+    width: 100%;
+    height: 100%;
+    padding: 2%;
+}
+
+::placeholder {
+    color:#9fafb7;
+}
+
+ul {
+    list-style-type: none;
+}
+
+.appTitle {
+    margin-left: 3rem;
+    font-size: 3rem;
+    display: inline-block;
+    color: #9fafb7;
+    padding-bottom: 0.25rem;
+}
+
+.gamesList {
+    width: 93vw;
+    height: 100%;
+}
+
+/* --------------------- NAV BAR --------------------- */
+
+.navItem {
+    color: white;
+}
+
+/* --------------------- GAMES LIST --------------------- */
+.listColumn {
+    border-right: 1px solid #9fafb7;
+    padding: 0;
+}
+/* .list {
+    background-color: #2d373c;
+    font-size: 1rem;
+    max-width: 100%;
+    margin-top: 1rem;
+    margin-bottom: 20px;
+    padding: 8px 16px;
+    border-radius: 5px;
+    box-shadow: 0 5px 30px #8c9fa921;
+} */
+
+.gamesForm {
+    font-size: 1rem;
+    max-width: 1400px;
+    margin: auto;
+    margin-bottom: 20px;
+    padding: 8px 16px;
+}
+
+.game > div {
+    margin-left: 0 !important;
+}
+
+.game > .row {
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+}
+
+
+.game:hover {
+    background-color: #9fafb73f;
+}
+
+/* --------------------- GAME ROW FIELDS --------------------- */
+.game > .row > .col, .game > .row > .col-md-4 {
+    display: flex;
+}
+.gameTitle {
+    margin: auto;
+    font-style: italic;
+    display: inline-block;
+    color: white;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.gamePlatform {
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    vertical-align: center;
+    color: white;
+}
+
+.gamePlaytime {
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.gameRating {
+    margin: auto;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+/* --------------------- BUTTONS --------------------- */
+
+.rightButton {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.buttonAdd {
+    display: block;
+    outline: none;
+    padding: 8px;
+    font-size: 15px;
+    border: 0px solid;
+    border-radius: 5px;
+    color: white;
+    background-color: green;
+}
+
+.buttonAdd[disabled] {
+    opacity: 0.3;
+}
+
+.buttonRemove {
+    margin: auto;
+    outline: none;
+    padding: 0;
+    border: none;
+    background: none;
+    font-size: 1.7rem;
+    color: #9fafb7;
+}
+
+.buttonAddGame {
+    background: none;
+    color: #9fafb7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 100px;
+    margin: 0.5rem;
+    padding-top: -0.5rem;
+    width: 3rem;
+    height: 3rem;
+    float: right;
+    outline: none;
+    font-size: 3.5rem;
+    border: none;
+}
+
+.buttonAddGame:hover {
+    color: white;
+}
+
+/* --------------------- ADD GAME MODAL ---------------------*/
+.modalForm {
+    color: white;
+}
+.modal-dialog {
+    margin-top: 3rem;
+    max-width: 50vw;
+}
+
+.modal-content {
+    background-color: #2d373c !important;
+}
+.modal-body {
+    background-color: #9fafb7;
+}
+
+/* --------------------- ADD GAME FORM --------------------- */
+.inputText {
+    background-color: #2d373c;
+    border: none;
+    border-bottom: 1px solid #9fafb7;
+}
+.inputText:hover, .inputText:focus{
+    color: #fff;
+    background: none;
+}
+
+.formLabel {
+    color:#9fafb7;
+}
+
+.formGroup {
+    background-color: #2d373c;
+    border: 1px solid #9fafb7;
+    border-radius: 8px;
+    box-shadow: 8px 8px 5px #15181a;
+    padding: 0.5rem;
+    margin: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.formHeader {
+    font-size: 1.2rem;
+    padding-left: 0.2rem;
+    color: white;
+    margin: 0;
+}
+
+.ratingsLabel {
+    padding-left: 0.8rem;
+    color:#9fafb7;
+}
+
+.ratingsSubLabel {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0 !important;
+}
+
+.ratingsRow > div {
+    max-width: 30%;
+    padding: 0.3rem;
+    border: 1px solid #9fafb7;
+    border-radius: 8px;
+    box-shadow: 5px 5px 3px #15181a;
+}
+
+.ratingsRow > div > div > span{
+    display: flex !important;
+    justify-content: center;
+}
+
+.modal-body form .formGroup .ratingsRow {
+    display: flex;
+    justify-content: space-around;
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+}
+
+/* --------------------- FIRST ROW ---------------------*/
+.listHeader {
+    border-bottom: 1px solid #9fafb7;
+    margin-left: 0;
+    margin-right: 0;
+   /*  background: rgb(149, 167, 176);
+    background: radial-gradient(circle, rgb(134, 151, 160) 0%, rgba(116, 142, 151, 1) 35%, rgba(38, 46, 51, 1) 100%); */
+    /* border-radius: 5px; */
+}
+
+.columnTitle {
+    color: #9fafb7;
+    font-size: 1.1rem;
+    min-width: fit-content;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.columnFill {
+    width: 1.7rem;
+    padding-right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+}
+
+/* --------------------- SIDE NAVBAR ---------------------*/
+
+.sideBarColumn {
+    height: 75vh;
+    border-right: 1px solid #9fafb7;
+}
+.tabSelectors {
+    margin-top: 3.2rem;
+}
+
+.nav-link {
+    color: white;
+    text-align: center;
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show>.nav-link {
+    color: #fff;
+    transition: 0.5s;
+    border-radius: 0;
+    background: rgb(25, 29, 33);
+}
+
+.nav-link:hover,
+.nav-link:focus {
+    color: white;
+}
+
+.nav-item {
+    border-radius: 0;
+    margin: 0.5rem;
+    margin-right: 0;
+    transition: 0.5s;
+    background: linear-gradient(90deg, var(--c1, rgb(92, 187, 79)) 0%, var(--c1, rgb(92, 187, 79)) 48%, rgba(116, 142, 151, 0) 56%, rgba(38, 46, 51, 0) 90%) var(--x, 83%)/200%;
+    border: 1px solid #9fafb7;
+    border-left: 0;
+    border-right: 0;
+}
+
+.nav-item:hover {
+    --x: 0;
+}
+
+.tabFinished, #tabs-tabpane-Finished {
+    --c1: rgb(92, 187, 79);
+}
+
+.tabPlaying, #tabs-tabpane-Playing {
+    --c1: rgb(232, 167, 74);
+}
+
+.tabOnHold, #tabs-tabpane-OnHold {
+    --c1: rgb(84, 138, 203);
+}
+
+.tabDropped, #tabs-tabpane-Dropped {
+    --c1: rgb(220, 74, 232);
+}
+
+.tabOthers, #tabs-tabpane-Other {
+    --c1: rgb(203, 84, 84);
+}
+
+.active > .listHeader >.col >.bookmark {
+    margin-right: -0.1rem;
+    width: 1.8rem;
+    height: 1.8rem;
+    background-color: var(--c1);
+    clip-path: polygon(0 0, 100% 0, 100% 100%);
+}
+
+/* --------------------- TOP NAVBAR ---------------------*/
+.topMenu {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+.navbar {
+    padding-top: 1rem !important;
+}
+
+.navItem {
+    padding: 0.25rem 0.75rem 0.25rem 0.75rem;
+    text-decoration: none;
+    color:#9fafb7;
+    font-size: 1.2rem;
+    border-radius: 1rem;
+}
+
+.navItem:hover {
+    color:white;
+}
+
+/* --------------------- SEARCH BAR ---------------------*/
+
+.searchBarButton {
+    font-size: 1.1rem;
+    background: none;
+    border: none;
+    color:#9fafb7;
+
+}
+
+.searchBarLoading {
+    color: #9fafb7;
+}
+.buttonContainer {
+    width: 30px;
+    height: 30px;
+    margin-left: -2rem;
+    position: fixed;
+}
+
+/* --------------------- SEARCH RESULTS ---------------------*/
+.searchList {
+    margin: 1rem;
+}
+
+.emptySearchList {
+    color: white;
+    /* text-shadow: 0px 0px 0 #899CD5, 1px 1px 0 #8194CD, 2px 2px 0 #788BC4, 3px 3px 0 #6F82BB, 4px 4px 0 #677AB3, 5px 5px 0 #5E71AA, 6px 6px 0 #5568A1, 7px 7px 0 #4C5F98, 8px 8px 0 #445790, 9px 9px 0 #3B4E87, 10px 10px 0 #32457E, 11px 11px 0 #2A3D76, 12px 12px 0 #21346D, 13px 13px 0 #182B64, 14px 14px 0 #0F225B, 15px 15px 0 #071A53, 16px 16px 0 #02114A, 17px 17px 0 #0B0841, 18px 18px 0 #130039, 19px 19px 0 #1C0930, 20px 20px 0 #251227, 21px 21px 20px rgba(0,0,0,1), 21px 21px 1px rgba(0,0,0,0.5), 0px 0px 20px rgba(0,0,0,.2);
+     */font-size: 1.5rem;
+    text-align: center;
+    margin-top: 3rem;
+}
+
+.emptyListImage {
+    max-width: 25%;
+    max-height: 25%;
+    margin: auto;
+    margin-top: 2rem;
+    border-radius: 50%;
+   transition: transform 2s ease-in-out;
+}
+
+.emptyListImage:hover {
+    transform: rotate(3420deg)/*  skewX(-159deg) skewY(18deg) */;
+  }
+.searchedGame {
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #9fafb7;
+}
+
+.searchTitle {
+    margin-left: 3rem;
+    font-size: 2rem;
+    display: inline-block;
+    color: #9fafb7;
+}
+
+.gameName {
+    color:white;
+    font-weight: bold;
+    font-style: italic;
+    margin-bottom: 0.5rem;
+}
+
+.gameInfo {
+    font-size: 0.95rem;
+    color:white;
+}
+
+.gameImage {
+    display: block;
+    min-width: 210px;
+    min-height: 90px;
+    width: 210px;
+    height: 105px;
+    border-radius: 8px;
+}
+
+.imageContainer {
+    position: relative;
+    width: min-content;
+}
+
+.imageOverlay {
+    position: absolute;
+    bottom: 25%;
+    left: 96%;
+    right: 0;
+    overflow: hidden;
+    width: 4%;
+    height: 50%;
+    transition: .5s ease;
+    border-radius: 8px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border: 2px solid #9fafb7;
+    border-right: none;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.imageContainer:hover .imageOverlay {
+    width: 50%;
+    left: 50%;
+}
+
+.imageOverlay * {
+    color: #9fafb7;
+    font-size: 1.8rem;
+    position: relative;
+    top: 25%;
+    left:35%;
+
+}
+
+/* --------------------- OVERRIDES ---------------------*/
+
+input[type="text"] {
+    color:white;
+    padding: 0.25rem 4rem 0.25rem 0.75rem;
+    background: none;
+    border: none;
+    border-bottom: 1px solid #9fafb7;
+}
+input[type="text"]:hover, input[type="text"]:focus {
+    border-bottom: 1px solid white;
+}
+
+select {
+    color:#9fafb7;
+    padding: 0.25rem 4rem 0.25rem 0.75rem;
+    background: none;
+    border: none;
+    border-bottom: 1px solid #9fafb7;
+    font-size: 1.05rem;
+}
+select:hover, select:focus {
+    border-bottom: 1px solid white;
+}
+
+.form-select {
+    outline: none;
+    color:white;
+    border-radius: 0;
+    appearance: button;
+    padding-top: 1.5rem !important;
+    padding-bottom: 0 !important;
+}
+.form-control {
+    outline: none;
+    border-radius: 0;
+}
+
+.container-xxl {
+    margin: 0px !important;
+    max-width: 95vw;
+}
+
+.col-sm-2 {
+    padding-right: 0px;
+}
+
+.mb-3{
+    margin-bottom: 0.75rem !important;
+}
+
+:focus-visible {
+    outline: none;
+}
+
+.btn-close {
+    color: white;
+    background: transparent url("data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27 fill=%27%23fff%27%3e%3cpath d=%27M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z%27/%3e%3c/svg%3e") center/1em auto no-repeat;
+}
+
+option {
+    background-color: #9fafb7;
+    color: #2d373c;
+    font-weight: bold;
+}
+
+.form-floating > .form-control:focus, .form-floating > .form-control:not(:placeholder-shown) {
+    padding-top: 2.1rem;
+    padding-left: 1rem;
+}       
