@@ -1,10 +1,9 @@
 import React from 'react'
-import { Rating } from 'react-simple-star-rating'
 import { MdClose } from 'react-icons/md';
 import { AiOutlineEdit } from 'react-icons/ai'
 import { Row, Col } from 'react-bootstrap';
 
-const Game = (props) => {
+const GamePlanToPlay = (props) => {
     const { onClickRemoveItem, onClickEditItem, game} = props;
 
     return (
@@ -13,16 +12,8 @@ const Game = (props) => {
                 <Col md ={4}>
                     <span className='gameTitle'>{game.title}</span>
                 </Col>
-                <Col>
-                <span className='gamePlatform'> {game.platform} </span> 
-                </Col>
-                <Col>
-                    <span className='gamePlaytime'>{game.playtime}</span>
-                </Col>
-                <Col>
-                    <span className='gameRating'>
-                        <Rating readonly={true} size={20} ratingValue={game.rating.reduce((a, b) => a + b, 0) / game.rating.length} fillColor ={"#fff"} emptyColor={'#2d373c'}/>
-                    </span>
+                <Col md ={5}>
+                <span className='gamePlatform'> {game.detail} </span> 
                 </Col>
                 <Col className='rightButton'>
                     <button className="buttonEdit" onClick={(e) => { onClickEditItem(game.id) }} title="Edit entry"><AiOutlineEdit /></button>
@@ -33,4 +24,4 @@ const Game = (props) => {
     )
 }
 
-export default Game
+export default GamePlanToPlay

@@ -1,43 +1,66 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { Tab, Nav, Col, Row  } from 'react-bootstrap';
+import EditForm from './forms/EditForm';
 
 import Game from './Game'
+import GamePlanToPlay from './GamePlanToPlay';
 
 const List = (props) => {
     const {list, setList} = props;
-    const onClickRemoveItem = (title) => {
+
+    const onClickRemoveItem = (id) => {
         if(window.confirm("Delete this entry?")) {
-            var tmpList = list.filter((item => item.title !== title))
-            if(tmpList !== list) {
-                localStorage.setItem('games', tmpList) 
-            }
+            var tmpList = list.filter((item => item.id !== id))
+
             setList(tmpList);
         }
     };
+
+    const handleUpdateItem = (game) => {
+        var gameIndex = list.findIndex((item => item.id === game.id))
+        let tmpList = [...list];
+        tmpList[gameIndex] = game;
+        setList(tmpList);
+    }
+
+    const [gameId, setGameId] = useState(-1);
+    const [showModal, setShowModal] = useState(false);
+    const handleEditGame = (id) => {
+        setGameId(id);
+        setShowModal(true);
+    }
+    const handleCloseModal = () => {
+        setShowModal(false);
+    }
  
     const gameListFinished = list.map ((game) => (
         game.playstatus === "finished" ? 
-            <Game key={game.title} onClickRemoveItem ={onClickRemoveItem} game ={game} />
+            <Game key={game.id} onClickRemoveItem ={onClickRemoveItem} onClickEditItem = {handleEditGame} game ={game} />
         : <></>  
     ));
-    const gameListPlaying = list.map ((item) => (
-        item.playstatus === "playing" ? 
-            <Game onClickRemoveItem = {onClickRemoveItem} game = {item} />
+    const gameListPlaying = list.map ((game) => (
+        game.playstatus === "playing" ? 
+            <Game key={game.id} onClickRemoveItem = {onClickRemoveItem} onClickEditItem = {handleEditGame} game = {game}/>
         : <></>  
     ));
-    const gameListOnHold = list.map ((item) => (
-        item.playstatus === "onhold" ? 
-            <Game onClickRemoveItem = {onClickRemoveItem} game = {item} /> 
+    const gameListOnHold = list.map ((game) => (
+        game.playstatus === "onhold" ? 
+            <Game key={game.id} onClickRemoveItem = {onClickRemoveItem} onClickEditItem = {handleEditGame} game = {game} /> 
         : <></>  
     ));
-    const gameListDropped = list.map ((item) => (
-        item.playstatus === "dropped" ? 
-            <Game onClickRemoveItem = {onClickRemoveItem} game = {item} /> 
+    const gameListDropped = list.map ((game) => (
+        game.playstatus === "dropped" ? 
+            <Game key={game.id} onClickRemoveItem = {onClickRemoveItem} onClickEditItem = {handleEditGame} game = {game}/> 
         : <></>  
     ));
-    const gameListOther = list.map ((item) => (
-        item.playstatus === "other" ? 
-            <Game onClickRemoveItem = {onClickRemoveItem} game = {item} /> 
+    const gameListPlanToPlay = list.map ((game) => (
+        game.playstatus === "plantoplay" ? 
+            <GamePlanToPlay key={game.id} onClickRemoveItem = {onClickRemoveItem} onClickEditItem = {handleEditGame} game = {game}/> 
+        : <></>  
+    ));
+    const gameListOther = list.map ((game) => (
+        game.playstatus === "other" ? 
+            <Game onClickRemoveItem = {onClickRemoveItem} onClickEditItem = {handleEditGame} game = {game}/> 
         : <></>  
     ));
 
@@ -50,9 +73,17 @@ const List = (props) => {
         <Col className='columnFill'><div className='bookmark'></div></Col>
     </Row>
 
+    const listHeaderPlanToPlay = 
+    <Row className='listHeader'>
+        <Col md = {4} className="columnTitle">TITLE</Col>
+        <Col md = {5} className='columnTitle '>PLAY DETAILS</Col>
+        <Col className='columnFill'><div className='bookmark'></div></Col>
+    </Row>
+
     return (
-        <ul className='gamesList'>
-            <Tab.Container id="tabs" defaultActiveKey="Finished">
+        <>
+        <EditForm show ={showModal} handleCloseModal = {handleCloseModal} gameId = {gameId} updateItemHandler = {handleUpdateItem}/>
+            <Tab.Container id="tabs" defaultActiveKey="Finished" className='gamesList'>
                 <Row>
                     <Col sm = {2} className='sideBarColumn'>
                         <Nav variant="pills" className="flex-column tabSelectors">
@@ -71,35 +102,54 @@ const List = (props) => {
                             <Nav.Item className='tabOthers'>
                                 <Nav.Link eventKey="Other">Other</Nav.Link>
                             </Nav.Item>
+                            <Nav.Item className='tabPlanToPlay'>
+                                <Nav.Link eventKey="PlanToPlay">Plan to Play</Nav.Link>
+                            </Nav.Item>
                         </Nav>
                     </Col>
                     <Col sm = {10} className='listColumn'>
                         <Tab.Content>
-                            <Tab.Pane eventKey="Finished" className='listFinished'>
+                            <Tab.Pane eventKey="Finished" >
                                 {listHeader}
-                                {list.length ? gameListFinished : "No games added yet"}
+                                <ul>
+                                    {list.length ? gameListFinished : "No games added yet"}
+                                </ul>
                             </Tab.Pane>
-                            <Tab.Pane eventKey="Playing" className='listPlaying'>
+                            <Tab.Pane eventKey="Playing" >
                                 {listHeader}
-                                {list.length ? gameListPlaying : "No games added yet"}
+                                <ul>
+                                    {list.length ? gameListPlaying : "No games added yet"}
+                                </ul>
                             </Tab.Pane>
-                            <Tab.Pane eventKey="OnHold" className='listOnHold'>
+                            <Tab.Pane eventKey="OnHold" >
                                 {listHeader}
-                                {list.length ? gameListOnHold : "No games added yet"}
+                                <ul>   
+                                    {list.length ? gameListOnHold : "No games added yet"}
+                                </ul>
                             </Tab.Pane>
-                            <Tab.Pane eventKey="Dropped" className='listDropped'>
+                            <Tab.Pane eventKey="Dropped" >
                                 {listHeader}
-                                {list.length ? gameListDropped : "No games added yet"}
+                                <ul>
+                                    {list.length ? gameListDropped : "No games added yet"}
+                                </ul>
                             </Tab.Pane>
-                            <Tab.Pane eventKey="Other" className='listOther'>
+                            <Tab.Pane eventKey="Other" >
                                 {listHeader}
-                                {list.length ? gameListOther : "No games added yet"}
+                                <ul>
+                                    {list.length ? gameListOther : "No games added yet"}
+                                </ul>
+                            </Tab.Pane>
+                            <Tab.Pane eventKey="PlanToPlay" >
+                                {listHeaderPlanToPlay}
+                                <ul>
+                                    {list.length ? gameListPlanToPlay : "No games added yet"}
+                                </ul>
                             </Tab.Pane>
                         </Tab.Content>
                     </Col>
                 </Row>
             </Tab.Container>
-        </ul>
+        </>
     )
 }
 

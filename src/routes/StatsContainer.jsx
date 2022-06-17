@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react'
 
-import AddForm from '../components/AddForm'
 import List from '../components/List'
 
 const StatsContainer = () => {
@@ -19,7 +18,6 @@ const StatsContainer = () => {
     return (
         <>
             <div>STAAAAAAAAAAAAAAAAAAATS</div>
-            {/* <Form handleAddItem = {handleAddItem} /> */}
             <List list = {list} setList = {setList}/>
         </>
     )

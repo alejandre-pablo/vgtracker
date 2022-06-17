@@ -1,7 +1,7 @@
 import { useState, React } from 'react'
 import { useLocation } from 'react-router-dom'
 import SearchedGame from '../components/SearchedGame';
-import AddForm from '../components/AddForm';
+import AddForm from '../components/forms/AddForm';
 
 const SearchResultsContainer = (props) => {
 

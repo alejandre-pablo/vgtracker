@@ -14,9 +14,10 @@ const ListContainer = () => {
 
     useEffect(() => {
         if(location.state !== null) {
-            if(location.state.addedGame !== null) {
-                handleAddItem(location.state.addedGame);
-            }  
+            localStorage.setItem(('games'), (JSON.stringify(list)))
+            let addedGame = location.state.addedGame
+            window.history.replaceState({}, document.title)
+            handleAddItem(addedGame);
         }
     }, [location.state])
 
@@ -24,13 +25,15 @@ const ListContainer = () => {
         localStorage.setItem(('games'), (JSON.stringify(list)))
     }, [list])
 
+
     const handleAddItem = addedGame => {
-        window.history.replaceState({}, document.title)
-            setList([...list, addedGame]);
+        
+        location.state = null
+        setList([...list, addedGame]);
     }
     return (
         <>
-            <List list = {list} setList = {setList}/>
+            <List list = {list} setList = {setList} />
         </>
     )
 }

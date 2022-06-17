@@ -1,7 +1,11 @@
 @import "~bootstrap/scss/bootstrap";
 
+:root {
+    --base: #2d373c;
+    --accent: #9fa6cc;
+}
+
 html {
-    background: rgb(177, 177, 177);
     display: flex;
     height: 100%;
     background: linear-gradient(#181d20fa,
@@ -20,7 +24,7 @@ body {
 }
 
 ::placeholder {
-    color:#9fafb7;
+    color:var(--accent);
 }
 
 ul {
@@ -31,7 +35,7 @@ ul {
     margin-left: 3rem;
     font-size: 3rem;
     display: inline-block;
-    color: #9fafb7;
+    color: var(--accent);
     padding-bottom: 0.25rem;
 }
 
@@ -48,11 +52,11 @@ ul {
 
 /* --------------------- GAMES LIST --------------------- */
 .listColumn {
-    border-right: 1px solid #9fafb7;
+    border-right: 1px solid var(--accent);
     padding: 0;
 }
 /* .list {
-    background-color: #2d373c;
+    background-color: var(--base);
     font-size: 1rem;
     max-width: 100%;
     margin-top: 1rem;
@@ -81,11 +85,12 @@ ul {
 
 
 .game:hover {
-    background-color: #9fafb73f;
+    background-color: var(--accent)3f;
 }
 
 /* --------------------- GAME ROW FIELDS --------------------- */
-.game > .row > .col, .game > .row > .col-md-4 {
+.game > .row > .col, .game > .row > .col-md-4, 
+.game > .row > .col, .game > .row > .col-md-5 {
     display: flex;
 }
 .gameTitle {
@@ -154,12 +159,22 @@ ul {
     border: none;
     background: none;
     font-size: 1.7rem;
-    color: #9fafb7;
+    color: var(--accent);
+}
+
+.buttonEdit {
+    margin: auto;
+    outline: none;
+    padding: 0;
+    border: none;
+    background: none;
+    font-size: 1.5rem;
+    color: var(--accent);
 }
 
 .buttonAddGame {
     background: none;
-    color: #9fafb7;
+    color: var(--accent);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -189,30 +204,30 @@ ul {
 }
 
 .modal-content {
-    background-color: #2d373c !important;
+    background-color: var(--base) !important;
 }
 .modal-body {
-    background-color: #9fafb7;
+    background-color: var(--accent);
 }
 
 /* --------------------- ADD GAME FORM --------------------- */
 .inputText {
-    background-color: #2d373c;
+    background-color: var(--base);
     border: none;
-    border-bottom: 1px solid #9fafb7;
+    border-bottom: 1px solid var(--accent);
 }
 .inputText:hover, .inputText:focus{
-    color: #fff;
+    color: white;
     background: none;
 }
 
 .formLabel {
-    color:#9fafb7;
+    color:var(--accent);
 }
 
 .formGroup {
-    background-color: #2d373c;
-    border: 1px solid #9fafb7;
+    background-color: var(--base);
+    border: 1px solid var(--accent);
     border-radius: 8px;
     box-shadow: 8px 8px 5px #15181a;
     padding: 0.5rem;
@@ -229,7 +244,7 @@ ul {
 
 .ratingsLabel {
     padding-left: 0.8rem;
-    color:#9fafb7;
+    color:var(--accent);
 }
 
 .ratingsSubLabel {
@@ -241,7 +256,7 @@ ul {
 .ratingsRow > div {
     max-width: 30%;
     padding: 0.3rem;
-    border: 1px solid #9fafb7;
+    border: 1px solid var(--accent);
     border-radius: 8px;
     box-shadow: 5px 5px 3px #15181a;
 }
@@ -261,7 +276,7 @@ ul {
 
 /* --------------------- FIRST ROW ---------------------*/
 .listHeader {
-    border-bottom: 1px solid #9fafb7;
+    border-bottom: 1px solid var(--accent);
     margin-left: 0;
     margin-right: 0;
    /*  background: rgb(149, 167, 176);
@@ -270,7 +285,7 @@ ul {
 }
 
 .columnTitle {
-    color: #9fafb7;
+    color: var(--accent);
     font-size: 1.1rem;
     min-width: fit-content;
     display: inline-flex;
@@ -291,7 +306,7 @@ ul {
 
 .sideBarColumn {
     height: 75vh;
-    border-right: 1px solid #9fafb7;
+    border-right: 1px solid var(--accent);
 }
 .tabSelectors {
     margin-top: 3.2rem;
@@ -304,7 +319,7 @@ ul {
 
 .nav-pills .nav-link.active,
 .nav-pills .show>.nav-link {
-    color: #fff;
+    color: white;
     transition: 0.5s;
     border-radius: 0;
     background: rgb(25, 29, 33);
@@ -321,7 +336,7 @@ ul {
     margin-right: 0;
     transition: 0.5s;
     background: linear-gradient(90deg, var(--c1, rgb(92, 187, 79)) 0%, var(--c1, rgb(92, 187, 79)) 48%, rgba(116, 142, 151, 0) 56%, rgba(38, 46, 51, 0) 90%) var(--x, 83%)/200%;
-    border: 1px solid #9fafb7;
+    border: 1px solid var(--accent);
     border-left: 0;
     border-right: 0;
 }
@@ -331,23 +346,26 @@ ul {
 }
 
 .tabFinished, #tabs-tabpane-Finished {
-    --c1: rgb(92, 187, 79);
+    --c1: #66cc66;
 }
 
 .tabPlaying, #tabs-tabpane-Playing {
-    --c1: rgb(232, 167, 74);
+    --c1: #ffcc80;
 }
 
 .tabOnHold, #tabs-tabpane-OnHold {
-    --c1: rgb(84, 138, 203);
+    --c1: #6680cc;
 }
 
 .tabDropped, #tabs-tabpane-Dropped {
-    --c1: rgb(220, 74, 232);
+    --c1: #ff8080;
 }
 
 .tabOthers, #tabs-tabpane-Other {
-    --c1: rgb(203, 84, 84);
+    --c1: #ffff80;
+}
+.tabPlanToPlay, #tabs-tabpane-PlanToPlay {
+    --c1: #804d99;
 }
 
 .active > .listHeader >.col >.bookmark {
@@ -370,7 +388,7 @@ ul {
 .navItem {
     padding: 0.25rem 0.75rem 0.25rem 0.75rem;
     text-decoration: none;
-    color:#9fafb7;
+    color:var(--accent);
     font-size: 1.2rem;
     border-radius: 1rem;
 }
@@ -385,12 +403,12 @@ ul {
     font-size: 1.1rem;
     background: none;
     border: none;
-    color:#9fafb7;
+    color:var(--accent);
 
 }
 
 .searchBarLoading {
-    color: #9fafb7;
+    color: var(--accent);
 }
 .buttonContainer {
     width: 30px;
@@ -427,14 +445,14 @@ ul {
 .searchedGame {
     margin-bottom: 0.75rem;
     padding-bottom: 0.75rem;
-    border-bottom: 1px solid #9fafb7;
+    border-bottom: 1px solid var(--accent);
 }
 
 .searchTitle {
     margin-left: 3rem;
     font-size: 2rem;
     display: inline-block;
-    color: #9fafb7;
+    color: var(--accent);
 }
 
 .gameName {
@@ -475,7 +493,7 @@ ul {
     border-radius: 8px;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
-    border: 2px solid #9fafb7;
+    border: 2px solid var(--accent);
     border-right: none;
     background-color: rgba(0, 0, 0, 0.6);
 }
@@ -486,7 +504,7 @@ ul {
 }
 
 .imageOverlay * {
-    color: #9fafb7;
+    color: var(--accent);
     font-size: 1.8rem;
     position: relative;
     top: 25%;
@@ -501,18 +519,18 @@ input[type="text"] {
     padding: 0.25rem 4rem 0.25rem 0.75rem;
     background: none;
     border: none;
-    border-bottom: 1px solid #9fafb7;
+    border-bottom: 1px solid var(--accent);
 }
 input[type="text"]:hover, input[type="text"]:focus {
     border-bottom: 1px solid white;
 }
 
 select {
-    color:#9fafb7;
+    color:var(--accent);
     padding: 0.25rem 4rem 0.25rem 0.75rem;
     background: none;
     border: none;
-    border-bottom: 1px solid #9fafb7;
+    border-bottom: 1px solid var(--accent);
     font-size: 1.05rem;
 }
 select:hover, select:focus {
@@ -530,6 +548,10 @@ select:hover, select:focus {
 .form-control {
     outline: none;
     border-radius: 0;
+}
+.form-control[readonly] {
+    color: rgba(255, 255, 255, 0.63);
+    background-color: var(--base);
 }
 
 .container-xxl {
@@ -555,8 +577,8 @@ select:hover, select:focus {
 }
 
 option {
-    background-color: #9fafb7;
-    color: #2d373c;
+    background-color: var(--accent);
+    color: var(--base);
     font-weight: bold;
 }
 
@@ -564,3 +586,20 @@ option {
     padding-top: 2.1rem;
     padding-left: 1rem;
 }       
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+  color: white;
+}
+
+ul {
+    padding: 0 !important;
+}
