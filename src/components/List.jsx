@@ -111,37 +111,37 @@ const List = (props) => {
                         <Tab.Content>
                             <Tab.Pane eventKey="Finished" >
                                 {listHeader}
-                                <ul>
+                                <ul className='scrollable'>
                                     {list.length ? gameListFinished : "No games added yet"}
                                 </ul>
                             </Tab.Pane>
                             <Tab.Pane eventKey="Playing" >
                                 {listHeader}
-                                <ul>
+                                <ul className='scrollable'>
                                     {list.length ? gameListPlaying : "No games added yet"}
                                 </ul>
                             </Tab.Pane>
                             <Tab.Pane eventKey="OnHold" >
                                 {listHeader}
-                                <ul>   
+                                <ul className='scrollable'>   
                                     {list.length ? gameListOnHold : "No games added yet"}
                                 </ul>
                             </Tab.Pane>
                             <Tab.Pane eventKey="Dropped" >
                                 {listHeader}
-                                <ul>
+                                <ul className='scrollable'>
                                     {list.length ? gameListDropped : "No games added yet"}
                                 </ul>
                             </Tab.Pane>
                             <Tab.Pane eventKey="Other" >
                                 {listHeader}
-                                <ul>
+                                <ul className='scrollable'>
                                     {list.length ? gameListOther : "No games added yet"}
                                 </ul>
                             </Tab.Pane>
                             <Tab.Pane eventKey="PlanToPlay" >
                                 {listHeaderPlanToPlay}
-                                <ul>
+                                <ul className='scrollable'>
                                     {list.length ? gameListPlanToPlay : "No games added yet"}
                                 </ul>
                             </Tab.Pane>

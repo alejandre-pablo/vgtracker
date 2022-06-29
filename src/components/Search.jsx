@@ -9,7 +9,7 @@ const Search = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     let k = 'd068d12dda5d4c8283eaa6167fe26f79'
-
+    
     const navigate = useNavigate();
     const handleChange = (e) => {
         setSearchString(e.target.value);
