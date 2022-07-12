@@ -2,7 +2,7 @@ import React from 'react'
 import { Row, Col } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import Search from './Search'
-import { useFirebaseApp } from 'reactfire';
+import { useFirebaseApp} from 'reactfire';
 import { getAuth, signOut } from 'firebase/auth';
 import { FaSignOutAlt } from 'react-icons/fa'
 
@@ -13,12 +13,19 @@ const NavBar = () => {
 
     const navigate = useNavigate();
 
+    const user = auth.currentUser;
+
     return (
         <Row className='topMenu'>
             <Col sm={4}>
                 <Link to={'/'}>
-                    <div className='appTitle'>Les Jeux Vidéo</div>
+                    <h1 className='appTitle'>
+                        VGTracker 
+                    </h1>
                 </Link>
+                <h5 className='appTitleSubheader'>
+                    Powered by <a href='https://rawg.io/'>RAWG.io</a>
+                </h5> 
             </Col>
             <Col sm={8}>
                 <nav>
@@ -32,9 +39,9 @@ const NavBar = () => {
                         <Search />
                         <button className ='searchBarButton' onClick={async () => {
                             await signOut(auth);
-                            navigate('/login', {replace: true});
+                            navigate('/', {replace: true});
                         }}> 
-                            <FaSignOutAlt/> 
+                            {user.displayName} <FaSignOutAlt/> 
                         </button>
                     </ul>
                 </nav>

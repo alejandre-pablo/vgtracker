@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Form, Row, FloatingLabel, Button } from 'react-bootstrap';
 import { FcGoogle } from 'react-icons/fc'
-import { useNavigate } from 'react-router-dom';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { Link, useNavigate } from 'react-router-dom';
+import { getAuth, createUserWithEmailAndPassword, signInWithRedirect, GoogleAuthProvider, updateProfile } from 'firebase/auth';
 import { AuthProvider, useFirebaseApp} from 'reactfire';
 
 const SignupContainer = () => {
@@ -44,13 +44,17 @@ const SignupContainer = () => {
         e.preventDefault();
 
         const err = validate();
-        console.log(email,password,passwordMatch)
-        console.log(err)
         if ( Object.keys(err).length > 0 ) {
             setErrors(err)
         } else {
             await createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
-                navigate('/login', {replace: true});
+                debugger
+                updateProfile(auth.currentUser, {displayName : username}).then(() => {
+                    navigate('/', {replace: true});
+                })
+                .catch((error) => {
+
+                }) 
               })
               .catch((error) => {
                 // ..
@@ -58,21 +62,37 @@ const SignupContainer = () => {
         }
     }
 
-    const googleSignupHandler = e => {
-
-    }
-
-    const handleLoginClick= e => {
-        e.preventDefault();
-        navigate('/login', {})
+    const googleSignupHandler = async() => {
+        try {
+            const provider = new GoogleAuthProvider();
+            await signInWithRedirect(auth, provider).then(navigate('/', {replace: true}));
+        } catch (error) {
+            console.log(error)
+        }
+        
     }
 
     return (
         <AuthProvider sdk={auth}>
-            <h1 className='appTitle'> VGTracker</h1>
-            <Form className= 'signupForm' onSubmit={emailAndPasswordHandler}>
+            <div className='appTitleWrapper'>
+                <h1 className='appTitle'> 
+                    VGTracker 
+                </h1>
+                <div className='appTitleSubheader'>
+                Powered by <a href='https://rawg.io/'>RAWG.io</a>
+                </div>
+            </div>
+            <Form className= 'authForm' onSubmit={emailAndPasswordHandler}>
                 <Row className='formGroup'>
-                <Form.Label className='formHeader'> Sign Up </Form.Label>
+                <ul className='authNavbar'>
+                    <Link to ={'/login'} className={'authNavItem'}>
+                        <li>LOG IN</li>
+                    </Link>
+                     <span className='authNavbarSeparator'> | </span>
+                    <Link to ={'/signup'} className={'authNavItem activeItem'}>
+                        <li>SIGN UP</li>
+                    </Link>
+                </ul>
                 <Form.Group className='mb-3'>
                     <FloatingLabel
                     controlId='usernameLabel'
@@ -99,7 +119,7 @@ const SignupContainer = () => {
                     label='Password'
                     className='formLabel'
                     >   
-                        <Form.Control required type='password' className="inputText" placeholder='Password' value={password} onChange={e => setPassword(e.target.value)} isInvalid={!!errors.password}/>
+                        <Form.Control required autoComplete="on" type='password' className="inputText" placeholder='Password' value={password} onChange={e => setPassword(e.target.value)} isInvalid={!!errors.password}/>
                         <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
                     </FloatingLabel>
                 </Form.Group>
@@ -109,18 +129,17 @@ const SignupContainer = () => {
                     label='Repeat Password'
                     className='formLabel'
                     >   
-                        <Form.Control required type='password' className="inputText" placeholder='Repeat Password' value={passwordMatch} onChange={e => setPasswordMatch(e.target.value)} isInvalid={!!errors.match} />
+                        <Form.Control required autoComplete="on" type='password' className="inputText" placeholder='Repeat Password' value={passwordMatch} onChange={e => setPasswordMatch(e.target.value)} isInvalid={!!errors.match} />
                         <Form.Control.Feedback type="invalid">{errors.match}</Form.Control.Feedback>
                     </FloatingLabel>
                 </Form.Group>
-                <Button type='submit' className='loginButton'> Sign Up </Button>
-                <Form.Label className='formHeader'> ... using Google </Form.Label>
-                <button className='loginButton' onClick={googleSignupHandler}> 
-                    <FcGoogle/>
+                <Button type='submit' className='authFormSubmitButton'> Sign Up </Button>
+                <Form.Label className='authFormText'> OR SIGN IN USING </Form.Label>
+                <button className='authFormProviderButton' onClick={googleSignupHandler}> 
+                    <FcGoogle/> <span> GOOGLE </span>
                 </button>
                 </Row>
             </Form>
-            <button onClick={handleLoginClick}> Already registered? Log in </button>
         </AuthProvider>
     )
 }

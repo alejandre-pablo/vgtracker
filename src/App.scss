@@ -20,6 +20,8 @@ body {
     background: none;
     width: 100%;
     height: 100%;
+    max-width: 100%;
+    max-height: 100%;
     padding: 2%;
 }
 
@@ -32,11 +34,25 @@ ul {
 }
 
 .appTitle {
-    margin-left: 3rem;
+    margin-left: auto;
+    margin-bottom: 0;
     font-size: 3rem;
     display: inline-block;
     color: var(--accent);
-    padding-bottom: 0.25rem;
+}
+
+.appTitleWrapper {
+    display: inline-block;
+    width: 100%;
+    margin-top: 3rem;
+    text-align: center;
+}
+
+.appTitleSubheader {
+    margin-left: 6rem;
+    font-size: 0.8rem;
+    color: var(--accent);
+
 }
 
 .gamesList {
@@ -44,6 +60,98 @@ ul {
     height: 100%;
 }
 
+/* --------------------- AUTH FORMS --------------------- */
+
+.authForm {
+    margin: auto;
+    margin-top: 10vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    width: 60%;
+}
+
+
+.authFormSubmitButton {
+    color: var(--base);
+    background-color: var(--accent);
+    border: 1px solid white;
+    border-radius: 0px;
+    margin: auto;
+    width: 50%;
+    font-weight: bold;
+}
+
+.authFormSubmitButton:hover {
+    color: var(--accent);
+    background-color: var(--base);
+    border: 1px solid var(--accent);
+    margin: auto;
+    width: 50%;
+    font-weight: bold;
+}
+
+.authFormProviderButton {
+    display: inline-block;
+    margin: auto;
+    margin-bottom: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    width: 30%;
+    height: 3rem;
+    border: none;
+    font-size: 1.1rem;
+}
+
+.authFormProviderButton span {
+    vertical-align: middle;
+}
+
+.authNavbar {
+    margin: auto;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.authNavItem {
+    font-weight: bold;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    width: auto;
+    flex:auto;
+    font-size: 1.3rem;
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent);
+}
+
+.authNavItem:hover {
+    color: white;
+}
+
+.activeItem {
+    color: white;
+    border-bottom: 1px solid white;
+}
+
+.authNavbarSeparator{
+    padding-top: 0.8rem;
+    cursor: default;
+    font-size: 1.5rem;
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.authFormText {
+    color: white;
+    width: 100%;
+    margin-top: 2rem;
+
+
+}
 /* --------------------- NAV BAR --------------------- */
 
 .navItem {
@@ -235,7 +343,7 @@ ul {
 .formGroup {
     background-color: var(--base);
     border: 1px solid var(--accent);
-    border-radius: 8px;
+    /* border-radius: 8px; */
     box-shadow: 8px 8px 5px #15181a;
     padding: 0.5rem;
     margin: 0.5rem;
@@ -561,12 +669,6 @@ select:hover, select:focus {
     background-color: var(--base);
 }
 
-.container-xxl {
-    margin: 0px !important;
-    max-width: 95vw;
-    max-height: 100vh;
-}
-
 .col-sm-2 {
     padding-right: 0px;
 }
@@ -602,7 +704,10 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-/* Firefox */
+input[type=password] {
+    color: white;
+  }
+
 input[type=number] {
   -moz-appearance: textfield;
   color: white;
@@ -610,6 +715,14 @@ input[type=number] {
 
 ul {
     padding: 0 !important;
+}
+
+a {
+    color: var(--accent);
+}
+
+a:hover {
+    color: white;
 }
 
 /* --------------------- SCROLLBARS ---------------------*/

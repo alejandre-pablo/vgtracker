@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState} from 'react'
 import { Tab, Nav, Col, Row  } from 'react-bootstrap';
 import EditForm from './forms/EditForm';
 
@@ -6,21 +6,20 @@ import Game from './Game'
 import GamePlanToPlay from './GamePlanToPlay';
 
 const List = (props) => {
-    const {list, setList} = props;
+    const {list, handleEditRemoveItem} = props;
 
     const onClickRemoveItem = (id) => {
-        if(window.confirm("Delete this entry?")) {
+        console.log(`Deleting game id ${id} from list`)
             var tmpList = list.filter((item => item.id !== id))
-
-            setList(tmpList);
-        }
+            handleEditRemoveItem(tmpList);
     };
 
     const handleUpdateItem = (game) => {
+        console.log(`Editing game ${game.title}`)
         var gameIndex = list.findIndex((item => item.id === game.id))
         let tmpList = [...list];
         tmpList[gameIndex] = game;
-        setList(tmpList);
+        handleEditRemoveItem(tmpList);
     }
 
     const [gameId, setGameId] = useState(-1);
@@ -60,7 +59,7 @@ const List = (props) => {
     ));
     const gameListOther = list.map ((game) => (
         game.playstatus === "other" ? 
-            <Game onClickRemoveItem = {onClickRemoveItem} onClickEditItem = {handleEditGame} game = {game}/> 
+            <Game key={game.id} onClickRemoveItem = {onClickRemoveItem} onClickEditItem = {handleEditGame} game = {game}/> 
         : <></>  
     ));
 

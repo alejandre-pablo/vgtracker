@@ -30,15 +30,14 @@ function App(){
 
     const AuthWrapper = ({children, fallback,}) => {
         const { status, data: signInCheckResult } = useSigninCheck();
-        console.log(signInCheckResult);
       
         if (!children) {
-          throw new Error("Children must be provided");
+            throw new Error("Children must be provided");
         }
         if (status === "loading") {
-          return <></>;
+            return <></>;
         } else if (signInCheckResult.signedIn === true) {
-          return children;
+            return children;
         }
       
         return fallback;
@@ -48,7 +47,6 @@ function App(){
         <AuthProvider sdk={auth}>
             <FirestoreProvider sdk={firestoreDatabase}>
                 <BrowserRouter>
-                    <div className="container-xxl">
                     <AuthWrapper fallback={<AuthRoute />}>
                         <Routes>
                             <Route path ='/' element ={<><NavBar /><ListContainer /></>}/>
@@ -58,8 +56,7 @@ function App(){
                             <Route path ='/game/:game' element ={<><NavBar /><GameDetailContainer /></>}/>
                             <Route path ='/error' element ={<ErrorContainer />}/>
                         </Routes>
-                        </ AuthWrapper>
-                    </div>
+                    </ AuthWrapper>
                 </BrowserRouter>
             </FirestoreProvider>
         </AuthProvider>

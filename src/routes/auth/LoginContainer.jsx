@@ -1,9 +1,9 @@
 import React from 'react';
 import { useState } from 'react';
 import { Form, Row, FloatingLabel, Button } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, getRedirectResult, GoogleAuthProvider, signInWithEmailAndPassword, signInWithRedirect } from 'firebase/auth';
 import { AuthProvider, useFirebaseApp} from 'reactfire';
 
 const LoginContainer = () => {
@@ -30,17 +30,10 @@ const LoginContainer = () => {
         return errors
     }
 
-    const handleRegisterClick= e => {
-        e.preventDefault();
-        navigate('/signup', {})
-    }
-
     const emailAndPasswordHandler = async(e) => {
         e.preventDefault();
 
         const err = validate();
-        console.log(email,password)
-        console.log(err)
         if ( Object.keys(err).length > 0 ) {
             setErrors(err)
         } else {
@@ -53,45 +46,72 @@ const LoginContainer = () => {
         }
     }
 
-    const googleLoginHandler = e => {
-
+    const googleLoginHandler = async() => {
+        try {
+            const provider = new GoogleAuthProvider();
+            await signInWithRedirect(auth, provider).then(
+                getRedirectResult(auth).then((result) => {
+                    debugger
+                    navigate('/', {replace: true});
+                })
+            )
+                
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
         <AuthProvider sdk={auth}>
-            <h1 className='appTitle'> VGTracker</h1>
-            <Form className= 'loginForm' onSubmit={emailAndPasswordHandler}>
-                <Row className='formGroup'>
-                <Form.Label className='formHeader'> Login </Form.Label>
-                <Form.Group className='mb-3'>
-                    <FloatingLabel
-                    controlId='emailLabel'
-                    label='Email'
-                    className='formLabel'
-                    >   
-                        <Form.Control required type='text' className="inputText" placeholder='Email' value={email} onChange={e => setEmail(e.target.value)} isInvalid={!!errors.email}/>
-                        <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
-                    </FloatingLabel>
-                </Form.Group>
+            <div className='appTitleWrapper'>
+                <h1 className='appTitle'> 
+                    VGTracker 
+                </h1>
+                <div className='appTitleSubheader'>
+                Powered by <a href='https://rawg.io/'>RAWG.io</a>
+                </div>
+            </div>
+            <div className= 'authForm'>
+                <Form onSubmit={emailAndPasswordHandler}>
+                    <Row className='formGroup'>
+                    <ul className='authNavbar'>
+                        <Link to ={'/login'} className={'authNavItem activeItem'}>
+                            <li>LOG IN</li>
+                        </Link>
+                        <span className='authNavbarSeparator'> | </span>
+                        <Link to ={'/signup'} className={'authNavItem'}>
+                            <li>SIGN UP</li>
+                        </Link>
+                    </ul>
+                    <Form.Group className='mb-3'>
+                        <FloatingLabel
+                        controlId='emailLabel'
+                        label='Email'
+                        className='formLabel'
+                        >   
+                            <Form.Control required type='text' className="inputText" placeholder='Email' value={email} onChange={e => setEmail(e.target.value)} isInvalid={!!errors.email}/>
+                            <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
+                        </FloatingLabel>
+                    </Form.Group>
 
-                <Form.Group className='mb-3'>
-                    <FloatingLabel
-                    controlId='passwordLabel'
-                    label='Password'
-                    className='formLabel'
-                    >   
-                        <Form.Control required type='password' className="inputText" placeholder='Password' value={password} onChange={e => setPassword(e.target.value)} isInvalid={!!errors.password}/>
-                        <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
-                    </FloatingLabel>
-                </Form.Group>
-                <Button type='submit' className='loginButton'> Login </Button>
-                <Form.Label className='formHeader'> ... using Google </Form.Label>
-                <button className='loginButton' onClick={googleLoginHandler}> 
-                    <FcGoogle/>
+                    <Form.Group className='mb-3'>
+                        <FloatingLabel
+                        controlId='passwordLabel'
+                        label='Password'
+                        className='formLabel'
+                        >   
+                            <Form.Control required autoComplete="on" type='password' className="inputText" placeholder='Password' value={password} onChange={e => setPassword(e.target.value)} isInvalid={!!errors.password}/>
+                            <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
+                        </FloatingLabel>
+                    </Form.Group>
+                    <Button type='submit' className='authFormSubmitButton'> Login </Button>
+                    <Form.Label className='authFormText'> OR SIGN IN USING </Form.Label>
+                    <button className='authFormProviderButton' onClick={googleLoginHandler}> 
+                    <FcGoogle/> <span> GOOGLE </span>
                 </button>
-                </Row>
-            </Form>
-            <button onClick={handleRegisterClick}> Register </button>
+                    </Row>
+                </Form>
+            </div>
         </AuthProvider>
     )
 }
