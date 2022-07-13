@@ -1,5 +1,6 @@
 import { collection, doc, getDoc, setDoc } from 'firebase/firestore';
 import React, {useEffect, useState} from 'react'
+import { Row } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
 import { FirebaseAppProvider, useAuth, useFirebaseApp, useFirestore, useFirestoreDoc, useFirestoreDocData, useUser } from 'reactfire';
 
@@ -55,9 +56,9 @@ const ListContainer = () => {
         safeWrite(newList);
     }
     return (
-        <>
+        <Row className='mainContainer'>
             <List list = {list} handleEditRemoveItem = {handleEditRemoveItem} />
-        </>
+        </ Row>
     )
 }
 

@@ -18,7 +18,9 @@ const List = (props) => {
         console.log(`Editing game ${game.title}`)
         var gameIndex = list.findIndex((item => item.id === game.id))
         let tmpList = [...list];
-        tmpList[gameIndex] = game;
+        debugger
+        tmpList.splice(gameIndex, 1);
+        tmpList.push(game);
         handleEditRemoveItem(tmpList);
     }
 

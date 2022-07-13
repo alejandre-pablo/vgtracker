@@ -20,11 +20,11 @@ const NavBar = () => {
             <Col sm={4}>
                 <Link to={'/'}>
                     <h1 className='appTitle'>
-                        VGTracker 
+                        VGTracker
                     </h1>
                 </Link>
                 <h5 className='appTitleSubheader'>
-                    Powered by <a href='https://rawg.io/'>RAWG.io</a>
+                    v0.3 Powered by <a href='https://rawg.io/'>RAWG.io</a>
                 </h5> 
             </Col>
             <Col sm={8}>

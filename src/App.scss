@@ -22,7 +22,7 @@ body {
     height: 100%;
     max-width: 100%;
     max-height: 100%;
-    padding: 2%;
+    padding: 1%;
 }
 
 ::placeholder {
@@ -31,6 +31,19 @@ body {
 
 ul {
     list-style-type: none;
+}
+
+#root {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.mainContainer {
+    flex: 1;
+}
+.mainContainer > .row {
+    padding: 0 !important;
 }
 
 .appTitle {
@@ -160,15 +173,21 @@ ul {
 
 /* --------------------- GAMES LIST --------------------- */
 
+.listColumn > .tab-content, .listColumn > .tab-content > .tab-pane {
+    height: 100%;
+}
+
 .scrollable {
     min-height: 70vh;
-    max-height: 70vh;
+    max-height: 82vh;
     overflow-x: hidden;
     overflow-y: scroll;
     border-left: 1px solid var(--accent);
 }
 .listColumn {
+    max-height: 100%;
     padding: 0;
+    width: 80%;
 }
 /* .list {
     background-color: var(--base);
@@ -421,7 +440,8 @@ ul {
 /* --------------------- SIDE NAVBAR ---------------------*/
 
 .sideBarColumn {
-    height: 75vh;
+    height: 100%;
+    width: 20%;
 }
 .tabSelectors {
     margin-top: 3.2rem;
@@ -493,7 +513,6 @@ ul {
 
 /* --------------------- TOP NAVBAR ---------------------*/
 .topMenu {
-    margin-top: 2rem;
     margin-bottom: 1rem;
 }
 .navbar {
