@@ -1,8 +1,8 @@
-import { collection, doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import React, {useEffect, useState} from 'react'
 import { Row } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
-import { FirebaseAppProvider, useAuth, useFirebaseApp, useFirestore, useFirestoreDoc, useFirestoreDocData, useUser } from 'reactfire';
+import { useAuth, useFirebaseApp, useFirestore, useFirestoreDocData } from 'reactfire';
 
 import List from '../components/List'
 
@@ -14,21 +14,15 @@ const ListContainer = () => {
     const auth = useAuth(firebaseApp);
     const firestore = useFirestore();
     const userDataRef = doc(firestore, 'lists', auth.currentUser.uid);
-    const collectionRef = collection(firestore, 'lists');
 
     const {status, data} = useFirestoreDocData(userDataRef);
 
-    /* const [list, setList] = useState(() => {
-        const list = getDoc(userDataRef);
-        debugger
-        return (list ? list : [])
+    const [list, setList] = useState(() => {
+        return (status === 'success' && data !== undefined) ? JSON.parse(data.games) : []
     });
- */
-    const [list, setList] = useState([]);
 
     useEffect(() => {
         if(location.state !== null && status === 'success') {
-            /* localStorage.setItem(('games'), (JSON.stringify(list))) */
             setDoc(userDataRef, {games: JSON.stringify(list)});
             let addedGame = location.state.addedGame
             window.history.replaceState({}, document.title)
@@ -37,11 +31,11 @@ const ListContainer = () => {
     }, [location.state])
 
     useEffect(() => {
-        if(status === 'success') {
-            setList(JSON.parse(data.games));
-            localStorage.setItem('games', data.games)
+        if(status === 'success' && data !== undefined) {
+                setList(JSON.parse(data.games));
+                localStorage.setItem('games', data.games)
         }
-    },[data])
+    },[status, data])
 
     const safeWrite = list => {
         setDoc(userDataRef, {games: JSON.stringify(list)})

@@ -143,7 +143,7 @@ const AddForm = (props) => {
         e.preventDefault();
         let existingGames = JSON.parse(localStorage.getItem('games'));
         
-        if(existingGames.filter(game => (game.id === id)).length === 0 ) {
+        if(existingGames === null ||existingGames.filter(game => (game.id === id)).length === 0 ) {
             navigate('/', {state: {addedGame: {
                 'id': id,
                 'title': title,
