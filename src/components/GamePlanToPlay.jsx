@@ -9,6 +9,9 @@ const GamePlanToPlay = (props) => {
     return (
         <li className="game">
             <Row>
+                <Col md={1}>
+                    <img className='gameListImage' src={game.image} alt=''/>
+                </Col>
                 <Col md ={4}>
                     <span className='gameTitle'>{game.title}</span>
                 </Col>

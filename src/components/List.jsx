@@ -18,7 +18,6 @@ const List = (props) => {
         console.log(`Editing game ${game.title}`)
         var gameIndex = list.findIndex((item => item.id === game.id))
         let tmpList = [...list];
-        debugger
         tmpList.splice(gameIndex, 1);
         tmpList.push(game);
         handleEditRemoveItem(tmpList);
@@ -34,44 +33,42 @@ const List = (props) => {
         setShowModal(false);
     }
  
-    const gameListFinished = list.map ((game) => (
-        game.playstatus === "finished" ? 
-            <Game key={game.id} onClickRemoveItem ={onClickRemoveItem} onClickEditItem = {handleEditGame} game ={game} />
-        : <></>  
+    const gameListFinished = list.filter(game => game.playstatus === "finished" ).map ((game, index) => (
+        <div className={index % 2 === 0 ? 'highlight' : ''}>
+            <Game onClickRemoveItem ={onClickRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>
+        </div>
+        
     ));
-    const gameListPlaying = list.map ((game) => (
-        game.playstatus === "playing" ? 
+    const gameListPlaying = list.filter(game => game.playstatus === "playing" ).map ((game) => (
             <Game key={game.id} onClickRemoveItem = {onClickRemoveItem} onClickEditItem = {handleEditGame} game = {game}/>
-        : <></>  
     ));
-    const gameListOnHold = list.map ((game) => (
-        game.playstatus === "onhold" ? 
+    const gameListOnHold = list.filter(game => game.playstatus === "onhold" ).map ((game) => (
             <Game key={game.id} onClickRemoveItem = {onClickRemoveItem} onClickEditItem = {handleEditGame} game = {game} /> 
-        : <></>  
     ));
-    const gameListDropped = list.map ((game) => (
-        game.playstatus === "dropped" ? 
+    const gameListDropped = list.filter(game => game.playstatus === "dropped" ).map ((game) => (
             <Game key={game.id} onClickRemoveItem = {onClickRemoveItem} onClickEditItem = {handleEditGame} game = {game}/> 
-        : <></>  
     ));
-    const gameListPlanToPlay = list.map ((game) => (
-        game.playstatus === "plantoplay" ? 
+    const gameListPlanToPlay = list.filter(game => game.playstatus === "plantoplay" ).map ((game) => (
             <GamePlanToPlay key={game.id} onClickRemoveItem = {onClickRemoveItem} onClickEditItem = {handleEditGame} game = {game}/> 
-        : <></>  
     ));
-    const gameListOther = list.map ((game) => (
-        game.playstatus === "other" ? 
+    const gameListOther = list.filter(game => game.playstatus === "other" ).map ((game) => (
             <Game key={game.id} onClickRemoveItem = {onClickRemoveItem} onClickEditItem = {handleEditGame} game = {game}/> 
-        : <></>  
     ));
 
     const listHeader = 
     <Row className='listHeader'>
-        <Col md = {4} className="columnTitle">TITLE</Col>
-        <Col className='columnTitle '>PLATFORM</Col>
-        <Col className='columnTitle '>PLAYTIME</Col>
-        <Col className='columnTitle'>RATING</Col>
-        <Col className='columnFill'><div className='bookmark'></div></Col>
+        <Col md = {1}> 
+        </Col>
+        <Col md = {11}>
+            <Row>
+                <Col md = {3} className="columnTitle">TITLE</Col>
+                <Col md = {1} className='columnTitle '>PLATFORM</Col>
+                <Col md = {3} className='columnTitle '>PLAYTIME</Col>
+                <Col md = {3} className='columnTitle'>RATING</Col>
+                <Col className='columnFill'><div className='bookmark'></div></Col>
+            </Row>
+        </Col>
+        
     </Row>
 
     const listHeaderPlanToPlay = 
@@ -86,7 +83,7 @@ const List = (props) => {
         <EditForm show ={showModal} handleCloseModal = {handleCloseModal} gameId = {gameId} updateItemHandler = {handleUpdateItem}/>
             <Tab.Container id="tabs" defaultActiveKey="Finished" className='gamesList'>
                 <Row>
-                    <Col sm = {2} className='sideBarColumn'>
+                    <Col className='sideBarColumn'>
                         <Nav variant="pills" className="flex-column tabSelectors">
                             <Nav.Item className='tabFinished'>
                                 <Nav.Link eventKey="Finished">Completed</Nav.Link>
@@ -108,13 +105,15 @@ const List = (props) => {
                             </Nav.Item>
                         </Nav>
                     </Col>
-                    <Col sm = {10} className='listColumn'>
+                    <Col className='listColumn'>
                         <Tab.Content>
                             <Tab.Pane eventKey="Finished" >
                                 {listHeader}
-                                <ul className='scrollable'>
-                                    {list.length ? gameListFinished : "No games added yet"}
-                                </ul>
+                                <Row className='scrollable'>  
+                                    <ul >
+                                        {list.length ? gameListFinished : "No games added yet"}
+                                    </ul>
+                                </Row>
                             </Tab.Pane>
                             <Tab.Pane eventKey="Playing" >
                                 {listHeader}

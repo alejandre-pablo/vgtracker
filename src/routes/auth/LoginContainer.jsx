@@ -51,7 +51,6 @@ const LoginContainer = () => {
             const provider = new GoogleAuthProvider();
             await signInWithRedirect(auth, provider).then(
                 getRedirectResult(auth).then((result) => {
-                    debugger
                     navigate('/', {replace: true});
                 })
             )

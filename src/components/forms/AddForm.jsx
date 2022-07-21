@@ -24,6 +24,7 @@ const AddForm = (props) => {
     const [playdate, setPlaydate] = useState('');
     const [playdateCache, setPlaydateCache] = useState('');
     const [playstatus, setPlaystatus] = useState("");
+    const [backgroundImage, setBackgroundImage] = useState('');
     const [detail, setDetail] = useState("");
 
     const [show, setShow] = useState(false);
@@ -75,6 +76,7 @@ const AddForm = (props) => {
                 setDeveloper(result.developers);
                 setGenres(result.genres);
                 setPublisher(result.publishers);
+                setBackgroundImage(result.background_image);
             });
         }
     }, [shouldShow]);
@@ -155,6 +157,7 @@ const AddForm = (props) => {
                 'rating': rating,
                 'playdate': playdate,
                 'playstatus': playstatus,
+                'image': backgroundImage,
                 'detail': detail,
             }}})
             clearData();

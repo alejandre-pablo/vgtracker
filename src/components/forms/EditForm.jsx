@@ -17,6 +17,7 @@ const EditForm = (props) => {
     const [rating, setRating] = useState([0, 0, 0]);
     const [playdate, setPlaydate] = useState(new Date());
     const [playstatus, setPlaystatus] = useState("");
+    const [backgroundImage, setBackgroundImage] = useState('');
     const [detail, setDetail] = useState("");
 
     const [show, setShow] = useState(false);
@@ -51,7 +52,9 @@ const EditForm = (props) => {
                 setGenres(result.genres);
                 setPublisher(result.publisher);
                 setRating(result.rating);
+                setBackgroundImage(result.image);
                 setDetail(result.detail);
+                debugger
                 }
         }, [id]);
 
@@ -80,6 +83,7 @@ const EditForm = (props) => {
         setRating([0, 0, 0]);
         setPlaydate("");
         setPlaystatus("");
+        setBackgroundImage("");
         setDetail("");
     }
 
@@ -97,6 +101,7 @@ const EditForm = (props) => {
             'rating': rating,
             'playdate': playdate,
             'playstatus': playstatus,
+            'image': backgroundImage,
             'detail': detail,
         });
         clearData();

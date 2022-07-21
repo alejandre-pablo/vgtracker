@@ -22,7 +22,6 @@ const Search = () => {
         :fetch(`https://api.rawg.io/api/games?search=${normalizedString}&key=${k}&search_exact=true&ordering=-rating`).then( res => res.json()).then((results) => {
             navigate(`/search/${normalizedString}`, {state: {searchResults: results.results, searchString: searchString}});
             setIsLoading(false);
-            setSearchString('');
         });
         
     }
@@ -30,7 +29,7 @@ const Search = () => {
     return (
         <div>
             <form onSubmit={onSubmit}>
-                <input type= 'text' className='searchBar' value={searchString} onChange={handleChange} />
+                <input type= 'text' className='searchBar' value={searchString} onChange={handleChange} placeholder={"Search ..."}/>
                 <span className='buttonContainer'>
                     {isLoading 
                         ? <Spinner as="span" className='searchBarLoading' animation="border" size="sm" role="status" aria-hidden="true"/> 

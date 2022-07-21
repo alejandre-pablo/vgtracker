@@ -1,8 +1,13 @@
 @import "~bootstrap/scss/bootstrap";
 
 :root {
-    --base: #2d373c;
+    --base: #2d333c;
     --accent: #9fa6cc;
+    --darkBgAccentOpaque: #212c3b;
+    --darkBgAccent: #27354788;
+    --darkBgBase: #242b3a65;
+    --darkBgHighlight: #2d303c5b;
+    --darkBgHover: #9fa6cc20;
 }
 
 html {
@@ -22,7 +27,6 @@ body {
     height: 100%;
     max-width: 100%;
     max-height: 100%;
-    padding: 1%;
 }
 
 ::placeholder {
@@ -41,9 +45,16 @@ ul {
 
 .mainContainer {
     flex: 1;
+    height: 100vh;
+    max-height: 100vh;
+    margin: 0;
+    padding: 0.5rem;
+    padding-top: 11vh;
+    /* background-color: var(--darkBgBase); */
 }
 .mainContainer > .row {
     padding: 0 !important;
+    height: 100%;
 }
 
 .appTitle {
@@ -178,27 +189,27 @@ ul {
 }
 
 .scrollable {
-    min-height: 70vh;
-    max-height: 82vh;
+    height: 95%;
+    max-height: 95%;
     overflow-x: hidden;
     overflow-y: scroll;
-    border-left: 1px solid var(--accent);
+    border: 1px solid var(--accent);
+    border-top: none;
+    background-color: var(--darkBgBase);
+}
+.scrollable ul {
+    margin-bottom: 0;
 }
 .listColumn {
     max-height: 100%;
     padding: 0;
     width: 80%;
 }
-/* .list {
-    background-color: var(--base);
-    font-size: 1rem;
-    max-width: 100%;
-    margin-top: 1rem;
-    margin-bottom: 20px;
-    padding: 8px 16px;
-    border-radius: 5px;
-    box-shadow: 0 5px 30px #8c9fa921;
-} */
+
+.game {
+    padding: 0.14rem;
+    padding-left: 0.75rem;
+}
 
 .gamesForm {
     font-size: 1rem;
@@ -219,7 +230,11 @@ ul {
 
 
 .game:hover {
-    background-color: var(--accent)3f;
+    background-color: var(--darkBgHover);
+}
+
+.highlight {
+    background-color: var(--darkBgHighlight);
 }
 
 /* --------------------- GAME ROW FIELDS --------------------- */
@@ -410,13 +425,9 @@ ul {
 
 /* --------------------- FIRST ROW ---------------------*/
 .listHeader {
-    border-bottom: 1px solid var(--accent);
-    border-left: 1px solid var(--accent);
-    margin-left: 0;
-    margin-right: 0;
-   /*  background: rgb(149, 167, 176);
-    background: radial-gradient(circle, rgb(134, 151, 160) 0%, rgba(116, 142, 151, 1) 35%, rgba(38, 46, 51, 1) 100%); */
-    /* border-radius: 5px; */
+    border: 1px solid var(--accent);
+    height: 5%;
+    background-color: var(--darkBgAccent);
 }
 
 .columnTitle {
@@ -428,20 +439,22 @@ ul {
     justify-content: center;
 }
 
-
 .columnFill {
-    width: 1.7rem;
-    padding-right: 0;
+    width: 1.1rem;
     display: flex;
     align-items: center;
     justify-content: right;
 }
 
+.col-md-11 .row {
+    height: 100% ;
+}
 /* --------------------- SIDE NAVBAR ---------------------*/
 
 .sideBarColumn {
     height: 100%;
-    width: 20%;
+    max-width: 13%;
+    padding: 0;
 }
 .tabSelectors {
     margin-top: 3.2rem;
@@ -452,12 +465,11 @@ ul {
     text-align: center;
 }
 
-.nav-pills .nav-link.active,
+.nav-pills .active,
 .nav-pills .show>.nav-link {
-    color: white;
     transition: 0.5s;
-    border-radius: 0;
-    background: rgb(25, 29, 33);
+    background: var(--c1) !important;
+    border-radius: 0 !important;
 }
 
 .nav-link:hover,
@@ -470,10 +482,11 @@ ul {
     margin: 0.5rem;
     margin-right: 0;
     transition: 0.5s;
-    background: linear-gradient(90deg, var(--c1, rgb(92, 187, 79)) 0%, var(--c1, rgb(92, 187, 79)) 48%, rgba(116, 142, 151, 0) 56%, rgba(38, 46, 51, 0) 90%) var(--x, 83%)/200%;
+    background: linear-gradient(90deg, var(--c1, rgb(92, 187, 79)) 0%, var(--c1, rgb(92, 187, 79)) 48%, var(--darkBgBase) 56%, var(--darkBgBase) 90%) var(--x, 83%)/200%;
     border: 1px solid var(--accent);
-    border-left: 0;
     border-right: 0;
+    /* border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px; */
 }
 
 .nav-item:hover {
@@ -503,20 +516,27 @@ ul {
     --c1: #804d99;
 }
 
-.active > .listHeader >.col >.bookmark {
-
-    width: 1.8rem;
-    height: 1.8rem;
-    background-color: var(--c1);
-    clip-path: polygon(0 0, 100% 0, 100% 100%);
+.bookmark {
+    width: 6rem;
+    height: 100%;
+    background: rgb(45,55,60);
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, var(--c1) 100%);
+    /* clip-path: polygon(0 0, 100% 0, 100% 100%); */
 }
 
 /* --------------------- TOP NAVBAR ---------------------*/
 .topMenu {
-    margin-bottom: 1rem;
+    margin: 0;
+    position: fixed;
+    width: 100%;
+    z-index: 999;
+    background-color: var(--darkBgAccentOpaque);
+    border-bottom: 1px solid var(--accent);
+    padding: 0.5rem;
+    height: 10vh;
 }
 .navbar {
-    padding-top: 1rem !important;
+    padding-top: 1.5rem !important;
 }
 
 .navItem {
@@ -553,7 +573,9 @@ ul {
 
 /* --------------------- SEARCH RESULTS ---------------------*/
 .searchList {
+    padding-top: 11vh !important;
     margin: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .emptySearchList {
@@ -582,10 +604,11 @@ ul {
     border-bottom: 1px solid var(--accent);
 }
 
-.searchTitle {
-    margin-left: 3rem;
-    font-size: 2rem;
-    display: inline-block;
+.searchText {
+    display: table;
+    margin: 0 auto;
+    padding-bottom: 0.5rem;
+    font-size: 1.6rem;
     color: var(--accent);
 }
 
@@ -608,6 +631,34 @@ ul {
     width: 210px;
     height: 105px;
     border-radius: 8px;
+}
+
+.gameListImage {
+    display: block;
+    width: 80px;
+    height: 45px;
+}
+
+/* .game:hover .gameListImage {
+    width: 200px;
+    height: 110px;
+    transition: 1s ease-in-out;
+
+} */
+/* .game:hover .focusedGameInfo {
+    visibility: visible;
+    transition: visibility 1s ease-in-out;
+}
+
+.game:hover .mainGameInfo {
+    visibility: hidden;
+    transition: visibility 1s ease-in-out;
+} */
+
+.col-md-11 .col-md-1, .col-md-11 .col-md-3, .col-md-11 .col-md-2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .imageContainer {
@@ -645,6 +696,11 @@ ul {
     left:35%;
 
 }
+
+/* .focusedGameInfo {
+    visibility: hidden;
+    margin-left: 10%;
+} */
 
 /* --------------------- OVERRIDES ---------------------*/
 
@@ -686,10 +742,6 @@ select:hover, select:focus {
 .form-control[readonly] {
     color: rgba(255, 255, 255, 0.63);
     background-color: var(--base);
-}
-
-.col-sm-2 {
-    padding-right: 0px;
 }
 
 .mb-3{
@@ -744,6 +796,10 @@ a:hover {
     color: white;
 }
 
+.mainContainer .row {
+    --bs-gutter-x: 0;
+}
+
 /* --------------------- SCROLLBARS ---------------------*/
 
 /* width */
@@ -764,4 +820,8 @@ a:hover {
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
     background: var(--accent); 
+  }
+
+  .col-sm-8 nav {
+    height: 100%;
   }

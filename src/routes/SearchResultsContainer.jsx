@@ -30,8 +30,8 @@ const SearchResultsContainer = (props) => {
         
     return (
         <>
-            <div className='searchTitle'>Search results for "{location.state.searchString}":</div>
             {location.state.searchResults.length !== 0 ?listResults : listEmpty}
+            <span className='searchText'> No more results to show</span>
             <AddForm show ={showModal} handleCloseModal = {handleCloseModal} gameId = {gameId}/>
         </>
         

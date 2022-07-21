@@ -48,7 +48,6 @@ const SignupContainer = () => {
             setErrors(err)
         } else {
             await createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
-                debugger
                 updateProfile(auth.currentUser, {displayName : username}).then(() => {
                     navigate('/', {replace: true});
                 })
