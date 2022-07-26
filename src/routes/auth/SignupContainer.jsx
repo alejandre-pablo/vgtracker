@@ -4,6 +4,7 @@ import { FcGoogle } from 'react-icons/fc'
 import { Link, useNavigate } from 'react-router-dom';
 import { getAuth, createUserWithEmailAndPassword, signInWithRedirect, GoogleAuthProvider, updateProfile } from 'firebase/auth';
 import { AuthProvider, useFirebaseApp} from 'reactfire';
+import GoogleButton from 'react-google-button';
 
 const SignupContainer = () => {
 
@@ -133,10 +134,11 @@ const SignupContainer = () => {
                     </FloatingLabel>
                 </Form.Group>
                 <Button type='submit' className='authFormSubmitButton'> Sign Up </Button>
-                <Form.Label className='authFormText'> OR SIGN IN USING </Form.Label>
-                <button className='authFormProviderButton' onClick={googleSignupHandler}> 
+                <Form.Label className='authFormText'> OR </Form.Label>
+                <GoogleButton onClick={googleSignupHandler} />
+                {/* <button className='authFormProviderButton' onClick={googleSignupHandler}> 
                     <FcGoogle/> <span> GOOGLE </span>
-                </button>
+                </button> */}
                 </Row>
             </Form>
         </AuthProvider>

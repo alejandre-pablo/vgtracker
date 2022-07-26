@@ -29,7 +29,7 @@ const Search = () => {
     return (
         <div>
             <form onSubmit={onSubmit}>
-                <input type= 'text' className='searchBar' value={searchString} onChange={handleChange} placeholder={"Search ..."}/>
+                <input type= 'text' className='searchBar' value={searchString} onChange={handleChange} placeholder={"Search"}/>
                 <span className='buttonContainer'>
                     {isLoading 
                         ? <Spinner as="span" className='searchBarLoading' animation="border" size="sm" role="status" aria-hidden="true"/> 

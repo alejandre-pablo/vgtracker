@@ -174,8 +174,8 @@ const EditForm = (props) => {
                                 <option value="playing">Playing</option>
                                 <option value="onhold">On Hold</option>
                                 <option value="dropped" >Dropped</option>
-                                <option value="plantoplay">Plan to Play</option>
                                 <option value="other" >Other</option>
+                                <option value="plantoplay">Plan to Play</option>
                         </Form.Select>
                     </FloatingLabel>
                 </Form.Group>
