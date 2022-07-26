@@ -19,7 +19,7 @@ const Search = () => {
         e.preventDefault();
         let normalizedString = searchString.split(' ').join('-').toLowerCase();
         searchString === '' ? alert('Enter a valid title')
-        :fetch(`https://api.rawg.io/api/games?search=${normalizedString}&key=${k}&search_exact=true&ordering=-rating`).then( res => res.json()).then((results) => {
+        :fetch(`https://api.rawg.io/api/games?search=${normalizedString}&key=${k}&search_precise=true&ordering=-rating`).then( res => res.json()).then((results) => {
             navigate(`/search/${normalizedString}`, {state: {searchResults: results.results, searchString: searchString}});
             setIsLoading(false);
         });
