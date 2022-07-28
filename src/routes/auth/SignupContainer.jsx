@@ -134,11 +134,12 @@ const SignupContainer = () => {
                     </FloatingLabel>
                 </Form.Group>
                 <Button type='submit' className='authFormSubmitButton'> Sign Up </Button>
-                <Form.Label className='authFormText'> OR </Form.Label>
-                <GoogleButton onClick={googleSignupHandler} />
-                {/* <button className='authFormProviderButton' onClick={googleSignupHandler}> 
-                    <FcGoogle/> <span> GOOGLE </span>
-                </button> */}
+                <Form.Label className='authFormText'> </Form.Label>
+                <button className='authFormProviderButton' onClick={googleSignupHandler}> 
+                    <FcGoogle/> 
+                    <span className='bigSpanAuthFormProviderButton'> Sign In Using Google </span>
+                    <span className='reducedSpanAuthFormProviderButton'> Google </span>
+                </button>
                 </Row>
             </Form>
         </AuthProvider>

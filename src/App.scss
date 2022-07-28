@@ -88,12 +88,12 @@ ul {
 
 .authForm {
     margin: auto;
-    margin-top: 10vh;
+    margin-top: 4vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     text-align: center;
-    width: 60%;
+    width: 80%;
 }
 
 
@@ -103,6 +103,7 @@ ul {
     border: 1px solid white;
     border-radius: 0px;
     margin: auto;
+    margin-top: 1.2rem;
     width: 50%;
     font-weight: bold;
 }
@@ -117,19 +118,27 @@ ul {
 }
 
 .authFormProviderButton {
-    display: inline-block;
+    width: 50% !important;
+    height: 5vh !important;
     margin: auto;
-    margin-bottom: 1rem;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    width: 30%;
-    height: 3rem;
+    margin-bottom: 1.5rem;
     border: none;
-    font-size: 1.1rem;
+    font-weight: bold;
 }
 
-.authFormProviderButton span {
-    vertical-align: middle;
+.authFormText {
+    color: var(--accent);
+    width: 80%;
+    margin: auto;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--accent);
+
+}
+
+.authFormProviderButton .reducedSpanAuthFormProviderButton{
+    margin-left: 0.5rem;
+    display: none;
 }
 
 .authNavbar {
@@ -169,13 +178,6 @@ ul {
     text-decoration: none;
 }
 
-.authFormText {
-    color: white;
-    width: 100%;
-    margin-top: 2rem;
-
-
-}
 /* --------------------- NAV BAR --------------------- */
 
 .navItem {
@@ -597,7 +599,7 @@ ul {
     overflow-x: hidden;
     border: 1px solid var(--accent);
     margin-top: 0;
-    padding: 0.5rem;
+    padding: 0.5rem !important;
 
 }
 
@@ -663,10 +665,8 @@ ul {
 
 .gameImage {
     display: block;
-    min-width: 210px;
-    min-height: 90px;
-    width: 210px;
-    height: 105px;
+    width: 12vw;
+    height: 12vh;
     border-radius: 8px;
 }
 
@@ -842,23 +842,34 @@ a:hover {
 /* width */
 ::-webkit-scrollbar {
     width: 10px;
-  }
+}
   
-  /* Track */
-  ::-webkit-scrollbar-track {
+/* Track */
+::-webkit-scrollbar-track {
     background: var(--base); 
-  }
+}
    
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
+/* Handle */
+::-webkit-scrollbar-thumb {
     background: var(--accent); 
-  }
+}
   
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
     background: var(--accent); 
-  }
+}
 
-  .col-sm-8 nav {
+.col-sm-8 nav {
     height: 100%;
-  }
+}
+
+/* --------------------- MEDIA QUERIES ---------------------*/
+@media only screen and (max-width: 600px) {
+
+    .authFormProviderButton .bigSpanAuthFormProviderButton{
+        display: none;
+    }
+    .authFormProviderButton .reducedSpanAuthFormProviderButton{
+        display: inline-block;
+    }
+}

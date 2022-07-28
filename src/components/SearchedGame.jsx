@@ -1,5 +1,5 @@
 import React from 'react'
-import { Col, Row } from 'react-bootstrap';
+import { Col, Image, Row } from 'react-bootstrap';
 import { AiOutlinePlus } from 'react-icons/ai'
 
 const SearchedGame = ({gameItem, addGameHandler}) => {

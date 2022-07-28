@@ -33,7 +33,7 @@ const SearchResultsContainer = (props) => {
         <>
             <Row className='resultsContainer'>
                 <Col className='sideBarColumnWide'>
-
+                    <span style={{color: 'white'}}> FILTER & SORT TODO</span>
                 </Col>
                 <Col>
                     {location.state.searchResults.length !== 0 ?listResults : listEmpty}
