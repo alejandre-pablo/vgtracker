@@ -30,7 +30,7 @@ This project also relies on the following node modules:
 - React Icons
 - React Router
 - Reactfire
-- React Sortable HOC
+- Dnd-Kit
 
 ### Disclaimer
 
