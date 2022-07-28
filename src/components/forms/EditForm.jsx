@@ -54,7 +54,6 @@ const EditForm = (props) => {
                 setRating(result.rating);
                 setBackgroundImage(result.image);
                 setDetail(result.detail);
-                debugger
                 }
         }, [id]);
 

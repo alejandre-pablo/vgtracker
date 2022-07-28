@@ -60,7 +60,6 @@ ul {
 .appTitle {
     margin-left: auto;
     margin-bottom: 0;
-    font-size: 3rem;
     display: inline-block;
     color: var(--accent);
 }
@@ -73,9 +72,10 @@ ul {
 }
 
 .appTitleSubheader {
-    margin-left: 6rem;
-    font-size: 0.8rem;
+    margin-left: 5.5vw;
+    font-size: 1.7vh;
     color: var(--accent);
+    text-decoration: none;
 
 }
 
@@ -207,6 +207,7 @@ ul {
 }
 
 .game {
+    width: 100%;
     padding: 0.14rem;
     padding-left: 0.75rem;
 }
@@ -229,12 +230,29 @@ ul {
 }
 
 
-.game:hover {
+.gameWrapper:hover {
     background-color: var(--darkBgHover);
 }
 
 .highlight {
     background-color: var(--darkBgHighlight);
+}
+
+.gameWrapper {
+    display: flex;
+    flex-direction: row;
+    flex: auto;
+}
+
+.gameSortHandle{
+    width: 3rem;
+    outline: none;
+    padding: 0;
+    padding-left: 0.75rem;
+    border: none;
+    background: none;
+    font-size: 1.5rem;
+    color: var(--accent);
 }
 
 /* --------------------- GAME ROW FIELDS --------------------- */
@@ -573,17 +591,36 @@ ul {
 
 /* --------------------- SEARCH RESULTS ---------------------*/
 .searchList {
-    padding-top: 11vh !important;
-    margin: 1rem;
-    margin-bottom: 0.5rem;
+    height: 100%;
+    max-height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    border: 1px solid var(--accent);
+    margin-top: 0;
+    padding: 0.5rem;
+
+}
+
+.resultsContainer {
+    padding-top: 12vh !important;
+    height: 100%;
+    margin: 0;
+    padding-bottom: 1rem;
+    /* background-color: var(--darkBgBase); */
 }
 
 .emptySearchList {
     color: white;
-    /* text-shadow: 0px 0px 0 #899CD5, 1px 1px 0 #8194CD, 2px 2px 0 #788BC4, 3px 3px 0 #6F82BB, 4px 4px 0 #677AB3, 5px 5px 0 #5E71AA, 6px 6px 0 #5568A1, 7px 7px 0 #4C5F98, 8px 8px 0 #445790, 9px 9px 0 #3B4E87, 10px 10px 0 #32457E, 11px 11px 0 #2A3D76, 12px 12px 0 #21346D, 13px 13px 0 #182B64, 14px 14px 0 #0F225B, 15px 15px 0 #071A53, 16px 16px 0 #02114A, 17px 17px 0 #0B0841, 18px 18px 0 #130039, 19px 19px 0 #1C0930, 20px 20px 0 #251227, 21px 21px 20px rgba(0,0,0,1), 21px 21px 1px rgba(0,0,0,0.5), 0px 0px 20px rgba(0,0,0,.2);
-     */font-size: 1.5rem;
+     font-size: 1.5rem;
     text-align: center;
     margin-top: 3rem;
+}
+
+.sideBarColumnWide {
+    height: 100%;
+    max-width: 20%;
+    padding: 0;
+    border: 1px solid var(--accent);
 }
 
 .emptyListImage {
@@ -596,7 +633,7 @@ ul {
 }
 
 .emptyListImage:hover {
-    transform: rotate(3420deg)/*  skewX(-159deg) skewY(18deg) */;
+    transform: rotate(3420deg);
   }
 .searchedGame {
     margin-bottom: 0.75rem;

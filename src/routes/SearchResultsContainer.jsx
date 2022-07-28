@@ -2,6 +2,7 @@ import { useState, React } from 'react'
 import { useLocation } from 'react-router-dom'
 import SearchedGame from '../components/SearchedGame';
 import AddForm from '../components/forms/AddForm';
+import { Col, Row } from 'react-bootstrap';
 
 const SearchResultsContainer = (props) => {
 
@@ -30,8 +31,15 @@ const SearchResultsContainer = (props) => {
         
     return (
         <>
-            {location.state.searchResults.length !== 0 ?listResults : listEmpty}
-            <span className='searchText'> No more results to show</span>
+            <Row className='resultsContainer'>
+                <Col className='sideBarColumnWide'>
+
+                </Col>
+                <Col>
+                    {location.state.searchResults.length !== 0 ?listResults : listEmpty}
+                    {/* <span className='searchText'> No more results to show</span> */}
+                </Col>
+            </Row>
             <AddForm show ={showModal} handleCloseModal = {handleCloseModal} gameId = {gameId}/>
         </>
         

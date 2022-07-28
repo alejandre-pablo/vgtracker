@@ -1,20 +1,23 @@
+import { DndContext, KeyboardSensor, useSensor, useSensors, closestCenter, DragOverlay, PointerSensor } from '@dnd-kit/core';
+import { restrictToVerticalAxis, restrictToWindowEdges } from '@dnd-kit/modifiers';
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import React, { useState} from 'react'
 import { Tab, Nav, Col, Row  } from 'react-bootstrap';
 import EditForm from './forms/EditForm';
 
 import Game from './Game'
-import GamePlanToPlay from './GamePlanToPlay';
+import SortableGame from './utils/SortableGame';
 
 const List = (props) => {
     const {list, handleEditRemoveItem} = props;
 
-    const onClickRemoveItem = (id) => {
+    function handleRemoveItem (id)  {
         console.log(`Deleting game id ${id} from list`)
             var tmpList = list.filter((item => item.id !== id))
             handleEditRemoveItem(tmpList);
     };
 
-    const handleUpdateItem = (game) => {
+    function handleUpdateItem (game)  {
         console.log(`Editing game ${game.title}`)
         var gameIndex = list.findIndex((item => item.id === game.id))
         let tmpList = [...list];
@@ -25,35 +28,93 @@ const List = (props) => {
 
     const [gameId, setGameId] = useState(-1);
     const [showModal, setShowModal] = useState(false);
-    const handleEditGame = (id) => {
+    function handleEditGame(id) {
         setGameId(id);
         setShowModal(true);
     }
-    const handleCloseModal = () => {
+    function handleCloseModal() {
         setShowModal(false);
     }
+
+    const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates,
+          })
+    )
+
+    const [activeId, setActiveId] = useState(null);
+    const [dragGame, setDragGame] = useState({});
+    
+    function handleDragStart(event) {
+        setDragGame(list.find(game => game.id === event.active.id))
+        setActiveId(event.active.id);
+    }
+    
+    function handleDragEnd(event) {
+        console.log('drag end')
+        const { active, over } = event;
+        if (active.id !== over.id) {
+                const oldIndex = list.findIndex(item => item.id === active.id);
+                const newIndex = list.findIndex(item => item.id === over.id);
+                const tmpList =  arrayMove(list, oldIndex, newIndex);
+                handleEditRemoveItem(tmpList);
+        };
+    }
  
-    const gameListFinished = list.filter(game => game.playstatus === "finished" ).map ((game, index) => (
-        <div className={index % 2 === 0 ? 'highlight' : ''}>
-            <Game onClickRemoveItem ={onClickRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>
-        </div>
-        
-    ));
-    const gameListPlaying = list.filter(game => game.playstatus === "playing" ).map ((game) => (
-            <Game key={game.id} onClickRemoveItem = {onClickRemoveItem} onClickEditItem = {handleEditGame} game = {game}/>
-    ));
-    const gameListOnHold = list.filter(game => game.playstatus === "onhold" ).map ((game) => (
-            <Game key={game.id} onClickRemoveItem = {onClickRemoveItem} onClickEditItem = {handleEditGame} game = {game} /> 
-    ));
-    const gameListDropped = list.filter(game => game.playstatus === "dropped" ).map ((game) => (
-            <Game key={game.id} onClickRemoveItem = {onClickRemoveItem} onClickEditItem = {handleEditGame} game = {game}/> 
-    ));
-    const gameListPlanToPlay = list.filter(game => game.playstatus === "plantoplay" ).map ((game) => (
-            <GamePlanToPlay key={game.id} onClickRemoveItem = {onClickRemoveItem} onClickEditItem = {handleEditGame} game = {game}/> 
-    ));
-    const gameListOther = list.filter(game => game.playstatus === "other" ).map ((game) => (
-            <Game key={game.id} onClickRemoveItem = {onClickRemoveItem} onClickEditItem = {handleEditGame} game = {game}/> 
-    ));
+    const gameListFinished = 
+        <ul>
+            {list.filter(game => game.playstatus === "finished" ).map ((game, index) => (
+                <div className={index % 2 === 0 ? 'highlight' : ''}>
+                    <SortableGame key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>
+                </div>))
+            }
+        </ul>   
+
+    const gameListPlaying = 
+        <ul>
+            {list.filter(game => game.playstatus === "playing" ).map ((game, index) => (
+                <div className={index % 2 === 0 ? 'highlight' : ''}>
+                    <SortableGame key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>
+                </div>))
+            }
+        </ul>  
+
+    const gameListOnHold = 
+        <ul>
+            {list.filter(game => game.playstatus === "onhold" ).map ((game, index) => (
+                <div className={index % 2 === 0 ? 'highlight' : ''}>
+                    <SortableGame key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>
+                </div>))
+            }
+        </ul>  
+
+    const gameListDropped = 
+        <ul>
+            {list.filter(game => game.playstatus === "dropped" ).map ((game, index) => (
+                <div className={index % 2 === 0 ? 'highlight' : ''}>
+                    <SortableGame key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>
+                </div>))
+            }
+        </ul>  
+
+    const gameListOther = 
+        <ul>
+            {list.filter(game => game.playstatus === "other" ).map ((game, index) => (
+                <div className={index % 2 === 0 ? 'highlight' : ''}>
+                    <SortableGame key = {game.id} id={game.id} isDragging={activeId === game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>
+                </div>))
+            }
+        </ul>  
+
+    const gameListPlanToPlay = 
+        <ul>
+            {list.filter(game => game.playstatus === "plantoplay" ).map ((game, index) => (
+                <div className={index % 2 === 0 ? 'highlight' : ''}>
+                    <SortableGame key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>
+                </div>))
+            }
+        </ul> 
 
     const listHeader = 
     <Row className='listHeader'>
@@ -106,46 +167,67 @@ const List = (props) => {
                         </Nav>
                     </Col>
                     <Col className='listColumn'>
-                        <Tab.Content>
-                            <Tab.Pane eventKey="Finished" >
-                                {listHeader}
-                                <Row className='scrollable'>  
-                                    <ul >
-                                        {list.length ? gameListFinished : "No games added yet"}
-                                    </ul>
-                                </Row>
-                            </Tab.Pane>
-                            <Tab.Pane eventKey="Playing" >
-                                {listHeader}
-                                <ul className='scrollable'>
-                                    {list.length ? gameListPlaying : "No games added yet"}
-                                </ul>
-                            </Tab.Pane>
-                            <Tab.Pane eventKey="OnHold" >
-                                {listHeader}
-                                <ul className='scrollable'>   
-                                    {list.length ? gameListOnHold : "No games added yet"}
-                                </ul>
-                            </Tab.Pane>
-                            <Tab.Pane eventKey="Dropped" >
-                                {listHeader}
-                                <ul className='scrollable'>
-                                    {list.length ? gameListDropped : "No games added yet"}
-                                </ul>
-                            </Tab.Pane>
-                            <Tab.Pane eventKey="Other" >
-                                {listHeader}
-                                <ul className='scrollable'>
-                                    {list.length ? gameListOther : "No games added yet"}
-                                </ul>
-                            </Tab.Pane>
-                            <Tab.Pane eventKey="PlanToPlay" >
-                                {listHeaderPlanToPlay}
-                                <ul className='scrollable'>
-                                    {list.length ? gameListPlanToPlay : "No games added yet"}
-                                </ul>
-                            </Tab.Pane>
-                        </Tab.Content>
+                        <DndContext 
+                            sensors={sensors} 
+                            collisionDetection={closestCenter} 
+                            onDragStart={handleDragStart} 
+                            onDragEnd={handleDragEnd}
+                            modifiers={[restrictToVerticalAxis]}
+                        >
+                            <Tab.Content>
+                                <Tab.Pane eventKey="Finished" >
+                                    {listHeader}
+                                    <Row className='scrollable'> 
+                                        <SortableContext items={list.filter(game => game.playstatus === "finished" ).map(item => item.id)} strategy={verticalListSortingStrategy}>
+                                            {list.length ? gameListFinished : "No games added yet"}
+                                        </SortableContext> 
+                                    </Row>
+                                </Tab.Pane>
+                                <Tab.Pane eventKey="Playing" >
+                                    {listHeader}
+                                    <Row className='scrollable'> 
+                                        <SortableContext items={list.filter(game => game.playstatus === "playing" ).map(item => item.id)} strategy={verticalListSortingStrategy}>
+                                            {list.length ? gameListPlaying : "No games added yet"}
+                                        </SortableContext>
+                                    </Row>
+                                </Tab.Pane>
+                                <Tab.Pane eventKey="OnHold" >
+                                    {listHeader}
+                                    <Row className='scrollable'> 
+                                        <SortableContext items={list.filter(game => game.playstatus === "onhold" ).map(item => item.id)} strategy={verticalListSortingStrategy}>
+                                            {list.length ? gameListOnHold : "No games added yet"}
+                                        </SortableContext>
+                                    </Row>
+                                </Tab.Pane>
+                                <Tab.Pane eventKey="Dropped" >
+                                    {listHeader}
+                                    <Row className='scrollable'> 
+                                        <SortableContext items={list.filter(game => game.playstatus === "dropped" ).map(item => item.id)} strategy={verticalListSortingStrategy}>
+                                            {list.length ? gameListDropped : "No games added yet"}
+                                        </SortableContext>
+                                    </Row>
+                                </Tab.Pane>
+                                <Tab.Pane eventKey="Other" >
+                                    {listHeader}
+                                    <Row className='scrollable'> 
+                                        <SortableContext items={list.filter(game => game.playstatus === "other" ).map(item => item.id)} strategy={verticalListSortingStrategy}>
+                                            {list.length ? gameListOther : "No games added yet"}
+                                        </SortableContext>
+                                    </Row>
+                                </Tab.Pane>
+                                <Tab.Pane eventKey="PlanToPlay" >
+                                    {listHeaderPlanToPlay}
+                                    <Row className='scrollable'> 
+                                        <SortableContext items={list.filter(game => game.playstatus === "plantoplay" ).map(item => item.id)} strategy={verticalListSortingStrategy}>
+                                            {list.length ? gameListPlanToPlay : "No games added yet"}
+                                        </SortableContext>
+                                    </Row>
+                                </Tab.Pane>
+                            </Tab.Content>
+                            <DragOverlay wrapperElement="ul" modifiers={[restrictToWindowEdges]} dropAnimation={null}>
+                                {activeId ? <Game id={activeId} game={dragGame} onClickEditItem={handleEditGame} onClickRemoveItem={handleRemoveItem} /> : null}
+                            </DragOverlay>
+                        </DndContext>
                     </Col>
                 </Row>
             </Tab.Container>
