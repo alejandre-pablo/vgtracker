@@ -3,8 +3,8 @@
 :root {
     --base: #2d333c;
     --accent: #9fa6cc;
-    --darkBgAccentOpaque: #212c3b;
-    --darkBgAccent: #27354788;
+    --darkBgAccentOpaque: #2d333c;
+    --darkBgAccent: #2d333c88;
     --darkBgBase: #242b3a65;
     --darkBgHighlight: #2d303c5b;
     --darkBgHover: #9fa6cc20;
@@ -93,7 +93,7 @@ ul {
     flex-direction: column;
     justify-content: center;
     text-align: center;
-    width: 80%;
+    width: 50%;
 }
 
 
@@ -112,9 +112,6 @@ ul {
     color: var(--accent);
     background-color: var(--base);
     border: 1px solid var(--accent);
-    margin: auto;
-    width: 50%;
-    font-weight: bold;
 }
 
 .authFormProviderButton {
@@ -381,6 +378,7 @@ ul {
 
 /* --------------------- ADD GAME FORM --------------------- */
 .inputText {
+    background: none;
     background-color: var(--base);
     border: none;
     border-bottom: 1px solid var(--accent);
@@ -426,7 +424,6 @@ ul {
     max-width: 30%;
     padding: 0.3rem;
     border: 1px solid var(--accent);
-    border-radius: 8px;
     box-shadow: 5px 5px 3px #15181a;
 }
 
@@ -712,9 +709,6 @@ ul {
     width: 4%;
     height: 50%;
     transition: .5s ease;
-    border-radius: 8px;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
     border: 2px solid var(--accent);
     border-right: none;
     background-color: rgba(0, 0, 0, 0.6);
@@ -795,9 +789,7 @@ select:hover, select:focus {
 }
 
 option {
-    background-color: var(--accent);
-    color: var(--base);
-    font-weight: bold;
+    color: black;
 }
 
 .form-floating > .form-control:focus, .form-floating > .form-control:not(:placeholder-shown) {
@@ -866,6 +858,10 @@ a:hover {
 /* --------------------- MEDIA QUERIES ---------------------*/
 @media only screen and (max-width: 600px) {
 
+    .authForm {
+        width: 90%;
+    }
+
     .authFormProviderButton .bigSpanAuthFormProviderButton{
         display: none;
     }
@@ -873,3 +869,34 @@ a:hover {
         display: inline-block;
     }
 }
+
+@media only screen and (min-width: 600px) {
+    
+    .authForm {
+        width: 70%;
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+    
+    .authForm {
+        width: 50%;
+    }
+}
+
+
+//Touch devices
+@media (hover: none) {
+    .imageOverlay {
+        position: absolute;
+        bottom: 25%;
+        left: 50%;
+        right: 0;
+        overflow: hidden;
+        width: 50%;
+        height: 50%;
+        border: 2px solid var(--accent);
+        border-right: none;
+        background-color: rgba(0, 0, 0, 0.8);
+    }
+  }

@@ -17,9 +17,9 @@ const Search = () => {
     const onSubmit = (e) => {
         setIsLoading(true);
         e.preventDefault();
-        let normalizedString = searchString.split(' ').join('-').toLowerCase();
+        let normalizedString = searchString.split(' ').join('%20').toLowerCase();
         searchString === '' ? alert('Enter a valid title')
-        :fetch(`https://api.rawg.io/api/games?search=${normalizedString}&key=${k}&search_precise=true&ordering=-rating`).then( res => res.json()).then((results) => {
+        :fetch(`https://api.rawg.io/api/games?search=${normalizedString}&key=${k}&search_precise=true`).then( res => res.json()).then((results) => {
             navigate(`/search/${normalizedString}`, {state: {searchResults: results.results, searchString: searchString}});
             setIsLoading(false);
         });

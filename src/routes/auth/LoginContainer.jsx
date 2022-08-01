@@ -38,7 +38,10 @@ const LoginContainer = () => {
             setErrors(err)
         } else {
             await signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
+                sessionStorage.setItem('games', []);
                 navigate('/', {replace: true})
+                //Temp Fix to "Insufficent Permissions Reactfire bug, issue #228 on Github @FirebaseExtended/reactfire"
+                window.location.reload();
               })
               .catch((error) => {
                 // ..
@@ -50,7 +53,8 @@ const LoginContainer = () => {
         try {
             const provider = new GoogleAuthProvider();
             await signInWithRedirect(auth, provider).then(
-                getRedirectResult(auth).then((result) => {
+                getRedirectResult(auth).then(() => {
+                    sessionStorage.setItem('games', []);
                     navigate('/', {replace: true});
                 })
             )

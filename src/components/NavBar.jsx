@@ -38,8 +38,9 @@ const NavBar = () => {
                         </Link>
                         <Search />
                         <button className ='searchBarButton' onClick={async () => {
-                            await signOut(auth);
-                            navigate('/', {replace: true});
+                            signOut(auth).then(() => {
+                                navigate('/', {replace: true});
+                            });
                         }}> 
                             {user.displayName} <FaSignOutAlt/> 
                         </button>

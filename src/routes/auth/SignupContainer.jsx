@@ -65,7 +65,9 @@ const SignupContainer = () => {
     const googleSignupHandler = async() => {
         try {
             const provider = new GoogleAuthProvider();
-            await signInWithRedirect(auth, provider).then(navigate('/', {replace: true}));
+            await signInWithRedirect(auth, provider).then( () => {
+                sessionStorage.setItem('games', []);
+                navigate('/', {replace: true})});
         } catch (error) {
             console.log(error)
         }

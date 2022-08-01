@@ -38,7 +38,7 @@ const EditForm = (props) => {
 
         useEffect (() => {
             if(id !== -1 && fetched === false) {
-                let existingGames = JSON.parse(localStorage.getItem('games'));
+                let existingGames = JSON.parse(sessionStorage.getItem('games'));
                 let result = existingGames.filter(game => (game.id === id))[0]
                 console.log(`locally fetched game ${result.title}, id ${id} successfully`);
                 setFetched(true);
@@ -86,7 +86,7 @@ const EditForm = (props) => {
         setDetail("");
     }
 
-    const enableButton = (title!== "" && platform !== "" && playtime !== "" && rating !== "" && playdate !== "" && playstatus !== "" && (playstatus !== "playing" || (playstatus === "playing" && detail !== "")))
+    const enableButton = (title!== "" && platform !== "" && playtime !== "" && rating !== "" && playdate !== "" && playstatus !== "" && (playstatus !== "plantoplay" || (playstatus === "plantoplay" && detail !== "")))
     const handleSubmit = e => {
         e.preventDefault();
         updateItem({

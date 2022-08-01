@@ -2,28 +2,26 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
 import React, {useEffect, useState} from 'react'
 import { Row } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
-import { useAuth, useFirebaseApp, useFirestore, useFirestoreDocData } from 'reactfire';
+import { preloadFirestoreDoc, useAuth, useFirebaseApp, useFirestore, useFirestoreDocDataOnce } from 'reactfire';
 
 import List from '../components/List'
 
 const ListContainer = () => {
 
     const location = useLocation();
-
     const firebaseApp = useFirebaseApp();
     const auth = useAuth(firebaseApp);
     const firestore = useFirestore();
     const userDataRef = doc(firestore, 'lists', auth.currentUser.uid);
 
-    const {status, data} = useFirestoreDocData(userDataRef);
+    const {status, data } = useFirestoreDocDataOnce(userDataRef);
 
-    const [list, setList] = useState(() => {
-        return (status === 'success' && data !== undefined) ? JSON.parse(data.games) : []
-    });
+    const [list, setList] = useState([]);
+
+    const [prevStatus, setPrevStatus] = useState('none')
 
     useEffect(() => {
         if(location.state !== null && status === 'success') {
-            setDoc(userDataRef, {games: JSON.stringify(list)});
             let addedGame = location.state.addedGame
             window.history.replaceState({}, document.title)
             handleAddItem(addedGame);
@@ -31,19 +29,29 @@ const ListContainer = () => {
     }, [location.state])
 
     useEffect(() => {
-        if(status === 'success' && data !== undefined) {
+        if(prevStatus === 'loading' && status === 'success' && data !== undefined) {
+                console.log('Fetched remote list');
                 setList(JSON.parse(data.games));
-                localStorage.setItem('games', data.games)
+                sessionStorage.setItem('games', data.games)
         }
-    },[status, data])
+        if(prevStatus === 'none' && status === 'success') {
+            console.log('Fetched local list');
+            setList(JSON.parse(sessionStorage.getItem('games')));
+        }
+        setPrevStatus(status);
+    },[status])
 
-    const safeWrite = list => {
-        setDoc(userDataRef, {games: JSON.stringify(list)})
+    const safeWrite = newList => {
+        console.log('List obj updated');
+        setList(newList);
+        sessionStorage.setItem('games', JSON.stringify(newList))
+        setDoc(userDataRef, {games: JSON.stringify(newList)})
     }
 
     const handleAddItem = addedGame => {
         location.state = null
-        safeWrite([...list, addedGame]);
+        const tmpList = JSON.parse(sessionStorage.getItem('games'));
+        safeWrite([...tmpList, addedGame]);
     }
 
     const handleEditRemoveItem = newList => {

@@ -143,9 +143,8 @@ const AddForm = (props) => {
     const enableButton = (title!== "" && platform !== "" && playtime !== "" && rating[0] !== -1 && rating[1] !== -1 && rating[2] !== -1 && playdate !== "" && playstatus !== "" )
     const handleSubmit = e => {
         e.preventDefault();
-        let existingGames = JSON.parse(localStorage.getItem('games'));
-        
-        if(existingGames === null ||existingGames.filter(game => (game.id === id)).length === 0 ) {
+        let existingGames = sessionStorage.getItem('games') === '' ? null : JSON.parse(sessionStorage.getItem('games'));
+        if(existingGames === null || existingGames.filter(game => (game.id === id)).length === 0 ) {
             navigate('/', {state: {addedGame: {
                 'id': id,
                 'title': title,
