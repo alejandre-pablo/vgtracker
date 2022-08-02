@@ -54,7 +54,10 @@ const ListContainer = () => {
 
     const handleAddItem = addedGame => {
         location.state = null
-        const tmpList = JSON.parse(sessionStorage.getItem('games'));
+        var tmpList = [];
+        if (sessionStorage.getItem('games') !== '') {
+            tmpList = JSON.parse(sessionStorage.getItem('games'));
+        }
         safeWrite([...tmpList, addedGame]);
     }
 
@@ -62,7 +65,7 @@ const ListContainer = () => {
         safeWrite(newList);
     }
     return (
-        <Row className='mainContainer'>
+        <Row className={isTabletOrMobile ? 'mainContainerMobile' : 'mainContainer'}>
             {isTabletOrMobile 
             ?   <ListMobile list = {list} handleEditRemoveItem = {handleEditRemoveItem} />
             :   <List list = {list} handleEditRemoveItem = {handleEditRemoveItem} />

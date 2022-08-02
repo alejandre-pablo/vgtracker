@@ -52,7 +52,18 @@ ul {
     padding-top: 11vh;
     /* background-color: var(--darkBgBase); */
 }
-.mainContainer > .row {
+
+.mainContainerMobile {
+    flex: 1;
+    height: 100vh;
+    max-height: 100vh;
+    margin: 0;
+    padding: 0.5rem;
+    padding-top: 9.5vh;
+    /* background-color: var(--darkBgBase); */
+}
+
+.mainContainer > .row, .mainContainerMobile > .row {
     padding: 0 !important;
     height: 100%;
 }
@@ -76,7 +87,11 @@ ul {
     font-size: 1.7vh;
     color: var(--accent);
     text-decoration: none;
+}
 
+.appLogo {
+    height:100%;
+    width: auto;
 }
 
 .gamesList {
@@ -177,8 +192,45 @@ ul {
 
 /* --------------------- NAV BAR --------------------- */
 
+.navbarMobile li {
+    margin: 1.5rem;
+}
+
 .navItem {
-    color: white;
+    padding: 0.25rem 0.75rem 0.25rem 0.75rem;
+    text-decoration: none;
+    color:var(--accent);
+    font-size: 1.2rem;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+
+.navItem:hover {
+    color:white;
+}
+
+.navSideButton {
+    margin-right: 0.5rem;
+    align-self: center;
+}
+
+.navLogOutButton {
+    background: none;
+    border: none;
+    color:var(--accent);
+}
+
+.sidebar {
+    background-color: var(--darkBgAccentOpaque);
+    color: var(--accent);
+    width: 80%;
+}
+
+.btn-close {
+    color: var(--accent) ;
 }
 
 /* --------------------- GAMES LIST --------------------- */
@@ -188,7 +240,7 @@ ul {
 }
 
 .scrollable {
-    margin-top: 1%;
+    margin-top: 0.5%;
     height: 94%;
     max-height: 94%;
     overflow-x: hidden;
@@ -199,6 +251,35 @@ ul {
 .scrollable ul {
     margin-bottom: 0;
 }
+
+.scrollableMobile {
+    margin-top: 0.5%;
+    height: 81.5vh;
+    max-height: 81.5vh;
+    overflow-x: hidden;
+    border: 1px solid var(--accent);
+    background-color: var(--darkBgBase);
+}
+
+.listColumn .carousel-indicators {
+    display: none;
+}
+
+.mobileTabTitle {
+    margin-top: 1.4vh;
+    height: 6.2vh;
+    color: white;
+    border: 1px solid var(--accent);
+}
+
+.mobileTabTitle div{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .listColumn {
     max-height: 100%;
     padding: 0;
@@ -255,7 +336,7 @@ ul {
 }
 
 .gameMobile {
-    padding: 0.5rem;
+    padding: 1rem;
 }
 
 .gameCard{
@@ -263,22 +344,28 @@ ul {
     height: 27vh;
     overflow: hidden;
 }
-.card-img-overlay {
-    height: 30%;
+.gameCardInfo {
+    height: 35%;
     position: absolute;
-    top:72%;
+    top:67%;
     background-color: var(--darkBgAccentOpaque);
     color: var(--accent);
     border-radius: 0;
-    padding: 0.2rem;
-    padding-left: 0.5rem;
+    padding: 0.5rem;
+    padding-left: 1rem;
 }
 .card-title {
     color: white;
+    margin-bottom: 0.4rem;
 }
 .card-text {
-    padding-left: 1rem;
     width: 50%;
+}
+.gameCardRating .card-text {
+    padding: 0.3rem;
+    margin-left: 65%;
+    background-color: var(--darkBgAccentOpaque);
+    border-radius: 8px;
 }
 
 /* --------------------- GAME ROW FIELDS --------------------- */
@@ -579,20 +666,25 @@ ul {
     padding: 0.5rem;
     height: 10vh;
 }
+
+.topMenuMobile {
+    margin: 0;
+    position: fixed;
+    width: 100%;
+    z-index: 999;
+    background-color: var(--darkBgAccentOpaque);
+    border-bottom: 1px solid var(--accent);
+    padding-left: 1rem;
+    height: 8vh;
+}
+
+.topMenuMobile > div {
+    display: inline-block;
+    width: 75%;
+}
+
 .navbar {
     padding-top: 1.5rem !important;
-}
-
-.navItem {
-    padding: 0.25rem 0.75rem 0.25rem 0.75rem;
-    text-decoration: none;
-    color:var(--accent);
-    font-size: 1.2rem;
-    border-radius: 1rem;
-}
-
-.navItem:hover {
-    color:white;
 }
 
 /* --------------------- SEARCH BAR ---------------------*/
@@ -852,8 +944,13 @@ a:hover {
     color: white;
 }
 
-.mainContainer .row {
+.mainContainer .row, .mainContainerMobile .row {
     --bs-gutter-x: 0;
+}
+
+.carousel-control-prev, .carousel-control-next{
+    height: 6vh;
+    margin-top: 83.2vh;
 }
 
 /* --------------------- SCROLLBARS ---------------------*/
@@ -895,6 +992,15 @@ a:hover {
     .authFormProviderButton .reducedSpanAuthFormProviderButton{
         display: inline-block;
     }
+    .searchBar {
+        margin-left: 10%;
+        width: 90%;
+    }
+
+    ::-webkit-scrollbar {
+        display: none;
+    }
+      
 }
 
 @media only screen and (min-width: 600px) {

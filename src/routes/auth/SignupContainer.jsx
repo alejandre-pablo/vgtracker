@@ -50,6 +50,7 @@ const SignupContainer = () => {
         } else {
             await createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
                 updateProfile(auth.currentUser, {displayName : username}).then(() => {
+                    sessionStorage.setItem('games', []);
                     navigate('/', {replace: true});
                 })
                 .catch((error) => {

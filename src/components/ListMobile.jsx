@@ -93,34 +93,51 @@ const ListMobile = (props) => {
             <Col className='listColumn'>
                 <Carousel interval = {null} >
                     <Carousel.Item >
-                        <Row className='scrollable'> 
+                        <Row className='scrollableMobile'> 
                             {list.length ? gameListFinished : "No games added yet"}
+                        </Row>
+                        <Row className='mobileTabTitle'> 
+                            <div style={{background: 'radial-gradient(circle, rgba(0,0,0,0) 0%, #66cc66 100%)'}}>COMPLETED</div>
                         </Row>
                     </Carousel.Item>
                     <Carousel.Item >
-                        <Row className='scrollable'> 
+                        <Row className='scrollableMobile'> 
                             {list.length ? gameListPlaying : "No games added yet"}
-                            
+                        </Row>
+                        <Row className='mobileTabTitle'> 
+                            <div style={{background: 'radial-gradient(circle, rgba(0,0,0,0) 0%, #ffcc80 100%)'}}>PLAYING</div>
                         </Row>
                     </Carousel.Item>
                     <Carousel.Item>
-                        <Row className='scrollable'> 
+                        <Row className='scrollableMobile'> 
                             {list.length ? gameListOnHold : "No games added yet"}
                         </Row>
+                        <Row className='mobileTabTitle'> 
+                            <div style={{background: 'radial-gradient(circle, rgba(0,0,0,0) 0%, #6080cc 100%)'}}>ON HOLD</div>
+                        </Row>
                     </Carousel.Item>
-                    <Carousel.Item >
-                        <Row className='scrollable'> 
+                    <Carousel.Item>
+                        <Row className='scrollableMobile'> 
                             {list.length ? gameListDropped : "No games added yet"}
                         </Row>
-                    </Carousel.Item>
-                    <Carousel.Item >
-                        <Row className='scrollable'> 
-                            {list.length ? gameListOther : "No games added yet"}
+                        <Row className='mobileTabTitle'> 
+                            <div style={{background: 'radial-gradient(circle, rgba(0,0,0,0) 0%, #ff8080 100%)'}}>DROPPED</div>
                         </Row>
                     </Carousel.Item>
                     <Carousel.Item >
-                        <Row className='scrollable'>
+                        <Row className='scrollableMobile'> 
+                            {list.length ? gameListOther : "No games added yet"}
+                        </Row>
+                        <Row className='mobileTabTitle'> 
+                            <div style={{background: 'radial-gradient(circle, rgba(0,0,0,0) 0%, #ffff80 100%)'}}>OTHER</div>
+                        </Row>
+                    </Carousel.Item>
+                    <Carousel.Item >
+                        <Row className='scrollableMobile'>
                             {list.length ? gameListPlanToPlay : "No games added yet"} 
+                        </Row>
+                        <Row className='mobileTabTitle'> 
+                            <div style={{background: 'radial-gradient(circle, rgba(0,0,0,0) 0%, rgba(128,77,153,1) 100%)'}}>PLAN TO PLAY</div>
                         </Row>
                     </Carousel.Item>
                 </Carousel>
