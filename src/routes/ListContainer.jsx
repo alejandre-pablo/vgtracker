@@ -1,12 +1,16 @@
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 import React, {useEffect, useState} from 'react'
 import { Row } from 'react-bootstrap';
+import { useMediaQuery } from 'react-responsive';
 import { useLocation } from 'react-router-dom';
-import { preloadFirestoreDoc, useAuth, useFirebaseApp, useFirestore, useFirestoreDocDataOnce } from 'reactfire';
+import { useAuth, useFirebaseApp, useFirestore, useFirestoreDocDataOnce } from 'reactfire';
 
 import List from '../components/List'
+import ListMobile from '../components/ListMobile';
 
 const ListContainer = () => {
+
+    const isTabletOrMobile = useMediaQuery({query: '(max-width: 1224px)'})
 
     const location = useLocation();
     const firebaseApp = useFirebaseApp();
@@ -59,7 +63,11 @@ const ListContainer = () => {
     }
     return (
         <Row className='mainContainer'>
-            <List list = {list} handleEditRemoveItem = {handleEditRemoveItem} />
+            {isTabletOrMobile 
+            ?   <ListMobile list = {list} handleEditRemoveItem = {handleEditRemoveItem} />
+            :   <List list = {list} handleEditRemoveItem = {handleEditRemoveItem} />
+            }
+           
         </ Row>
     )
 }

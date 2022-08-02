@@ -84,6 +84,7 @@ const List = (props) => {
         <ul>
             {list.filter(game => game.playstatus === "onhold" ).map ((game, index) => (
                 <div className={index % 2 === 0 ? 'highlight' : ''}>
+                    ?<SortableGame key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>
                     <SortableGame key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>
                 </div>))
             }
