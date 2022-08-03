@@ -68,60 +68,62 @@ const NavBar = () => {
                 </nav>
             </Col>
         </Row>
-        :<Col className='topMenuMobile'>
-            <button className="buttonEdit" onClick={handleShowSidebar} title="Show sidebar"><GoThreeBars/></button>
-            <img className = 'appLogo' src={window.location.origin +'/img/logo_cutre.png'} alt="logo"></img>
-            <Search/>
-            <Offcanvas show={showSidebar} onHide={handleCloseSidebar} className='sidebar'>
-            <Offcanvas.Header closeButton>
-                <Offcanvas.Title>
-                    <Link to={'/'}>
-                        <h1 className='appTitle'>
-                            VGTracker
-                        </h1>
-                    </Link>
-                    <h5 className='appTitleSubheader'>
-                        v0.3 Powered by <a href='https://rawg.io/'>RAWG.io</a>
-                    </h5> 
-                </Offcanvas.Title>
-            </Offcanvas.Header>
-            <Offcanvas.Body>
-            <nav>
-                <ul className='navbarMobile'>
-                    <li>
-                        <Link className='navItem' to={'/'} onClick={handleCloseSidebar}>
-                            <FaHome className='navSideButton'/>
-                            <span>HOME</span>
+        :<>
+            <Col className='topMenuMobile'>
+                <button className="buttonEdit" onClick={handleShowSidebar} title="Show sidebar"><GoThreeBars/></button>
+                <img className = 'appLogo' src={window.location.origin +'/img/logo_cutre.png'} alt="logo"></img>
+                <Search/>
+                <Offcanvas show={showSidebar} onHide={handleCloseSidebar} className='sidebar'>
+                <Offcanvas.Header closeButton>
+                    <Offcanvas.Title>
+                        <Link to={'/'}>
+                            <h1 className='appTitle'>
+                                VGTracker
+                            </h1>
                         </Link>
-                    </li>
-                    <li>
-                        <Link className='navItem' to={'/stats'} onClick={handleCloseSidebar}>
-                            <IoIosStats className='navSideButton'/>   
-                            <span>STATS</span>
-                        </Link>
-                    </li>
-                    <li>
-                        <Link className='navItem' to={'/'} onClick={handleCloseSidebar}>
-                            <CgProfile className='navSideButton'/>
-                            <span>PROFILE</span>
-                        </Link>
-                    </li>
-                    <li>
-                        <button className='navItem navLogOutButton' onClick={async () => {
-                                signOut(auth).then(() => {
-                                    sessionStorage.setItem('games', []);
-                                    navigate('/', {replace: true});
-                                });
-                            }}>
-                            <FaSignOutAlt className='navSideButton'/>
-                            <span>LOG OUT</span>
-                        </button>
-                    </li>
-                </ul>
-            </nav>
-            </Offcanvas.Body>
-        </Offcanvas>
-        </Col>
+                        <h5 className='appTitleSubheader'>
+                            v0.3 Powered by <a href='https://rawg.io/'>RAWG.io</a>
+                        </h5> 
+                    </Offcanvas.Title>
+                </Offcanvas.Header>
+                <Offcanvas.Body>
+                <nav>
+                    <ul className='navbarMobile'>
+                        <li>
+                            <Link className='navItem' to={'/'} onClick={handleCloseSidebar}>
+                                <FaHome className='navSideButton'/>
+                                <span>HOME</span>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link className='navItem' to={'/stats'} onClick={handleCloseSidebar}>
+                                <IoIosStats className='navSideButton'/>   
+                                <span>STATS</span>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link className='navItem' to={'/'} onClick={handleCloseSidebar}>
+                                <CgProfile className='navSideButton'/>
+                                <span>PROFILE</span>
+                            </Link>
+                        </li>
+                        <li>
+                            <button className='navItem navLogOutButton' onClick={async () => {
+                                    signOut(auth).then(() => {
+                                        sessionStorage.setItem('games', []);
+                                        navigate('/', {replace: true});
+                                    });
+                                }}>
+                                <FaSignOutAlt className='navSideButton'/>
+                                <span>LOG OUT</span>
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+                </Offcanvas.Body>
+            </Offcanvas>
+            </Col>
+        </>
     )
 }
 

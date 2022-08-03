@@ -67,7 +67,9 @@ const ListContainer = () => {
     return (
         <Row className={isTabletOrMobile ? 'mainContainerMobile' : 'mainContainer'}>
             {isTabletOrMobile 
-            ?   <ListMobile list = {list} handleEditRemoveItem = {handleEditRemoveItem} />
+            ?   <>
+                    <ListMobile list = {list} handleEditRemoveItem = {handleEditRemoveItem} />
+                </>
             :   <List list = {list} handleEditRemoveItem = {handleEditRemoveItem} />
             }
            

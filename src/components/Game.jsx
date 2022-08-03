@@ -5,39 +5,49 @@ import { AiOutlineEdit } from 'react-icons/ai'
 import { BiTime } from 'react-icons/bi'
 import { Row, Col, Card } from 'react-bootstrap';
 import { useMediaQuery } from 'react-responsive';
+import { useState } from 'react';
+import { RiArrowDropUpLine, RiArrowDropDownLine } from 'react-icons/ri'
 
 const Game = forwardRef((props, ref) => {
 
     const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' })
 
     const {game, onClickEditItem, onClickRemoveItem} = props;
+
+    const [isCollapsed, setCollapsed] = useState(true);
+
+    function handleAccordion() {
+        isCollapsed ? setCollapsed(false) : setCollapsed(true);
+    }
     return (
         isTabletOrMobile 
         ?
         <div ref={ref} className='gameMobile'>
             <Card className='gameCard'>
                 <Card.Img src={game.image} alt="Game background" />
-                <Card.ImgOverlay className='gameCardRating'>
-                    <Card.Text> 
-                        <Rating 
-                            readonly={true} 
-                            size={20} 
-                            ratingValue={game.rating.reduce((a, b) => a + b, 0) / game.rating.length} 
-                            fillColor ={(game.rating.reduce((a, b) => a + b, 0) / game.rating.length) === 100 ? '#FFBC0D' : '#fff'} 
-                            emptyColor={'#000'}/>
+                <Card.ImgOverlay className= {isCollapsed ? 'gameCardInfoCollapsed' : 'gameCardInfo'}>
+                    <Card.Title> 
+                        {game.title} 
+                        <button className='collapseInfoButton' onClick={handleAccordion}> 
+                            {isCollapsed ? <RiArrowDropUpLine/> : <RiArrowDropDownLine/>}
+                        </button>
+                    </Card.Title>
+                    <Card.Text >
+                        <div> 
+                            <Rating 
+                                readonly={true} 
+                                size={20} 
+                                ratingValue={game.rating.reduce((a, b) => a + b, 0) / game.rating.length} 
+                                fillColor ={(game.rating.reduce((a, b) => a + b, 0) / game.rating.length) === 100 ? '#FFBC0D' : '#fff'} 
+                                emptyColor={'#000'}/>
+                        </div>
+                        <div> 
+                            Played on {game.platform} 
+                        </div>
+                        <div> 
+                            {game.playtime} hours 
+                        </div>
                     </Card.Text>
-                </Card.ImgOverlay>
-                <Card.ImgOverlay className='gameCardInfo'>
-                    <Card.Title> {game.title} </Card.Title>
-                    <Row xs={2}>
-                        
-                        <Card.Text> 
-                            {game.platform} 
-                        </Card.Text>
-                        <Card.Text> 
-                            <BiTime/> {game.playtime} hours | <MdDateRange/> {game.playdate} 
-                        </Card.Text>
-                    </Row>
                 </Card.ImgOverlay>
             </Card>
         </div>

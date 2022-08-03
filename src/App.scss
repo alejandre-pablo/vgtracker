@@ -38,7 +38,6 @@ ul {
 }
 
 #root {
-    height: 100%;
     display: flex;
     flex-direction: column;
 }
@@ -55,11 +54,9 @@ ul {
 
 .mainContainerMobile {
     flex: 1;
-    height: 100vh;
-    max-height: 100vh;
     margin: 0;
     padding: 0.5rem;
-    padding-top: 9.5vh;
+    padding-top: 9vh;
     /* background-color: var(--darkBgBase); */
 }
 
@@ -248,25 +245,19 @@ ul {
     border: 1px solid var(--accent);
     background-color: var(--darkBgBase);
 }
-.scrollable ul {
-    margin-bottom: 0;
+.scrollable ul, .scrollableMobile ul {
+    margin-bottom: 0 !important;
 }
 
 .scrollableMobile {
     margin-top: 0.5%;
-    height: 81.5vh;
-    max-height: 81.5vh;
+    height: 73vh;
+    max-height: 73vh;
     overflow-x: hidden;
-    border: 1px solid var(--accent);
-    background-color: var(--darkBgBase);
-}
-
-.listColumn .carousel-indicators {
-    display: none;
 }
 
 .mobileTabTitle {
-    margin-top: 1.4vh;
+    margin-bottom: 1vh;
     height: 6.2vh;
     color: white;
     border: 1px solid var(--accent);
@@ -337,36 +328,80 @@ ul {
 
 .gameMobile {
     padding: 1rem;
+    z-index: 20;
 }
 
 .gameCard{
     width: 100%;
-    height: 27vh;
+    height: auto;
+    max-height: 27vh;
     overflow: hidden;
 }
 .gameCardInfo {
-    height: 35%;
+    background: rgb(45,51,60);
+    background: linear-gradient(90deg, var(--darkBgAccentOpaque) 0%, rgba(0,0,0,0) 600%);
+    color: var(--accent);
+    border-radius: 0;
+    padding: 0.5rem;
+    padding-top: 1.5rem;
+    padding-left: 1rem;
+}
+
+.gameCardInfoCollapsed {
+    height: 27%;
     position: absolute;
-    top:67%;
-    background-color: var(--darkBgAccentOpaque);
+    top:76%;
+    background: rgb(45,51,60);
+    background: linear-gradient(90deg, var(--darkBgAccentOpaque) 0%, rgba(0,0,0,0) 600%);
     color: var(--accent);
     border-radius: 0;
     padding: 0.5rem;
     padding-left: 1rem;
 }
+
+.collapseInfoButton {
+    float: right;
+    margin-top: -0.5rem;
+    font-size: 1.7rem;
+    background: none;
+    border: none;
+    color:white;
+
+}
+
 .card-title {
+    margin-top: 0.2rem;
+    font-size: 1.1rem;
     color: white;
     margin-bottom: 0.4rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
-.card-text {
-    width: 50%;
-}
-.gameCardRating .card-text {
-    padding: 0.3rem;
-    margin-left: 65%;
+
+.gameCardRating {
     background-color: var(--darkBgAccentOpaque);
-    border-radius: 8px;
+    margin-left: 60%;
+    width: 40%;
+    height: 65%;
+    padding-right: 0;
+    border-radius: 0;
 }
+
+ .card-text {
+    border-top: 1px solid var(--accent);
+    color: white;
+    padding-left: 1rem;
+}
+
+.card-text div{
+    padding: 0.3rem;
+}
+
+.gameCardInfoCollapsed .card-text {
+    border: none;
+}
+
 
 /* --------------------- GAME ROW FIELDS --------------------- */
 .game > .row > .col, .game > .row > .col-md-4, 
@@ -948,10 +983,19 @@ a:hover {
     --bs-gutter-x: 0;
 }
 
-.carousel-control-prev, .carousel-control-next{
-    height: 6vh;
-    margin-top: 83.2vh;
+.slick-next {
+    right: 1rem !important;
 }
+.slick-prev {
+    left: 1rem !important;
+}
+
+.slick-arrow {
+    z-index: 100;
+    background: none;
+    top: 3.4vh !important;
+}
+
 
 /* --------------------- SCROLLBARS ---------------------*/
 
