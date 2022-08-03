@@ -35,7 +35,7 @@ const NavBar = () => {
                     </h1>
                 </Link>
                 <h5 className='appTitleSubheader'>
-                    v0.3 Powered by <a href='https://rawg.io/'>RAWG.io</a>
+                    v0.3.3 Powered by <a href='https://rawg.io/'>RAWG.io</a>
                 </h5> 
             </Col>
             <Col sm={8}>
@@ -82,7 +82,7 @@ const NavBar = () => {
                             </h1>
                         </Link>
                         <h5 className='appTitleSubheader'>
-                            v0.3 Powered by <a href='https://rawg.io/'>RAWG.io</a>
+                            v0.3.3 Powered by <a href='https://rawg.io/'>RAWG.io</a>
                         </h5> 
                     </Offcanvas.Title>
                 </Offcanvas.Header>

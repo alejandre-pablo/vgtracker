@@ -71,7 +71,7 @@ const LoginContainer = () => {
                     VGTracker 
                 </h1>
                 <div className='appTitleSubheader'>
-                    v0.3 Powered by <a href='https://rawg.io/'>RAWG.io</a>
+                    v0.3.3 Powered by <a href='https://rawg.io/'>RAWG.io</a>
                 </div>
             </div>
             <div className= 'authForm'>
