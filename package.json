@@ -1,6 +1,6 @@
 {
   "name": "vgtracker",
-  "version": "0.3.2.2",
+  "version": "0.3.3",
   "private": true,
   "dependencies": {
     "@dnd-kit/core": "^6.0.5",

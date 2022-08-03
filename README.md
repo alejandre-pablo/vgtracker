@@ -31,6 +31,7 @@ This project also relies on the following node modules:
 - React Router
 - Reactfire
 - DnD-Kit
+- React-Slick
 
 ### Disclaimer
 
