@@ -6,6 +6,8 @@ import { FcGoogle } from 'react-icons/fc';
 import { getAuth, getRedirectResult, GoogleAuthProvider, signInWithEmailAndPassword, signInWithRedirect } from 'firebase/auth';
 import { AuthProvider, useFirebaseApp} from 'reactfire';
 
+const { version } = require('../../../package.json');
+
 const LoginContainer = () => {
 
     const navigate = useNavigate();
@@ -71,7 +73,7 @@ const LoginContainer = () => {
                     VGTracker 
                 </h1>
                 <div className='appTitleSubheader'>
-                    v0.3.3 Powered by <a href='https://rawg.io/'>RAWG.io</a>
+                    v{version} Powered by <a href='https://rawg.io/'>RAWG.io</a>
                 </div>
             </div>
             <div className= 'authForm'>

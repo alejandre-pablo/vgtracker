@@ -1,8 +1,7 @@
 import React, { forwardRef } from 'react'
 import { Rating } from 'react-simple-star-rating'
-import { MdClose, MdDateRange } from 'react-icons/md';
+import { MdClose } from 'react-icons/md';
 import { AiOutlineEdit } from 'react-icons/ai'
-import { BiTime } from 'react-icons/bi'
 import { Row, Col, Card } from 'react-bootstrap';
 import { useMediaQuery } from 'react-responsive';
 import { useState } from 'react';
@@ -27,7 +26,7 @@ const Game = forwardRef((props, ref) => {
                 <Card.Img src={game.image} alt="Game background" />
                 <Card.ImgOverlay className= {isCollapsed ? 'gameCardInfoCollapsed' : 'gameCardInfo'}>
                     <Card.Title> 
-                        {game.title} 
+                        <div>{game.title}</div> 
                         <button className='collapseInfoButton' onClick={handleAccordion}> 
                             {isCollapsed ? <RiArrowDropUpLine/> : <RiArrowDropDownLine/>}
                         </button>
@@ -62,10 +61,10 @@ const Game = forwardRef((props, ref) => {
                             <Col md={3}>
                                 <span className='gameTitle'>{game.title}</span>
                             </Col>
-                            <Col md={1}>
+                            <Col md={3}>
                             <span className='gamePlatform'> {game.platform}</span> 
                             </Col>
-                            <Col md={3}>
+                            <Col md={1}>
                                 <span className='gamePlaytime'>{game.playtime}</span>
                             </Col>
                             <Col md={3}>

@@ -11,6 +11,7 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import { AuthProvider, FirestoreProvider, useFirebaseApp, useSigninCheck } from 'reactfire';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
+import { useEffect } from 'react';
 
 function App(){
 
@@ -43,6 +44,16 @@ function App(){
         return fallback;
     };
 
+    useEffect(() => {
+        if(window.innerWidth >= 768) {
+            let viewheight = window.innerHeight;
+            let viewwidth = window.innerWidth;
+            let viewport = document.querySelector("meta[name=viewport]");
+            viewport.setAttribute("content", "height=" + viewheight + "px, width=" + viewwidth + "px, initial-scale=1.0");
+        }
+    })
+    
+
     return (
         <AuthProvider sdk={auth}>
             <FirestoreProvider sdk={firestoreDatabase}>
@@ -52,7 +63,7 @@ function App(){
                             <Route path ='/' element ={<><NavBar /><ListContainer /></>}/>
                             <Route path ='/home' element ={<><NavBar /><ListContainer /></>}/>
                             <Route path ='/stats' element ={<><NavBar /><StatsContainer /></>}/>
-                            <Route path ='/search/:string' element ={<><NavBar /><SearchResultsContainer /></>}/>
+                            <Route path ='/search' element ={<><NavBar /><SearchResultsContainer /></>}/>
                             <Route path ='/game/:game' element ={<><NavBar /><GameDetailContainer /></>}/>
                             <Route path ='/error' element ={<ErrorContainer />}/>
                         </Routes>

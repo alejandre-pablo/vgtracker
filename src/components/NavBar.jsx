@@ -11,6 +11,8 @@ import { GoThreeBars } from 'react-icons/go'
 import { useMediaQuery } from 'react-responsive';
 import { useState } from 'react';
 
+const { version } = require('../../package.json');
+
 const NavBar = () => {
 
     const isTabletOrMobile = useMediaQuery({query: '(max-width: 1224px)'})
@@ -30,12 +32,12 @@ const NavBar = () => {
         ? <Row className='topMenu'>
             <Col>
                 <Link to={'/'}>
-                    <h1 className='appTitle'>
+                    <h2 className='appTitle'>
                         VGTracker
-                    </h1>
+                    </h2>
                 </Link>
                 <h5 className='appTitleSubheader'>
-                    v0.3.3 Powered by <a href='https://rawg.io/'>RAWG.io</a>
+                    v{version} Powered by <a href='https://rawg.io/'>RAWG.io</a>
                 </h5> 
             </Col>
             <Col sm={8}>
@@ -71,7 +73,9 @@ const NavBar = () => {
         :<>
             <Col className='topMenuMobile'>
                 <button className="buttonEdit" onClick={handleShowSidebar} title="Show sidebar"><GoThreeBars/></button>
-                <img className = 'appLogo' src={window.location.origin +'/img/logo_cutre.png'} alt="logo"></img>
+                <Link to={'/'}>
+                    <img className = 'appLogo' src={window.location.origin +'/img/logo_cutre.png'} alt="logo"></img>
+                </Link>
                 <Search/>
                 <Offcanvas show={showSidebar} onHide={handleCloseSidebar} className='sidebar'>
                 <Offcanvas.Header closeButton>
@@ -82,7 +86,7 @@ const NavBar = () => {
                             </h1>
                         </Link>
                         <h5 className='appTitleSubheader'>
-                            v0.3.3 Powered by <a href='https://rawg.io/'>RAWG.io</a>
+                            v{version} Powered by <a href='https://rawg.io/'>RAWG.io</a>
                         </h5> 
                     </Offcanvas.Title>
                 </Offcanvas.Header>

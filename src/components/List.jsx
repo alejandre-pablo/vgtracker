@@ -123,8 +123,8 @@ const List = (props) => {
         <Col md = {11}>
             <Row>
                 <Col md = {3} className="columnTitle">TITLE</Col>
-                <Col md = {1} className='columnTitle '>PLATFORM</Col>
-                <Col md = {3} className='columnTitle '>PLAYTIME</Col>
+                <Col md = {3} className='columnTitle' style={{paddingLeft: '3rem'}}>PLATFORM</Col>
+                <Col md = {1} className='columnTitle 'style={{paddingLeft: '1.5rem'}}>PLAYTIME</Col>
                 <Col md = {3} className='columnTitle'>RATING</Col>
                 <Col className='columnFill'><div className='bookmark'></div></Col>
             </Row>

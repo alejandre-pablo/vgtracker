@@ -4,7 +4,8 @@ import { FcGoogle } from 'react-icons/fc'
 import { Link, useNavigate } from 'react-router-dom';
 import { getAuth, createUserWithEmailAndPassword, signInWithRedirect, GoogleAuthProvider, updateProfile } from 'firebase/auth';
 import { AuthProvider, useFirebaseApp} from 'reactfire';
-import GoogleButton from 'react-google-button';
+
+const { version } = require('../../../package.json');
 
 const SignupContainer = () => {
 
@@ -82,7 +83,7 @@ const SignupContainer = () => {
                     VGTracker 
                 </h1>
                 <div className='appTitleSubheader'>
-                    v0.3.3 Powered by <a href='https://rawg.io/'>RAWG.io</a>
+                    v{version} Powered by <a href='https://rawg.io/'>RAWG.io</a>
                 </div>
             </div>
             <Form className= 'authForm' onSubmit={emailAndPasswordHandler}>

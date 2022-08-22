@@ -48,7 +48,7 @@ ul {
     max-height: 100vh;
     margin: 0;
     padding: 0.5rem;
-    padding-top: 11vh;
+    padding-top: 9.5vh;
     /* background-color: var(--darkBgBase); */
 }
 
@@ -237,9 +237,9 @@ ul {
 }
 
 .scrollable {
-    margin-top: 0.5%;
-    height: 94%;
-    max-height: 94%;
+    margin-top: 1.3vh;
+    height: 83vh;
+    max-height: 83vh;
     overflow-x: hidden;
     overflow-y: scroll;
     border: 1px solid var(--accent);
@@ -251,8 +251,7 @@ ul {
 
 .scrollableMobile {
     margin-top: 0.5%;
-    height: 73vh;
-    max-height: 73vh;
+    height: 81vh;
     overflow-x: hidden;
 }
 
@@ -261,6 +260,13 @@ ul {
     height: 6.2vh;
     color: white;
     border: 1px solid var(--accent);
+}
+
+.mobileTabTitleWrapper {
+    position: fixed !important; 
+    bottom: 0;
+    left: 0;
+    width: 100%;
 }
 
 .mobileTabTitle div{
@@ -333,9 +339,10 @@ ul {
 
 .gameCard{
     width: 100%;
-    height: auto;
-    max-height: 27vh;
+    height: 27vh;
     overflow: hidden;
+    background-color: black;
+    border: 1px solid var(--accent);
 }
 .gameCardInfo {
     background: rgb(45,51,60);
@@ -355,13 +362,12 @@ ul {
     background: linear-gradient(90deg, var(--darkBgAccentOpaque) 0%, rgba(0,0,0,0) 600%);
     color: var(--accent);
     border-radius: 0;
-    padding: 0.5rem;
+    padding: 0.2rem;
     padding-left: 1rem;
 }
 
 .collapseInfoButton {
-    float: right;
-    margin-top: -0.5rem;
+    display: inline-block;
     font-size: 1.7rem;
     background: none;
     border: none;
@@ -374,6 +380,14 @@ ul {
     font-size: 1.1rem;
     color: white;
     margin-bottom: 0.4rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    
+}
+.card-title div {
+    display: inline-block;
+    width: 85%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -592,7 +606,7 @@ ul {
 /* --------------------- FIRST ROW ---------------------*/
 .listHeader {
     border: 1px solid var(--accent);
-    height: 5%;
+    height: 4.5vh;
     background-color: var(--darkBgAccent);
 }
 
@@ -623,7 +637,7 @@ ul {
     padding: 0;
 }
 .tabSelectors {
-    margin-top: 3.2rem;
+    margin-top: 5rem;
 }
 
 .nav-link {
@@ -699,7 +713,7 @@ ul {
     background-color: var(--darkBgAccentOpaque);
     border-bottom: 1px solid var(--accent);
     padding: 0.5rem;
-    height: 10vh;
+    height: 8vh;
 }
 
 .topMenuMobile {
@@ -719,7 +733,7 @@ ul {
 }
 
 .navbar {
-    padding-top: 1.5rem !important;
+    padding-top: 0.75rem !important;
 }
 
 /* --------------------- SEARCH BAR ---------------------*/
@@ -744,22 +758,20 @@ ul {
 
 /* --------------------- SEARCH RESULTS ---------------------*/
 .searchList {
-    height: 100%;
-    max-height: 100%;
-    overflow-y: scroll;
+    width: 98%;
+    height: 83vh;
+    max-height: 83vh;
     overflow-x: hidden;
+    overflow-y: scroll;
     border: 1px solid var(--accent);
-    margin-top: 0;
-    padding: 0.5rem !important;
-
+    background-color: var(--darkBgBase);
+    margin: 0 auto 0 auto;
 }
 
 .resultsContainer {
-    padding-top: 12vh !important;
+    padding-top: 9vh;
     height: 100%;
     margin: 0;
-    padding-bottom: 1rem;
-    /* background-color: var(--darkBgBase); */
 }
 
 .emptySearchList {
@@ -767,13 +779,6 @@ ul {
      font-size: 1.5rem;
     text-align: center;
     margin-top: 3rem;
-}
-
-.sideBarColumnWide {
-    height: 100%;
-    max-width: 20%;
-    padding: 0;
-    border: 1px solid var(--accent);
 }
 
 .emptyListImage {
@@ -789,9 +794,7 @@ ul {
     transform: rotate(3420deg);
   }
 .searchedGame {
-    margin-bottom: 0.75rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--accent);
+    padding: 0.75rem 0 0.75rem 0.75rem;
 }
 
 .searchText {
@@ -882,10 +885,24 @@ ul {
 
 }
 
-/* .focusedGameInfo {
-    visibility: hidden;
-    margin-left: 10%;
-} */
+.pagesNavWrapper {
+    font-size: 1.1rem;
+    padding-top: 1rem;
+    margin: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pagesNavWrapper button {
+    width: fit-content;
+    text-decoration: none;
+    background: none;
+    border: none;
+    color: var(--accent);
+}
+
 
 /* --------------------- OVERRIDES ---------------------*/
 
@@ -1001,7 +1018,7 @@ a:hover {
 
 /* width */
 ::-webkit-scrollbar {
-    width: 10px;
+    width: 12px;
 }
   
 /* Track */
@@ -1016,7 +1033,7 @@ a:hover {
   
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--accent); 
+    background: white; 
 }
 
 .col-sm-8 nav {
@@ -1037,14 +1054,13 @@ a:hover {
         display: inline-block;
     }
     .searchBar {
-        margin-left: 10%;
+        margin-left: 5%;
         width: 90%;
     }
 
     ::-webkit-scrollbar {
         display: none;
     }
-      
 }
 
 @media only screen and (min-width: 600px) {
