@@ -200,25 +200,6 @@ const AddForm = (props) => {
                 </Row>
                 <Row className='formGroup'>
                 <Form.Label className='formHeader'> Play Details </Form.Label>
-                <Form.Group className='mb-3'>
-                    <FloatingLabel
-                    controlId='playtimeLabel'
-                    label='Playtime (Hours)'
-                    className='formLabel'
-                    >   
-                        <Form.Control type='text' className="inputText" value={playtime} onChange={e => handlePlaytime(e.target.value)} readOnly = {playstatus === 'plantoplay' ? true: false}/>
-                    </FloatingLabel>
-                </Form.Group>
-
-                <Form.Group className='mb-3'>
-                    <FloatingLabel
-                    controlId='playdateLabel'
-                    label='Playdate (Year)'
-                    className='formLabel'
-                    >   
-                        <Form.Control type='number' min={1000} max={9999} maxLength="4" className="inputText" value={playdate} onChange={e => setPlaydate(e.target.value.slice(0,4))} readOnly = {playstatus === 'plantoplay' ? true: false}/>
-                    </FloatingLabel>
-                </Form.Group>
 
                 <Form.Group className='mb-3'>
                     <FloatingLabel
@@ -235,6 +216,26 @@ const AddForm = (props) => {
                                 <option value="other" >Other</option>
                                 <option value="plantoplay">Plan to Play</option>
                         </Form.Select>
+                    </FloatingLabel>
+                </Form.Group>
+                
+                <Form.Group className='mb-3'>
+                    <FloatingLabel
+                    controlId='playtimeLabel'
+                    label='Playtime (Hours)'
+                    className='formLabel'
+                    >   
+                        <Form.Control type='text' className="inputText" placeholder= '0,0' value={playtime} onChange={e => handlePlaytime(e.target.value)} readOnly = {playstatus === 'plantoplay' ? true: false}/>
+                    </FloatingLabel>
+                </Form.Group>
+
+                <Form.Group className='mb-3'>
+                    <FloatingLabel
+                    controlId='playdateLabel'
+                    label='Playdate (Year)'
+                    className='formLabel'
+                    >   
+                        <Form.Control type='number' min={1000} max={9999} maxLength="4" placeholder= {new Date().getFullYear()}  className="inputText" value={playdate} onChange={e => setPlaydate(e.target.value.slice(0,4))} readOnly = {playstatus === 'plantoplay' ? true: false}/>
                     </FloatingLabel>
                 </Form.Group>
 

@@ -142,6 +142,24 @@ const EditForm = (props) => {
                 </Row>
                 <Row className='formGroup'>
                 <Form.Label className='formHeader'> Play Details </Form.Label>
+
+                <Form.Group className='mb-3'>
+                    <FloatingLabel
+                    controlId='statusLabel'
+                    label='Status'
+                    className='formLabel'
+                    >   
+                        <Form.Select type='text' className="inputText" placeholder='Status' value={playstatus} onChange={e => setPlaystatus(e.target.value)}>
+                                <option value="finished">Finished</option>
+                                <option value="playing">Playing</option>
+                                <option value="onhold">On Hold</option>
+                                <option value="dropped" >Dropped</option>
+                                <option value="other" >Other</option>
+                                <option value="plantoplay">Plan to Play</option>
+                        </Form.Select>
+                    </FloatingLabel>
+                </Form.Group>
+
                 <Form.Group className='mb-3'>
                     <FloatingLabel
                     controlId='playtimeLabel'
@@ -162,22 +180,6 @@ const EditForm = (props) => {
                     </FloatingLabel>
                 </Form.Group>
 
-                <Form.Group className='mb-3'>
-                    <FloatingLabel
-                    controlId='statusLabel'
-                    label='Status'
-                    className='formLabel'
-                    >   
-                        <Form.Select type='text' className="inputText" placeholder='Status' value={playstatus} onChange={e => setPlaystatus(e.target.value)}>
-                                <option value="finished">Finished</option>
-                                <option value="playing">Playing</option>
-                                <option value="onhold">On Hold</option>
-                                <option value="dropped" >Dropped</option>
-                                <option value="other" >Other</option>
-                                <option value="plantoplay">Plan to Play</option>
-                        </Form.Select>
-                    </FloatingLabel>
-                </Form.Group>
                 <Form.Group className='mb-3' style={playstatus === 'plantoplay' ? {opacity: 0.65} : {}}>
                     <Form.Label className='ratingsLabel'> Ratings </Form.Label>
                     <Row className='ratingsRow'>

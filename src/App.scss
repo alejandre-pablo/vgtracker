@@ -3,7 +3,8 @@
 :root {
     --base: #2d333c;
     --accent: #9fa6cc;
-    --darkBgAccentOpaque: #2d333c;
+    --accentTranslucid: #9fa6cc88;
+    --darkAccent: #646983;
     --darkBgAccent: #2d333c88;
     --darkBgBase: #242b3a65;
     --darkBgHighlight: #2d303c5b;
@@ -23,6 +24,7 @@ html {
 body {
     font-family: 'Poppins', sans-serif;
     background: none;
+    color: var(--accent);
     width: 100%;
     height: 100%;
     max-width: 100%;
@@ -221,7 +223,7 @@ ul {
 }
 
 .sidebar {
-    background-color: var(--darkBgAccentOpaque);
+    background-color: var(--base);
     color: var(--accent);
     width: 80%;
 }
@@ -346,7 +348,7 @@ ul {
 }
 .gameCardInfo {
     background: rgb(45,51,60);
-    background: linear-gradient(90deg, var(--darkBgAccentOpaque) 0%, rgba(0,0,0,0) 600%);
+    background: linear-gradient(90deg, var(--base) 0%, rgba(0,0,0,0) 600%);
     color: var(--accent);
     border-radius: 0;
     padding: 0.5rem;
@@ -359,7 +361,7 @@ ul {
     position: absolute;
     top:76%;
     background: rgb(45,51,60);
-    background: linear-gradient(90deg, var(--darkBgAccentOpaque) 0%, rgba(0,0,0,0) 600%);
+    background: linear-gradient(90deg, var(--base) 0%, rgba(0,0,0,0) 600%);
     color: var(--accent);
     border-radius: 0;
     padding: 0.2rem;
@@ -394,7 +396,7 @@ ul {
 }
 
 .gameCardRating {
-    background-color: var(--darkBgAccentOpaque);
+    background-color: var(--base);
     margin-left: 60%;
     width: 40%;
     height: 65%;
@@ -502,25 +504,37 @@ ul {
 }
 
 .buttonAddGame {
-    background: none;
-    color: var(--accent);
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100px;
-    height: 100px;
-    margin: 0.5rem;
-    padding-top: -0.5rem;
-    width: 3rem;
-    height: 3rem;
-    float: right;
-    outline: none;
-    font-size: 3.5rem;
-    border: none;
+    padding: 0.25rem 1rem 0.25rem 1rem;
+    background: none;
+    color: var(--accent);
+    font-size: 1.1rem;
+    border: 1px solid var(--accent);
+}
+
+.buttonAddGameDisabled {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.25rem 1rem 0.25rem 1rem;
+    background: none;
+    color: var(--darkAccent);
+    font-size: 1.1rem;
+    border: 1px solid var(--darkAccent);
 }
 
 .buttonAddGame:hover {
+    cursor: pointer;
     color: white;
+    border: 1px solid white;
+}
+
+.buttonAddGameWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* --------------------- ADD GAME MODAL ---------------------*/
@@ -710,7 +724,7 @@ ul {
     position: fixed;
     width: 100%;
     z-index: 999;
-    background-color: var(--darkBgAccentOpaque);
+    background-color: var(--base);
     border-bottom: 1px solid var(--accent);
     padding: 0.5rem;
     height: 8vh;
@@ -721,7 +735,7 @@ ul {
     position: fixed;
     width: 100%;
     z-index: 999;
-    background-color: var(--darkBgAccentOpaque);
+    background-color: var(--base);
     border-bottom: 1px solid var(--accent);
     padding-left: 1rem;
     height: 8vh;
@@ -903,6 +917,54 @@ ul {
     color: var(--accent);
 }
 
+/* --------------------- STATS ---------------------*/
+
+.statsContainer {
+    height: 100vh;
+    max-height: 100vh;
+    padding-top: 9.5vh;
+    /* background-color: var(--darkBgBase); */
+}
+
+.statsMainRow {
+    padding-left: 1rem;
+    border-bottom: 1px solid var(--accent);
+}
+
+.statsYearDropdown button {
+    color: var(--accent);
+    margin-left: 50%;
+    width: 50%;
+    background: none;
+    outline: 0;
+    border: 0;
+    border-radius: 0;
+    border-bottom: 1px solid var(--accent);
+    padding: 0;
+    padding-left: 0.5rem;
+    text-align: start;
+}
+
+.statsYearDropdown button::after {
+    position: absolute;
+    top: 50%;
+    right: 5%;
+    transform: translate(0,-50%);
+}
+
+.statDiv {
+    height: 90%;
+    width: 30%;
+    margin: auto;
+    margin-top: 10%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--accent);
+    background-color: var(--darkBgHighlight);
+    box-shadow: 5px 5px 3px #15181a;
+}
 
 /* --------------------- OVERRIDES ---------------------*/
 
@@ -1013,6 +1075,11 @@ a:hover {
     top: 3.4vh !important;
 }
 
+.btn-dark:focus, .btn-dark:hover, .show > .btn-dark.dropdown-toggle {
+    background: none !important;
+    box-shadow: none !important;
+    border-color: white !important;
+}
 
 /* --------------------- SCROLLBARS ---------------------*/
 
