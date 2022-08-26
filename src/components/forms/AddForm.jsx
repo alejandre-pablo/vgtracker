@@ -68,7 +68,6 @@ const AddForm = (props) => {
 
         if(gameId !== -1 && fetched === false) {
             fetch(`https://api.rawg.io/api/games/${gameId}?key=${k}`).then( res => res.json()).then((result) => {
-                console.log(`fetched game ${result.name}, id ${gameId} successfully`)
                 setFetched(true);
                 setId(gameId);
                 setTitle(result.name);
@@ -174,7 +173,7 @@ const AddForm = (props) => {
         </Modal.Header>
         <Modal.Body>
             <Form  /* className='gamesForm file-input' */ >
-                <Row className='formGroup'>
+                <Row className='formGroupBordered'>
                 <Form.Label className='formHeader'> Game Details </Form.Label>
                 <Form.Group className='mb-3'>
                     <FloatingLabel
@@ -185,7 +184,6 @@ const AddForm = (props) => {
                         <Form.Control type='text' className="inputText" placeholder='Title' value={title} onChange={e => setTitle(e.target.value)} />
                     </FloatingLabel>
                 </Form.Group>
-
                 <Form.Group className='mb-3'>
                     <FloatingLabel
                     controlId='platformLabel'
@@ -198,7 +196,7 @@ const AddForm = (props) => {
                     </FloatingLabel>
                 </Form.Group>
                 </Row>
-                <Row className='formGroup'>
+                <Row className='formGroupBordered'>
                 <Form.Label className='formHeader'> Play Details </Form.Label>
 
                 <Form.Group className='mb-3'>
@@ -247,7 +245,7 @@ const AddForm = (props) => {
                                 <Form.Label className='ratingsSubLabel'> Gameplay </Form.Label>
                             </Row>
                             <Row>
-                                <Rating className='ratingsStars' onClick={e => setRating([e, rating[1], rating[2]])} ratingValue={rating[0]} transition={true} size='2.2rem' emptyColor= "#262e33" readonly = {playstatus === 'plantoplay' ? true: false}/>
+                                <Rating className='ratingsStars' onClick={e => setRating([e, rating[1], rating[2]])} ratingValue={rating[0]} transition={true} size='2.2rem' fillColor ={'#fff'} emptyColor= "#262e33" readonly = {playstatus === 'plantoplay' ? true: false}/>
                             </Row>   
                         </Col>
                         <Col>
@@ -255,7 +253,7 @@ const AddForm = (props) => {
                                 <Form.Label className='ratingsSubLabel'> Story </Form.Label>
                             </Row>
                             <Row>
-                                <Rating className='ratingsStars' onClick={e => setRating([rating[0], e, rating[2]])} ratingValue={rating[1]} transition={true} size='2.2rem' emptyColor= "#262e33" readonly = {playstatus === 'plantoplay' ? true: false}/>
+                                <Rating className='ratingsStars' onClick={e => setRating([rating[0], e, rating[2]])} ratingValue={rating[1]} transition={true} size='2.2rem' fillColor ={'#fff'} emptyColor= "#262e33" readonly = {playstatus === 'plantoplay' ? true: false}/>
                             </Row>  
                         </Col>
                         <Col>
@@ -263,7 +261,7 @@ const AddForm = (props) => {
                                 <Form.Label className='ratingsSubLabel'> Art & Music </Form.Label>
                             </Row>
                             <Row>
-                                <Rating className='ratingsStars' onClick={e => setRating([rating[0], rating[1], e])} ratingValue={rating[2]} transition={true} size='2.2rem' emptyColor= "#262e33" readonly = {playstatus === 'plantoplay' ? true: false}/>
+                                <Rating className='ratingsStars' onClick={e => setRating([rating[0], rating[1], e])} ratingValue={rating[2]} transition={true} size='2.2rem' fillColor ={'#fff'} emptyColor= "#262e33" readonly = {playstatus === 'plantoplay' ? true: false}/>
                             </Row>
                         </Col>
                     </Row>

@@ -53,10 +53,10 @@ const Game = forwardRef((props, ref) => {
         : <div ref={ref} className="game">
             {game.playstatus !== 'plantoplay' 
                 ? <Row>
-                    <Col md={1}>
+                    <Col md={2} className="gameImageWrapper">
                         <img className='gameListImage' src={game.image} alt=''/>
                     </Col>
-                    <Col md={11}>
+                    <Col md={10}>
                         <Row /* className='mainGameInfo' */>
                             <Col md={3}>
                                 <span className='gameTitle'>{game.title}</span>
@@ -64,7 +64,7 @@ const Game = forwardRef((props, ref) => {
                             <Col md={3}>
                             <span className='gamePlatform'> {game.platform}</span> 
                             </Col>
-                            <Col md={1}>
+                            <Col md={2}>
                                 <span className='gamePlaytime'>{game.playtime}</span>
                             </Col>
                             <Col md={3}>
@@ -77,7 +77,7 @@ const Game = forwardRef((props, ref) => {
                                         emptyColor={'#2d373c'}/>
                                 </span>
                             </Col>
-                            <Col md={2} className='rightButton'>
+                            <Col md={1} className='rightButton'>
                                 <button className="buttonEdit" onClick={(e) => { onClickEditItem(game.id) }} title="Edit entry"><AiOutlineEdit /></button>
                                 <button className="buttonRemove" onClick={(e) => { onClickRemoveItem(game.id) }} title="Delete entry" ><MdClose /></button>
                             </Col>

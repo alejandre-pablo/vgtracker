@@ -1,7 +1,10 @@
 import React from 'react'
-import { Col, Row } from 'react-bootstrap';
+import { Card, Col, Row } from 'react-bootstrap';
+import { useMediaQuery } from 'react-responsive';
 
 const SearchedGame = ({gameItem, addGameHandler}) => {
+
+    const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' })
     const handleShowModal = addGameHandler;
     const game = gameItem;
     const listPlatforms = game.platforms!== null ? game.platforms.map((platform) => `${platform.platform.name}`).join(" | ") : '';
@@ -10,7 +13,8 @@ const SearchedGame = ({gameItem, addGameHandler}) => {
     let localMatch = JSON.parse(sessionStorage.getItem('games')).filter(storedGame => (storedGame.id === game.id));
     const storedGame = localMatch.length > 0 ? localMatch[0] : {};
     return (
-        <li className="searchedGame">
+        !isTabletOrMobile 
+        ?<li className="searchedGame">
             <Row>
                 <Col sm={2}>
                     <div className='imageContainer'>
@@ -36,13 +40,34 @@ const SearchedGame = ({gameItem, addGameHandler}) => {
                     ? <button className='buttonAddGame' onClick={() =>handleShowModal(game.id)}>
                         + Add to list
                     </button>
-                    : <button className='buttonAddGameDisabled'>
+                    : <button className='buttonAddGame buttonAddGameDisabled'>
                         ✓ {storedGame.playstatus.charAt(0).toUpperCase() + storedGame.playstatus.slice(1)}
                     </button>
                     }
                     
                 </Col>
             </Row>  
+        </li>
+
+        :<li className='gameMobile'>
+            <Card className='gameCard'>
+                <Card.Img src={game.background_image} alt="Game background" />
+                <Card.ImgOverlay>
+                    {JSON.parse(sessionStorage.getItem('games')).filter(storedGame => (storedGame.id === game.id)).length === 0 
+                        ? <button className='buttonAddGameMobile' onClick={() =>handleShowModal(game.id)}>
+                            + Add to list
+                        </button>
+                        : <button className='buttonAddGameMobile buttonAddGameDisabledMobile'>
+                            ✓ {storedGame.playstatus.charAt(0).toUpperCase() + storedGame.playstatus.slice(1)}
+                        </button>
+                    }
+                </Card.ImgOverlay>
+                <Card.ImgOverlay className= {'searchCardInfo'}>
+                    <Card.Title> 
+                        <div>{game.name}</div> 
+                    </Card.Title>
+                </Card.ImgOverlay>
+            </Card>
         </li>
     )
 }

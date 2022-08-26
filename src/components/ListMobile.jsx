@@ -14,13 +14,11 @@ const ListMobile = (props) => {
     const [nav2, setNav2] = useState();
 
     function handleRemoveItem (id)  {
-        console.log(`Deleting game id ${id} from list`)
-            var tmpList = list.filter((item => item.id !== id))
-            handleEditRemoveItem(tmpList);
+        var tmpList = list.filter((item => item.id !== id))
+        handleEditRemoveItem(tmpList);
     };
 
     function handleUpdateItem (game)  {
-        console.log(`Editing game ${game.title}`)
         var gameIndex = list.findIndex((item => item.id === game.id))
         let tmpList = [...list];
         tmpList.splice(gameIndex, 1);
@@ -41,54 +39,42 @@ const ListMobile = (props) => {
     const gameListFinished = 
         <ul>
             {list.filter(game => game.playstatus === "finished" ).map ((game, index) => (
-                <div className={index % 2 === 0 ? 'highlight' : ''}>
-                    <Game key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>
-                </div>))
+                <Game key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>))
             }
         </ul>   
 
     const gameListPlaying = 
         <ul>
             {list.filter(game => game.playstatus === "playing" ).map ((game, index) => (
-                <div className={index % 2 === 0 ? 'highlight' : ''}>
-                    <Game key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>
-                </div>))
+                <Game key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>))
             }
         </ul>  
 
     const gameListOnHold = 
         <ul>
             {list.filter(game => game.playstatus === "onhold" ).map ((game, index) => (
-                <div className={index % 2 === 0 ? 'highlight' : ''}>
-                    <Game key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>
-                </div>))
+                <Game key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>))
             }
         </ul>  
 
     const gameListDropped = 
         <ul>
             {list.filter(game => game.playstatus === "dropped" ).map ((game, index) => (
-                <div className={index % 2 === 0 ? 'highlight' : ''}>
-                    <Game key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>
-                </div>))
+                <Game key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>))
             }
         </ul>  
 
     const gameListOther = 
         <ul>
             {list.filter(game => game.playstatus === "other" ).map ((game, index) => (
-                <div className={index % 2 === 0 ? 'highlight' : ''}>
-                    <Game key = {game.id} id={game.id}  onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>
-                </div>))
+                <Game key = {game.id} id={game.id}  onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>))
             }
         </ul>  
 
     const gameListPlanToPlay = 
         <ul>
             {list.filter(game => game.playstatus === "plantoplay" ).map ((game, index) => (
-                <div className={index % 2 === 0 ? 'highlight' : ''}>
-                    <Game key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>
-                </div>))
+                <Game key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>))
             }
         </ul> 
 
@@ -96,32 +82,6 @@ const ListMobile = (props) => {
         <>
             <EditForm show ={showModal} handleCloseModal = {handleCloseModal} gameId = {gameId} updateItemHandler = {handleUpdateItem}/>
             <Col className='listColumn'>
-                <Slider 
-                    asNavFor={nav1} 
-                    ref={(slider2) => setNav2(slider2)} 
-                    slidesToShow={1} 
-                    arrows={false} 
-                    style={{border: '1px solid var(--accent)', maxHeight: 'min-content'}}
-                    swipe={false}>
-                    <Row className='scrollableMobile'> 
-                        {list.length ? gameListFinished : "No games added yet"}
-                    </Row>
-                    <Row className='scrollableMobile'> 
-                        {list.length ? gameListPlaying : "No games added yet"}
-                    </Row>
-                    <Row className='scrollableMobile'> 
-                        {list.length ? gameListOnHold : "No games added yet"}
-                    </Row>
-                    <Row className='scrollableMobile'> 
-                        {list.length ? gameListDropped : "No games added yet"}
-                    </Row>
-                    <Row className='scrollableMobile'> 
-                        {list.length ? gameListOther : "No games added yet"}
-                    </Row>
-                    <Row className='scrollableMobile'>
-                        {list.length ? gameListPlanToPlay : "No games added yet"} 
-                    </Row>
-                </Slider>
                 <Slider asNavFor={nav2} ref={(slider1) => setNav1(slider1)} className='mobileTabTitleWrapper'>
                     <Row className='mobileTabTitle'> 
                         <div style={{background: 'radial-gradient(circle, rgba(0,0,0,0) 0%, #66cc66 100%)'}}>COMPLETED</div>
@@ -140,6 +100,32 @@ const ListMobile = (props) => {
                     </Row>
                     <Row className='mobileTabTitle'> 
                         <div style={{background: 'radial-gradient(circle, rgba(0,0,0,0) 0%, rgba(128,77,153,1) 100%)'}}>PLAN TO PLAY</div>
+                    </Row>
+                </Slider>
+                <Slider 
+                    asNavFor={nav1} 
+                    ref={(slider2) => setNav2(slider2)} 
+                    slidesToShow={1} 
+                    arrows={false} 
+                    style={{maxHeight: 'min-content'}}
+                    swipe={false}>
+                    <Row className='scrollableMobile'> 
+                        {list.length ? gameListFinished : "No games added yet"}
+                    </Row>
+                    <Row className='scrollableMobile'> 
+                        {list.length ? gameListPlaying : "No games added yet"}
+                    </Row>
+                    <Row className='scrollableMobile'> 
+                        {list.length ? gameListOnHold : "No games added yet"}
+                    </Row>
+                    <Row className='scrollableMobile'> 
+                        {list.length ? gameListDropped : "No games added yet"}
+                    </Row>
+                    <Row className='scrollableMobile'> 
+                        {list.length ? gameListOther : "No games added yet"}
+                    </Row>
+                    <Row className='scrollableMobile'>
+                        {list.length ? gameListPlanToPlay : "No games added yet"} 
                     </Row>
                 </Slider>
             </Col>

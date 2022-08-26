@@ -1,4 +1,4 @@
-import { useState, React, useEffect } from 'react'
+import { useState, React, useEffect, useRef } from 'react'
 import {useSearchParams } from 'react-router-dom'
 import SearchedGame from '../components/SearchedGame';
 import AddForm from '../components/forms/AddForm';
@@ -7,6 +7,8 @@ import { Row } from 'react-bootstrap';
 const SearchResultsContainer = (props) => {
 
     const k = 'd068d12dda5d4c8283eaa6167fe26f79';
+
+    const listInnerRef = useRef();
 
     const [searchParams, setSearchParams] = useSearchParams();
     const [isLoading, setIsLoading] = useState(false);
@@ -34,16 +36,24 @@ const SearchResultsContainer = (props) => {
     
     const handleScroll = (e) => {
         if(searchResults.next !== null && !isLoading) {
-            if(e.target.scrollHeight - e.target.scrollTop <= e.target.clientHeight) {
+            /* if(e.target.scrollHeight - e.target.scrollTop <= e.target.clientHeight) {
                 setIsLoading(true);
                 gameSearch(currQuery, true);
                 setIsLoading(false);
-            }
+            } */
+            if (listInnerRef.current) {
+                const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
+                if (scrollTop + clientHeight >= (scrollHeight-99)) {
+                    setIsLoading(true);
+                    gameSearch(currQuery, true);
+                    setIsLoading(false);
+                }
+              }
         }
     }
 
     const listResults = 
-        <ul onScroll={handleScroll} className='searchList'>
+        <ul onScroll={handleScroll} ref={listInnerRef} className='searchList'>
             {searchResults.results.map((result, index) => 
                 <div className={index % 2 === 0 ? 'highlight' : ''}>
                     <SearchedGame  key={result.id} gameItem ={result} addGameHandler = {handleAddGame}/>
@@ -110,12 +120,12 @@ const SearchResultsContainer = (props) => {
     return (
         <>
             <Row className='resultsContainer'>
-                    <h4 style= {{color: 'var(--accent)', padding: '0.5rem', paddingLeft: '2rem'}}> 
+                    {/* <h4 style= {{color: 'var(--accent)', padding: '0.5rem', paddingLeft: '2rem'}}> 
                         Showing search results for:
                         <span style={{fontStyle:'italic'}}>
                             &nbsp;"{searchParams.get('search_query')}"
                         </span>
-                    </h4>
+                    </h4> */}
                     {searchResults.count !== 0 ? listResults : listEmpty}
             </Row>
             {/* {pagesNav} */}

@@ -3,7 +3,7 @@ import {useSortable} from '@dnd-kit/sortable';
 import {CSS} from '@dnd-kit/utilities';
 
 import Game from '../Game';
-import { MdDragHandle } from 'react-icons/md';
+import { TiArrowUnsorted } from 'react-icons/ti';
 const SortableGame = (props) => {
     const {
         attributes,
@@ -23,7 +23,8 @@ const SortableGame = (props) => {
       
     return (
         <li ref={setNodeRef} {...attributes} style={style} className='gameWrapper'>
-            <button ref={setActivatorNodeRef} {...listeners} className='gameSortHandle'><MdDragHandle/></button>
+            <span className='gameSortIndex'>{props.index}</span>
+            <button ref={setActivatorNodeRef} {...listeners} className='gameSortHandle'><TiArrowUnsorted/></button>
             <Game ref={setNodeRef} onClickRemoveItem = {props.onClickRemoveItem} onClickEditItem = {props.onClickEditItem} game = {props.game}/> 
         </li>
         

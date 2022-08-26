@@ -40,7 +40,6 @@ const EditForm = (props) => {
             if(id !== -1 && fetched === false) {
                 let existingGames = JSON.parse(sessionStorage.getItem('games'));
                 let result = existingGames.filter(game => (game.id === id))[0]
-                console.log(`locally fetched game ${result.title}, id ${id} successfully`);
                 setFetched(true);
                 setId(result.id)
                 setTitle(result.title);
@@ -118,7 +117,7 @@ const EditForm = (props) => {
         </Modal.Header>
         <Modal.Body>
             <Form>
-                <Row className='formGroup'>
+                <Row className='formGroupBordered'>
                 <Form.Label className='formHeader'> Game Details </Form.Label>
                 <Form.Group className='mb-3'>
                     <FloatingLabel
@@ -140,7 +139,7 @@ const EditForm = (props) => {
                     </FloatingLabel>
                 </Form.Group>
                 </Row>
-                <Row className='formGroup'>
+                <Row className='formGroupBordered'>
                 <Form.Label className='formHeader'> Play Details </Form.Label>
 
                 <Form.Group className='mb-3'>
@@ -188,7 +187,7 @@ const EditForm = (props) => {
                                 <Form.Label className='ratingsSubLabel'> Gameplay </Form.Label>
                             </Row>
                             <Row>
-                                <Rating className='ratingsStars' onClick={e => setRating([e, rating[1], rating[2]])} ratingValue={rating[0]} transition={true} size='2.2rem' emptyColor= "#262e33" readonly = {playstatus === 'plantoplay' ? true: false}/>
+                                <Rating className='ratingsStars' onClick={e => setRating([e, rating[1], rating[2]])} ratingValue={rating[0]} transition={true} size='2.2rem' fillColor ={'#fff'} emptyColor= "#262e33" readonly = {playstatus === 'plantoplay' ? true: false}/>
                             </Row>   
                         </Col>
                         <Col>
@@ -196,7 +195,7 @@ const EditForm = (props) => {
                                 <Form.Label className='ratingsSubLabel'> Story </Form.Label>
                             </Row>
                             <Row>
-                                <Rating className='ratingsStars' onClick={e => setRating([rating[0], e, rating[2]])} ratingValue={rating[1]} transition={true} size='2.2rem' emptyColor= "#262e33" readonly = {playstatus === 'plantoplay' ? true: false}/>
+                                <Rating className='ratingsStars' onClick={e => setRating([rating[0], e, rating[2]])} ratingValue={rating[1]} transition={true} size='2.2rem' fillColor ={'#fff'} emptyColor= "#262e33" readonly = {playstatus === 'plantoplay' ? true: false}/>
                             </Row>  
                         </Col>
                         <Col>
@@ -204,7 +203,7 @@ const EditForm = (props) => {
                                 <Form.Label className='ratingsSubLabel'> Art & Music </Form.Label>
                             </Row>
                             <Row>
-                                <Rating className='ratingsStars' onClick={e => setRating([rating[0], rating[1], e])} ratingValue={rating[2]} transition={true} size='2.2rem' emptyColor= "#262e33" readonly = {playstatus === 'plantoplay' ? true: false}/>
+                                <Rating className='ratingsStars' onClick={e => setRating([rating[0], rating[1], e])} ratingValue={rating[2]} transition={true} size='2.2rem' fillColor ={'#fff'} emptyColor= "#262e33" readonly = {playstatus === 'plantoplay' ? true: false}/>
                             </Row>
                         </Col>
                     </Row>

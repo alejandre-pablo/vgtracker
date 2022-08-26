@@ -86,66 +86,68 @@ const SignupContainer = () => {
                     v{version} Powered by <a href='https://rawg.io/'>RAWG.io</a>
                 </div>
             </div>
-            <Form className= 'authForm' onSubmit={emailAndPasswordHandler}>
-                <Row className='formGroup'>
-                <ul className='authNavbar'>
-                    <Link to ={'/login'} className={'authNavItem'}>
-                        <li>LOG IN</li>
-                    </Link>
-                     <span className='authNavbarSeparator'> | </span>
-                    <Link to ={'/signup'} className={'authNavItem activeItem'}>
-                        <li>SIGN UP</li>
-                    </Link>
-                </ul>
-                <Form.Group className='mb-3'>
-                    <FloatingLabel
-                    controlId='usernameLabel'
-                    label='Username'
-                    className='formLabel'
-                    >   
-                        <Form.Control type='text' className="inputText" placeholder='Username' value={username} onChange={e => setUsername(e.target.value)} />
-                    </FloatingLabel>
-                </Form.Group>
-                <Form.Group className='mb-3'>
-                    <FloatingLabel
-                    controlId='emailLabel'
-                    label='Email'
-                    className='formLabel'
-                    >   
-                        <Form.Control required type='text' className="inputText" placeholder='Email' value={email} onChange={e => setEmail(e.target.value)} isInvalid={!!errors.email}/>
-                        <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
-                    </FloatingLabel>
-                </Form.Group>
+            <div className= 'authForm'>
+                <Form  onSubmit={emailAndPasswordHandler}>
+                    <Row className='formGroup'>
+                    <ul className='authNavbar'>
+                        <Link to ={'/login'} className={'authNavItem'}>
+                            <li>LOG IN</li>
+                        </Link>
+                        <span className='authNavbarSeparator'> | </span>
+                        <Link to ={'/signup'} className={'authNavItem activeItem'}>
+                            <li>SIGN UP</li>
+                        </Link>
+                    </ul>
+                    <Form.Group className='mb-3'>
+                        <FloatingLabel
+                        controlId='usernameLabel'
+                        label='Username'
+                        className='formLabel'
+                        >   
+                            <Form.Control type='text' className="inputText" placeholder='Username' value={username} onChange={e => setUsername(e.target.value)} />
+                        </FloatingLabel>
+                    </Form.Group>
+                    <Form.Group className='mb-3'>
+                        <FloatingLabel
+                        controlId='emailLabel'
+                        label='Email'
+                        className='formLabel'
+                        >   
+                            <Form.Control required type='text' className="inputText" placeholder='Email' value={email} onChange={e => setEmail(e.target.value)} isInvalid={!!errors.email}/>
+                            <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
+                        </FloatingLabel>
+                    </Form.Group>
 
-                <Form.Group className='mb-3'>
-                    <FloatingLabel
-                    controlId='passwordLabel'
-                    label='Password'
-                    className='formLabel'
-                    >   
-                        <Form.Control required autoComplete="on" type='password' className="inputText" placeholder='Password' value={password} onChange={e => setPassword(e.target.value)} isInvalid={!!errors.password}/>
-                        <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
-                    </FloatingLabel>
-                </Form.Group>
-                <Form.Group className='mb-3'>
-                    <FloatingLabel
-                    controlId='passwordMatchLabel'
-                    label='Repeat Password'
-                    className='formLabel'
-                    >   
-                        <Form.Control required autoComplete="on" type='password' className="inputText" placeholder='Repeat Password' value={passwordMatch} onChange={e => setPasswordMatch(e.target.value)} isInvalid={!!errors.match} />
-                        <Form.Control.Feedback type="invalid">{errors.match}</Form.Control.Feedback>
-                    </FloatingLabel>
-                </Form.Group>
-                <Button type='submit' className='authFormSubmitButton'> Sign Up </Button>
-                <Form.Label className='authFormText'> </Form.Label>
+                    <Form.Group className='mb-3'>
+                        <FloatingLabel
+                        controlId='passwordLabel'
+                        label='Password'
+                        className='formLabel'
+                        >   
+                            <Form.Control required autoComplete="on" type='password' className="inputText" placeholder='Password' value={password} onChange={e => setPassword(e.target.value)} isInvalid={!!errors.password}/>
+                            <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
+                        </FloatingLabel>
+                    </Form.Group>
+                    <Form.Group className='mb-3'>
+                        <FloatingLabel
+                        controlId='passwordMatchLabel'
+                        label='Repeat Password'
+                        className='formLabel'
+                        >   
+                            <Form.Control required autoComplete="on" type='password' className="inputText" placeholder='Repeat Password' value={passwordMatch} onChange={e => setPasswordMatch(e.target.value)} isInvalid={!!errors.match} />
+                            <Form.Control.Feedback type="invalid">{errors.match}</Form.Control.Feedback>
+                        </FloatingLabel>
+                    </Form.Group>
+                    <Button type='submit' className='authFormSubmitButton'> Sign Up </Button>
+                    <Form.Label className='authFormText'> </Form.Label>
+                    </Row>
+                </Form>
                 <button className='authFormProviderButton' onClick={googleSignupHandler}> 
                     <FcGoogle/> 
                     <span className='bigSpanAuthFormProviderButton'> Sign In Using Google </span>
                     <span className='reducedSpanAuthFormProviderButton'> Google </span>
                 </button>
-                </Row>
-            </Form>
+            </div>
         </AuthProvider>
     )
 }

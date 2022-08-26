@@ -34,19 +34,16 @@ const ListContainer = () => {
 
     useEffect(() => {
         if(prevStatus === 'loading' && status === 'success' && data !== undefined) {
-                console.log('Fetched remote list');
-                setList(JSON.parse(data.games));
-                sessionStorage.setItem('games', data.games)
+            setList(JSON.parse(data.games));
+            sessionStorage.setItem('games', data.games)
         }
         if(prevStatus === 'none' && status === 'success') {
-            console.log('Fetched local list');
             setList(JSON.parse(sessionStorage.getItem('games')));
         }
         setPrevStatus(status);
     },[status])
 
     const safeWrite = newList => {
-        console.log('List obj updated');
         setList(newList);
         sessionStorage.setItem('games', JSON.stringify(newList))
         setDoc(userDataRef, {games: JSON.stringify(newList)})

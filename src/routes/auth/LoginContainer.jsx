@@ -111,13 +111,13 @@ const LoginContainer = () => {
                     </Form.Group>
                     <Button type='submit' className='authFormSubmitButton'> Login </Button>
                     <Form.Label className='authFormText'>  </Form.Label>
-                    <button className='authFormProviderButton' onClick={googleLoginHandler}> 
-                        <FcGoogle/> 
-                        <span className='bigSpanAuthFormProviderButton'> Sign In Using Google </span>
-                        <span className='reducedSpanAuthFormProviderButton'> Google </span>
-                    </button>
                     </Row>
                 </Form>
+                <button className='authFormProviderButton' onClick={googleLoginHandler}> 
+                    <FcGoogle/> 
+                    <span className='bigSpanAuthFormProviderButton'> Sign In Using Google </span>
+                    <span className='reducedSpanAuthFormProviderButton'> Google </span>
+                </button>
             </div>
         </AuthProvider>
     )

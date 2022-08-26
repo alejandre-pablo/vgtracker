@@ -108,6 +108,8 @@ ul {
     justify-content: center;
     text-align: center;
     width: 50%;
+    border: 1px solid var(--accent);
+    background-color: var(--base);
 }
 
 
@@ -130,7 +132,7 @@ ul {
 
 .authFormProviderButton {
     width: 50% !important;
-    height: 5vh !important;
+    height: 2.5rem;
     margin: auto;
     margin-bottom: 1.5rem;
     border: none;
@@ -258,16 +260,13 @@ ul {
 }
 
 .mobileTabTitle {
-    margin-bottom: 1vh;
+    
     height: 6.2vh;
     color: white;
     border: 1px solid var(--accent);
 }
 
 .mobileTabTitleWrapper {
-    position: fixed !important; 
-    bottom: 0;
-    left: 0;
     width: 100%;
 }
 
@@ -286,7 +285,7 @@ ul {
 }
 
 .game {
-    width: 100%;
+    width: 90%;
     padding: 0.14rem;
     padding-left: 0.75rem;
 }
@@ -313,6 +312,18 @@ ul {
     background-color: var(--darkBgHover);
 }
 
+.gameWrapper:hover .gameSortIndex{
+    display: none;
+}
+
+.gameWrapper:hover .gameSortHandle{
+    display: block;
+}
+
+.gameWrapper:hover .rightButton{
+    display: flex !important;
+}
+
 .highlight {
     background-color: var(--darkBgHighlight);
 }
@@ -327,21 +338,33 @@ ul {
     width: 3rem;
     outline: none;
     padding: 0;
-    padding-left: 0.75rem;
+    padding-left: 2rem;
     border: none;
     background: none;
     font-size: 1.5rem;
     color: var(--accent);
+    display: none;
+}
+
+.gameSortIndex{
+    width: 3rem;
+    padding: 0;
+    padding-left: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--accent);
 }
 
 .gameMobile {
-    padding: 1rem;
+    padding: 0.5rem;
     z-index: 20;
 }
 
 .gameCard{
     width: 100%;
     height: 27vh;
+    min-height: 27vh;
     overflow: hidden;
     background-color: black;
     border: 1px solid var(--accent);
@@ -463,15 +486,17 @@ ul {
 /* --------------------- BUTTONS --------------------- */
 
 .rightButton {
-    display: flex;
+    display: none !important;
     justify-content: flex-end;
     align-items: center;
+    padding-left: 4rem;
 }
 
 .buttonAdd {
     display: block;
     outline: none;
-    padding: 8px;
+    padding-left: 2rem;
+    padding-right: 2rem;
     font-size: 15px;
     border: 0px solid;
     border-radius: 5px;
@@ -487,6 +512,8 @@ ul {
     margin: auto;
     outline: none;
     padding: 0;
+    padding-left: 2rem;
+    padding-right: 2rem;
     border: none;
     background: none;
     font-size: 1.7rem;
@@ -514,14 +541,24 @@ ul {
     border: 1px solid var(--accent);
 }
 
-.buttonAddGameDisabled {
+.buttonAddGameMobile {
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 0.25rem 1rem 0.25rem 1rem;
-    background: none;
-    color: var(--darkAccent);
+    background: linear-gradient(90deg, var(--base) 0%, rgba(0, 0, 0, 0) 600%);
+    color: var(--accent);
     font-size: 1.1rem;
+    border: 1px solid var(--accent);
+}
+
+.buttonAddGameDisabled {
+    color: var(--darkAccent);
+    border: 1px solid var(--darkAccent);
+}
+
+.buttonAddGameDisabledMobile {
+    color: var(--darkAccent);
     border: 1px solid var(--darkAccent);
 }
 
@@ -570,13 +607,20 @@ ul {
 }
 
 .formGroup {
-    background-color: var(--base);
-    border: 1px solid var(--accent);
-    /* border-radius: 8px; */
-    box-shadow: 8px 8px 5px #15181a;
     padding: 0.5rem;
     margin: 0.5rem;
-    margin-bottom: 1rem;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+.formGroupBordered {
+    padding: 0.5rem;
+    margin: 0.5rem;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    background-color: var(--base);
+    border: 1px solid var(--accent);
+    box-shadow: 5px 5px 3px #15181a;
 }
 
 .formHeader {
@@ -595,6 +639,11 @@ ul {
     display: flex;
     justify-content: center;
     margin-bottom: 0 !important;
+}
+.ratingsRow  {
+    justify-content: space-between;
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 
 .ratingsRow > div {
@@ -640,7 +689,7 @@ ul {
     justify-content: right;
 }
 
-.col-md-11 .row {
+.col-md-10 .row {
     height: 100% ;
 }
 /* --------------------- SIDE NAVBAR ---------------------*/
@@ -773,10 +822,9 @@ ul {
 /* --------------------- SEARCH RESULTS ---------------------*/
 .searchList {
     width: 98%;
-    height: 83vh;
-    max-height: 83vh;
+    height: 90vh;
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
     border: 1px solid var(--accent);
     background-color: var(--darkBgBase);
     margin: 0 auto 0 auto;
@@ -831,6 +879,7 @@ ul {
     color:white;
 }
 
+
 .gameImage {
     display: block;
     width: 12vw;
@@ -839,9 +888,15 @@ ul {
 }
 
 .gameListImage {
+    margin-right: 1.5rem;
     display: block;
-    width: 80px;
-    height: 45px;
+    width: 112px;
+    height: 63px;
+}
+
+.gameImageWrapper {
+    display: flex;
+    justify-content: center;
 }
 
 /* .game:hover .gameListImage {
@@ -860,7 +915,7 @@ ul {
     transition: visibility 1s ease-in-out;
 } */
 
-.col-md-11 .col-md-1, .col-md-11 .col-md-3, .col-md-11 .col-md-2 {
+.col-md-10 .col-md-1, .col-md-10 .col-md-3, .col-md-10 .col-md-2 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -917,6 +972,18 @@ ul {
     color: var(--accent);
 }
 
+.searchCardInfo {
+    height: 28%;
+    position: absolute;
+    top: 72%;
+    border-top: 1px solid var(--accent);
+    border-radius: 0;
+    background: #2d333c;
+    background: linear-gradient(90deg, var(--base) 0%, rgba(0, 0, 0, 0) 600%);
+    color: var(--accent);
+    border-radius: 0;
+}
+
 /* --------------------- STATS ---------------------*/
 
 .statsContainer {
@@ -956,7 +1023,7 @@ ul {
     height: 90%;
     width: 30%;
     margin: auto;
-    margin-top: 10%;
+    margin-top: 5rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -1079,6 +1146,14 @@ a:hover {
     background: none !important;
     box-shadow: none !important;
     border-color: white !important;
+}
+
+.offcanvas {
+    border-right: 1px solid var(--accent);
+}
+.offcanvas-header {
+    margin: 0 0.5rem 0 0.5rem;
+    border-bottom: 1px solid var(--accent);
 }
 
 /* --------------------- SCROLLBARS ---------------------*/

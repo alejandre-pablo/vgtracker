@@ -12,13 +12,11 @@ const List = (props) => {
     const {list, handleEditRemoveItem} = props;
 
     function handleRemoveItem (id)  {
-        console.log(`Deleting game id ${id} from list`)
-            var tmpList = list.filter((item => item.id !== id))
-            handleEditRemoveItem(tmpList);
+        var tmpList = list.filter((item => item.id !== id))
+        handleEditRemoveItem(tmpList);
     };
 
     function handleUpdateItem (game)  {
-        console.log(`Editing game ${game.title}`)
         var gameIndex = list.findIndex((item => item.id === game.id))
         let tmpList = [...list];
         tmpList.splice(gameIndex, 1);
@@ -52,7 +50,6 @@ const List = (props) => {
     }
     
     function handleDragEnd(event) {
-        console.log('drag end')
         const { active, over } = event;
         if (active.id !== over.id) {
                 const oldIndex = list.findIndex(item => item.id === active.id);
@@ -66,7 +63,7 @@ const List = (props) => {
         <ul>
             {list.filter(game => game.playstatus === "finished" ).map ((game, index) => (
                 <div className={index % 2 === 0 ? 'highlight' : ''}>
-                    <SortableGame key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>
+                    <SortableGame key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game} index ={index + 1}/>
                 </div>))
             }
         </ul>   
@@ -118,14 +115,14 @@ const List = (props) => {
 
     const listHeader = 
     <Row className='listHeader'>
-        <Col md = {1}> 
+        <Col md = {2}> 
         </Col>
-        <Col md = {11}>
+        <Col md = {10}>
             <Row>
-                <Col md = {3} className="columnTitle">TITLE</Col>
-                <Col md = {3} className='columnTitle' style={{paddingLeft: '3rem'}}>PLATFORM</Col>
-                <Col md = {1} className='columnTitle 'style={{paddingLeft: '1.5rem'}}>PLAYTIME</Col>
-                <Col md = {3} className='columnTitle'>RATING</Col>
+                <Col md = {3} className="columnTitle" style={{marginLeft: '-1rem'}}>TITLE</Col>
+                <Col md = {3} className='columnTitle'>PLATFORM</Col>
+                <Col md = {1} className='columnTitle'style={{paddingLeft: '1.5rem'}}>PLAYTIME</Col>
+                <Col md = {3} className='columnTitle' style={{paddingLeft: '3rem'}}>RATING</Col>
                 <Col className='columnFill'><div className='bookmark'></div></Col>
             </Row>
         </Col>
