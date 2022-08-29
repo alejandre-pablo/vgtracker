@@ -1,33 +1,157 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Col, Container, Dropdown, DropdownButton, Row } from "react-bootstrap"
 import { Rating } from "react-simple-star-rating";
+import { AiOutlineTrophy } from 'react-icons/ai'
 
 const StatsContainer = () => {
 
     const list = JSON.parse(sessionStorage.getItem('games'));
 
-    const [activeYear, setActiveYear] = useState('All Time');
+    const [activeYear, setActiveYear] = useState('');
     const [activeList, setActiveList] = useState(list);
 
+    const handleYearSelect=(e) =>{
+        setActiveYear(e);
+        e === 'All Time'
+            ? setActiveList(list.filter(game => (game.playstatus !== 'plantoplay')))
+            : setActiveList(list.filter(game => game.playdate === e))
+    }
+
+    useEffect(() => {
+        handleYearSelect("All Time")
+    }, [])
+    
     const years = uniq((list)
         .map( game => parseInt(game.playdate)))
         .filter(year => (1000 <= year && year <= new Date().getFullYear()))
         .sort(function(a, b) {
             return a - b
         });
-    const handleYearSelect=(e) =>{
-        setActiveYear(e);
-        e === 'All Time'
-            ? setActiveList(list.filter(game => game.playdate !== '9999'))
-            : setActiveList(list.filter(game => game.playdate === e))
-    }
 
     const yearTags = 
-        <DropdownButton onSelect={handleYearSelect} className="statsYearDropdown" title= "Select Year" variant='dark'>
+        <DropdownButton onSelect={handleYearSelect} className="statsYearDropdown" title={activeYear} variant='dark'>
             {years.map(year => <Dropdown.Item eventKey={year}>{year}</Dropdown.Item>)}
             <Dropdown.Item eventKey={'All Time'}>All Time</Dropdown.Item>
         </DropdownButton>
+
+    const genres =  Object.values( 
+        list.filter(game => game.playstatus !== 'plantoplay')
+        .reduce((genres, item) => {
+        item.genres.forEach(genre => {
+            genres[genre.id] = genres[genre.id] || {"id": genre.id, "name": genre.name, "count": 0};
+            genres[genre.id].count++;
+        });
+        return genres;
+        }, {})).sort((a,b) => b.count - a.count)
+        .slice(0, 5);
+
+    const genresList = <div className="statsRanking">
+        {genres.map((genre, index)=> {
+            if(index === 0) {
+                return <Row>
+                <Col md={1} className="flexCentered">
+                    <img className = 'topPositionIcon' src={window.location.origin +'/img/gold_medal.png'} alt="first position"/>
+                </Col>
+                <Col  md={11}>
+                    <span>{genre.name} </span>
+                    <span>({genre.count} games)</span>
+                </Col>
+                
+            </Row>
+            } else if (index === 1) {
+                return <Row>
+                <Col md={1} className="flexCentered">
+                    <img className = 'topPositionIcon' src={window.location.origin +'/img/silver_medal.png'} alt="second position"/>
+                </Col>
+                <Col  md={11}>
+                    <span>{genre.name} </span>
+                    <span>({genre.count} games)</span>
+                </Col>
+                
+            </Row>
+            } else if (index === 2) {
+                return <Row>
+                    <Col md={1} className="flexCentered">
+                        <img className = 'topPositionIcon' src={window.location.origin +'/img/bronze_medal.png'} alt="third position"/>
+                    </Col>
+                    <Col  md={11}>
+                        <span>{genre.name} </span>
+                        <span>({genre.count} games)</span>
+                    </Col>
+                    
+                </Row>
+            }
+            return <Row>
+                <Col md={1} className="flexCentered">
+                    <span className="topPositionText">{index + 1}. </span>
+                </Col>
+                <Col  md={11}>
+                    <span>{genre.name} </span>
+                    <span>({genre.count} games)</span>
+                </Col>
+            </Row>
+        })}
+        </div>
+
+    const devs =  Object.values( 
+        list.filter(game => game.playstatus !== 'plantoplay')
+        .reduce((devs, item) => {
+        item.developer.forEach(dev => {
+            devs[dev.id] = devs[dev.id] || {"id": dev.id, "name": dev.name, "count": 0};
+            devs[dev.id].count++;
+        });
+        return devs;
+        }, {})).sort((a,b) => b.count - a.count)
+        .slice(0, 5);
     
+    const devsList = <div className="statsRanking">
+        {devs.map((dev, index)=> {
+            if(index === 0) {
+                return <Row>
+                <Col md={1} className="flexCentered">
+                    <img className = 'topPositionIcon' src={window.location.origin +'/img/gold_medal.png'} alt="first position"/>
+                </Col>
+                <Col  md={11}>
+                    <span>{dev.name} </span>
+                    <span>({dev.count} games)</span>
+                </Col>
+                
+            </Row>
+            } else if (index === 1) {
+                return <Row>
+                <Col md={1} className="flexCentered">
+                    <img className = 'topPositionIcon' src={window.location.origin +'/img/silver_medal.png'} alt="second position"/>
+                </Col>
+                <Col  md={11}>
+                    <span>{dev.name} </span>
+                    <span>({dev.count} games)</span>
+                </Col>
+                
+            </Row>
+            } else if (index === 2) {
+                return <Row>
+                    <Col md={1} className="flexCentered">
+                        <img className = 'topPositionIcon' src={window.location.origin +'/img/bronze_medal.png'} alt="third position"/>
+                    </Col>
+                    <Col  md={11}>
+                        <span>{dev.name} </span>
+                        <span>({dev.count} games)</span>
+                    </Col>
+                    
+                </Row>
+            }
+            return <Row>
+                <Col md={1} className="flexCentered">
+                    <span className="topPositionText">{index + 1}. </span>
+                </Col>
+                <Col md={11}>
+                    <span>{dev.name} </span>
+                    <span>({dev.count} games)</span>
+                </Col>
+            </Row>
+        })}
+        </div>
+
     function uniq(a) {
         var prims = {"boolean":{}, "number":{}, "string":{}}, objs = [];
     
@@ -111,27 +235,19 @@ const StatsContainer = () => {
                         </Row>
                     </div>
                 </Col>
-                <Col>
-                    <div style={{margin: 'auto', height: '94%', border: '1px solid var(--accent)', backgroundColor: 'var(--darkBgBase)', padding: '1rem'}}>
-                        <Row style={{ height: '30%', border: '1px solid var(--accent)', padding: '1rem'}}>
-                            <div> Top genres</div>
-                            <div style={{margin: 'auto', height: '94%', border: '1px solid var(--accent)', backgroundColor: 'var(--darkBgBase)', padding: '1rem'}}>
-                                Aqui van genres
-                            </div>
-                        </Row>
-                        <Row style={{ marginTop: '15%', height: '30%', border: '1px solid var(--accent)', backgroundColor: 'var(--darkBgBase)', padding: '1rem'}}>
-                            <div> Top devs</div>
-                            <div style={{margin: 'auto', height: '94%', border: '1px solid var(--accent)', backgroundColor: 'var(--darkBgBase)', padding: '1rem'}}>
-                                Aqui van devs
-                            </div>
-                        </Row>
-                        <Row style={{ marginTop: '15%', height: '30%', border: '1px solid var(--accent)', backgroundColor: 'var(--darkBgBase)', padding: '1rem'}}>
-                            <div> algo</div>
-                            <div style={{margin: 'auto', height: '94%', border: '1px solid var(--accent)', backgroundColor: 'var(--darkBgBase)', padding: '1rem'}}>
-                               ni aqui tampoco 
-                            </div>
-                        </Row>
-                    </div>
+                <Col style={{ marginRight: '0.8rem'}}>
+                    <Row style={{ height: '33%', border: '1px solid var(--accent)', padding: '1rem', backgroundColor: 'var(--darkBgBase)'}}>
+                        <h5 style={{paddingBottom: '0.5rem', borderBottom: '1px solid var(--accent)', display: 'flex', alignItems: 'center'}}> <AiOutlineTrophy />&nbsp;Top Genres</h5>
+                        <div style={{margin: 'auto', height: '94%', padding: '1rem', paddingLeft: '1.5rem'}}>
+                            {genresList}
+                        </div>
+                    </Row>
+                    <Row style={{ marginTop: '15%', height: '33%', border: '1px solid var(--accent)', padding: '1rem', backgroundColor: 'var(--darkBgBase)'}}>
+                        <h5 style={{paddingBottom: '0.5rem', borderBottom: '1px solid var(--accent)', display: 'flex', alignItems: 'center'}}> <AiOutlineTrophy />&nbsp;Top Devs</h5>
+                        <div style={{margin: 'auto', height: '94%', padding: '1rem', paddingLeft: '1.5rem'}}>
+                            {devsList}
+                        </div>
+                    </Row>
                 </Col>
             </Row>
             

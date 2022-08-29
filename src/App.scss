@@ -44,6 +44,12 @@ ul {
     flex-direction: column;
 }
 
+.flexCentered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .mainContainer {
     flex: 1;
     height: 100vh;
@@ -1078,6 +1084,16 @@ ul {
     border: 1px solid var(--accent);
     background-color: var(--darkBgHighlight);
     box-shadow: 5px 5px 3px #15181a;
+}
+
+.statsRanking > .row > .col-md-11 {
+    padding: 0.3rem;
+    color: white;
+}
+
+.topPositionIcon {
+    width: 1.5rem;
+    height: 1.5rem;
 }
 
 /* --------------------- OVERRIDES ---------------------*/
