@@ -1,8 +1,11 @@
 import React, {useEffect, useState} from 'react'
 import { Rating } from 'react-simple-star-rating'
 import { Row, Col, Form, FloatingLabel, Modal } from 'react-bootstrap'
+import { useMediaQuery } from 'react-responsive'
 
 const EditForm = (props) => {
+
+    const isTabletOrMobile = useMediaQuery({query: '(max-width: 1224px)'})
 
     const shouldShow = props.show;
     const gameId = props.gameId;
@@ -110,10 +113,9 @@ const EditForm = (props) => {
     };
 
     return (
-        <Modal show={show} onHide={handleClose} className="modalForm">
+        <Modal show={show} onHide={handleClose} size="lg" fullscreen={isTabletOrMobile} className="modalForm">
         <Modal.Header closeButton>
             {fetched === true ? <Modal.Title>Edit game</Modal.Title> : <Modal.Title>Cargando</Modal.Title>}
-            
         </Modal.Header>
         <Modal.Body>
             <Form>
@@ -181,32 +183,60 @@ const EditForm = (props) => {
 
                 <Form.Group className='mb-3' style={playstatus === 'plantoplay' ? {opacity: 0.65} : {}}>
                     <Form.Label className='ratingsLabel'> Ratings </Form.Label>
-                    <Row className='ratingsRow'>
-                        <Col>
+                        {isTabletOrMobile ? 
+                        <Row className='ratingsRowMobile'>
                             <Row>
-                                <Form.Label className='ratingsSubLabel'> Gameplay </Form.Label>
+                                <Col md={6}>
+                                    <Form.Label className='ratingsSubLabel'> Gameplay </Form.Label>
+                                </Col>
+                                <Col md={6}>
+                                    <Rating className='ratingsStars' onClick={e => setRating([e, rating[1], rating[2]])} ratingValue={rating[0]} transition={true} size='1.5rem' fillColor ={'#fff'} emptyColor= "#262e33" readonly = {playstatus === 'plantoplay' ? true: false}/>
+                                </Col>   
                             </Row>
                             <Row>
-                                <Rating className='ratingsStars' onClick={e => setRating([e, rating[1], rating[2]])} ratingValue={rating[0]} transition={true} size='2.2rem' fillColor ={'#fff'} emptyColor= "#262e33" readonly = {playstatus === 'plantoplay' ? true: false}/>
-                            </Row>   
-                        </Col>
-                        <Col>
-                            <Row>
-                                <Form.Label className='ratingsSubLabel'> Story </Form.Label>
+                                <Col>
+                                    <Form.Label className='ratingsSubLabel'> Story </Form.Label>
+                                </Col>
+                                <Col>
+                                    <Rating className='ratingsStars' onClick={e => setRating([rating[0], e, rating[2]])} ratingValue={rating[1]} transition={true} size='1.5rem' fillColor ={'#fff'} emptyColor= "#262e33" readonly = {playstatus === 'plantoplay' ? true: false}/>
+                                </Col>  
                             </Row>
                             <Row>
-                                <Rating className='ratingsStars' onClick={e => setRating([rating[0], e, rating[2]])} ratingValue={rating[1]} transition={true} size='2.2rem' fillColor ={'#fff'} emptyColor= "#262e33" readonly = {playstatus === 'plantoplay' ? true: false}/>
-                            </Row>  
-                        </Col>
-                        <Col>
-                            <Row>
-                                <Form.Label className='ratingsSubLabel'> Art & Music </Form.Label>
+                                <Col>
+                                    <Form.Label className='ratingsSubLabel'> Art & Music </Form.Label>
+                                </Col>
+                                <Col>
+                                    <Rating className='ratingsStars' onClick={e => setRating([rating[0], rating[1], e])} ratingValue={rating[2]} transition={true} size='1.5rem' fillColor ={'#fff'} emptyColor= "#262e33" readonly = {playstatus === 'plantoplay' ? true: false}/>
+                                </Col>
                             </Row>
-                            <Row>
-                                <Rating className='ratingsStars' onClick={e => setRating([rating[0], rating[1], e])} ratingValue={rating[2]} transition={true} size='2.2rem' fillColor ={'#fff'} emptyColor= "#262e33" readonly = {playstatus === 'plantoplay' ? true: false}/>
-                            </Row>
-                        </Col>
-                    </Row>
+                        </Row>
+                        : <Row className='ratingsRow'>
+                            <Col>
+                                <Row>
+                                    <Form.Label className='ratingsSubLabel'> Gameplay </Form.Label>
+                                </Row>
+                                <Row>
+                                    <Rating className='ratingsStars' onClick={e => setRating([e, rating[1], rating[2]])} ratingValue={rating[0]} transition={true} size='2.2rem' fillColor ={'#fff'} emptyColor= "#262e33" readonly = {playstatus === 'plantoplay' ? true: false}/>
+                                </Row>   
+                            </Col>
+                            <Col>
+                                <Row>
+                                    <Form.Label className='ratingsSubLabel'> Story </Form.Label>
+                                </Row>
+                                <Row>
+                                    <Rating className='ratingsStars' onClick={e => setRating([rating[0], e, rating[2]])} ratingValue={rating[1]} transition={true} size='2.2rem' fillColor ={'#fff'} emptyColor= "#262e33" readonly = {playstatus === 'plantoplay' ? true: false}/>
+                                </Row>  
+                            </Col>
+                            <Col>
+                                <Row>
+                                    <Form.Label className='ratingsSubLabel'> Art & Music </Form.Label>
+                                </Row>
+                                <Row>
+                                    <Rating className='ratingsStars' onClick={e => setRating([rating[0], rating[1], e])} ratingValue={rating[2]} transition={true} size='2.2rem' fillColor ={'#fff'} emptyColor= "#262e33" readonly = {playstatus === 'plantoplay' ? true: false}/>
+                                </Row>
+                            </Col>
+                        </Row>
+                    }
                 </Form.Group>
 
                 <Form.Group className='mb-3'>

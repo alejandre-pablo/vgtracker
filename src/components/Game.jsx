@@ -46,6 +46,11 @@ const Game = forwardRef((props, ref) => {
                         <div> 
                             {game.playtime} hours 
                         </div>
+                        <div>
+                            <button className="textButtonMobile" onClick={(e) => { onClickEditItem(game.id) }} title="Edit entry">Edit</button>
+                            <span>| </span>
+                            <button className="textButtonMobile" onClick={(e) => { onClickRemoveItem(game.id) }} title="Delete entry" >Remove</button>
+                        </div>
                     </Card.Text>
                 </Card.ImgOverlay>
             </Card>
@@ -67,7 +72,8 @@ const Game = forwardRef((props, ref) => {
                             <Col md={2}>
                                 <span className='gamePlaytime'>{game.playtime}</span>
                             </Col>
-                            <Col md={3}>
+                            <Col md={3
+                            }>
                                 <span className='gameRating'>
                                     <Rating 
                                         readonly={true} 

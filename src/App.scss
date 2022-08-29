@@ -375,7 +375,6 @@ ul {
     color: var(--accent);
     border-radius: 0;
     padding: 0.5rem;
-    padding-top: 1.5rem;
     padding-left: 1rem;
 }
 
@@ -439,6 +438,14 @@ ul {
 
 .gameCardInfoCollapsed .card-text {
     border: none;
+}
+
+.textButtonMobile {
+    padding-left: 0;
+    outline: none;
+    border: none;
+    background: none;
+    color: var(--accent)
 }
 
 
@@ -562,7 +569,7 @@ ul {
     border: 1px solid var(--darkAccent);
 }
 
-.buttonAddGame:hover {
+.buttonAddGame:hover:not(.buttonAddGameDisabled)  {
     cursor: pointer;
     color: white;
     border: 1px solid white;
@@ -578,16 +585,26 @@ ul {
 .modalForm {
     color: white;
 }
-.modal-dialog {
-    margin-top: 3rem;
-    max-width: 50vw;
-}
 
 .modal-content {
     background-color: var(--base) !important;
 }
 .modal-body {
     background-color: var(--accent);
+}
+
+.modalOverlay {
+    background-color: #00000031;
+    position: absolute;
+    top: 0;
+    left: 0;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 50;
 }
 
 /* --------------------- ADD GAME FORM --------------------- */
@@ -604,6 +621,10 @@ ul {
 
 .formLabel {
     color:var(--accent);
+}
+
+.formLabel input{
+    text-overflow: ellipsis;
 }
 
 .formGroup {
@@ -646,6 +667,12 @@ ul {
     padding-right: 1rem;
 }
 
+.ratingsRowMobile  {
+    width: 100%;
+    margin: 0;
+    padding-left: 1rem;
+}
+
 .ratingsRow > div {
     max-width: 30%;
     padding: 0.3rem;
@@ -653,9 +680,21 @@ ul {
     box-shadow: 5px 5px 3px #15181a;
 }
 
+.ratingsRowMobile > .row {
+    height: 2.2rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
 .ratingsRow > div > div > span{
     display: flex !important;
     justify-content: center;
+}
+
+.ratingsRowMobile > div > div {
+    padding: 0;
+    width: 50%;
 }
 
 .modal-body form .formGroup .ratingsRow {
@@ -830,8 +869,16 @@ ul {
     margin: 0 auto 0 auto;
 }
 
+.searchListMobile {
+    width: 98%;
+    height: 90vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    margin: 0 auto 0 auto;
+}
+
 .resultsContainer {
-    padding-top: 9vh;
+    padding-top: 8.2vh;
     height: 100%;
     margin: 0;
 }
@@ -890,8 +937,8 @@ ul {
 .gameListImage {
     margin-right: 1.5rem;
     display: block;
-    width: 112px;
-    height: 63px;
+    width: 80px;
+    height: 45px;
 }
 
 .gameImageWrapper {

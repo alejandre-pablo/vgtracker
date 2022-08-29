@@ -2,7 +2,7 @@ import { DndContext, KeyboardSensor, useSensor, useSensors, closestCenter, DragO
 import { restrictToVerticalAxis, restrictToWindowEdges } from '@dnd-kit/modifiers';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import React, { useState} from 'react'
-import { Tab, Nav, Col, Row  } from 'react-bootstrap';
+import { Tab, Nav, Col, Row, Spinner  } from 'react-bootstrap';
 import EditForm from './forms/EditForm';
 
 import Game from './Game'
@@ -72,7 +72,7 @@ const List = (props) => {
         <ul>
             {list.filter(game => game.playstatus === "playing" ).map ((game, index) => (
                 <div className={index % 2 === 0 ? 'highlight' : ''}>
-                    <SortableGame key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>
+                    <SortableGame key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game} index ={index + 1}/>
                 </div>))
             }
         </ul>  
@@ -81,7 +81,7 @@ const List = (props) => {
         <ul>
             {list.filter(game => game.playstatus === "onhold" ).map ((game, index) => (
                 <div className={index % 2 === 0 ? 'highlight' : ''}>
-                    <SortableGame key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>
+                    <SortableGame key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game} index ={index + 1}/>
                 </div>))
             }
         </ul>  
@@ -90,7 +90,7 @@ const List = (props) => {
         <ul>
             {list.filter(game => game.playstatus === "dropped" ).map ((game, index) => (
                 <div className={index % 2 === 0 ? 'highlight' : ''}>
-                    <SortableGame key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>
+                    <SortableGame key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game} index ={index + 1}/>
                 </div>))
             }
         </ul>  
@@ -99,7 +99,7 @@ const List = (props) => {
         <ul>
             {list.filter(game => game.playstatus === "other" ).map ((game, index) => (
                 <div className={index % 2 === 0 ? 'highlight' : ''}>
-                    <SortableGame key = {game.id} id={game.id} isDragging={activeId === game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>
+                    <SortableGame key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game} index ={index + 1}/>
                 </div>))
             }
         </ul>  
@@ -108,7 +108,7 @@ const List = (props) => {
         <ul>
             {list.filter(game => game.playstatus === "plantoplay" ).map ((game, index) => (
                 <div className={index % 2 === 0 ? 'highlight' : ''}>
-                    <SortableGame key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>
+                    <SortableGame key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game} index ={index + 1}/>
                 </div>))
             }
         </ul> 
@@ -176,7 +176,10 @@ const List = (props) => {
                                     {listHeader}
                                     <Row className='scrollable'> 
                                         <SortableContext items={list.filter(game => game.playstatus === "finished" ).map(item => item.id)} strategy={verticalListSortingStrategy}>
-                                            {list.length ? gameListFinished : "No games added yet"}
+                                            {!list.length ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> : 
+                                            list.length === 0 ? "No games added yet"
+                                            : gameListFinished
+                                            }
                                         </SortableContext> 
                                     </Row>
                                 </Tab.Pane>
@@ -184,7 +187,10 @@ const List = (props) => {
                                     {listHeader}
                                     <Row className='scrollable'> 
                                         <SortableContext items={list.filter(game => game.playstatus === "playing" ).map(item => item.id)} strategy={verticalListSortingStrategy}>
-                                            {list.length ? gameListPlaying : "No games added yet"}
+                                        {!list.length ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
+                                            : list.length === 0 ? "No games added yet"
+                                            : gameListPlaying
+                                        }
                                         </SortableContext>
                                     </Row>
                                 </Tab.Pane>
@@ -192,7 +198,10 @@ const List = (props) => {
                                     {listHeader}
                                     <Row className='scrollable'> 
                                         <SortableContext items={list.filter(game => game.playstatus === "onhold" ).map(item => item.id)} strategy={verticalListSortingStrategy}>
-                                            {list.length ? gameListOnHold : "No games added yet"}
+                                        {!list.length ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
+                                            : list.length === 0 ? "No games added yet"
+                                            : gameListOnHold
+                                        }
                                         </SortableContext>
                                     </Row>
                                 </Tab.Pane>
@@ -200,7 +209,10 @@ const List = (props) => {
                                     {listHeader}
                                     <Row className='scrollable'> 
                                         <SortableContext items={list.filter(game => game.playstatus === "dropped" ).map(item => item.id)} strategy={verticalListSortingStrategy}>
-                                            {list.length ? gameListDropped : "No games added yet"}
+                                        {!list.length ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
+                                            : list.length === 0 ? "No games added yet"
+                                            : gameListDropped
+                                        }
                                         </SortableContext>
                                     </Row>
                                 </Tab.Pane>
@@ -208,7 +220,10 @@ const List = (props) => {
                                     {listHeader}
                                     <Row className='scrollable'> 
                                         <SortableContext items={list.filter(game => game.playstatus === "other" ).map(item => item.id)} strategy={verticalListSortingStrategy}>
-                                            {list.length ? gameListOther : "No games added yet"}
+                                        {!list.length ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
+                                            : list.length === 0 ? "No games added yet"
+                                            : gameListOther
+                                        }
                                         </SortableContext>
                                     </Row>
                                 </Tab.Pane>
@@ -216,7 +231,10 @@ const List = (props) => {
                                     {listHeaderPlanToPlay}
                                     <Row className='scrollable'> 
                                         <SortableContext items={list.filter(game => game.playstatus === "plantoplay" ).map(item => item.id)} strategy={verticalListSortingStrategy}>
-                                            {list.length ? gameListPlanToPlay : "No games added yet"}
+                                        {!list.length ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
+                                            : list.length === 0 ? "No games added yet"
+                                            : gameListPlanToPlay
+                                        }
                                         </SortableContext>
                                     </Row>
                                 </Tab.Pane>
