@@ -83,9 +83,12 @@ const AddForm = (props) => {
 
 
     useEffect (() => {
+        const controller = new AbortController();
+        const abortSignal = controller.signal;
         if(gameId !== -1 && fetched === false) {
-            try {
-                fetch(`https://api.rawg.io/api/games/${gameId}?key=${k}`).then( res => res.json()).then((result) => {
+            fetch(`https://api.rawg.io/api/games/${gameId}?key=${k}`, {abortSignal})
+            .then( res => res.json())
+            .then((result) => {
                 setFetched(true);
                 setId(result.id)
                 setTitle(result.name);
@@ -94,10 +97,12 @@ const AddForm = (props) => {
                 setGenres(result.genres);
                 setPublisher(result.publishers);
                 setBackgroundImage(result.background_image);
-            });
-            } catch (error) {
+            }).catch(error => {
                 console.log(error)
-            }
+            })
+        }
+        return () => {
+            controller.abort();
         }
     }, [gameId, fetched])
 

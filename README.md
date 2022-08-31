@@ -32,6 +32,7 @@ This project also relies on the following node modules:
 - Reactfire
 - DnD-Kit
 - React-Slick
+- Recharts
 
 ### Disclaimer
 

@@ -1065,6 +1065,11 @@ ul {
     text-align: start;
 }
 
+.statsMainRow .dropdown-menu {
+    height: 15rem;
+    overflow-y: scroll;
+}
+
 .statsYearDropdown button::after {
     position: absolute;
     top: 50%;
@@ -1073,10 +1078,8 @@ ul {
 }
 
 .statDiv {
-    height: 90%;
-    width: 30%;
+    width: 100%;
     margin: auto;
-    margin-top: 5rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -1084,6 +1087,17 @@ ul {
     border: 1px solid var(--accent);
     background-color: var(--darkBgHighlight);
     box-shadow: 5px 5px 3px #15181a;
+}
+
+.statDivRow {
+    width: 100%;
+    margin: auto;
+    margin-left: 3rem;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .statsRanking > .row > .col-md-11 {

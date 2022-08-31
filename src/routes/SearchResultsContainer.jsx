@@ -113,18 +113,14 @@ const SearchResultsContainer = (props) => {
 
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll)
+        }
     }, [])
 
     return (
         <>
             <Row className='resultsContainer'>
-                {/* <h4 style= {{color: 'var(--accent)', padding: '0.5rem', paddingLeft: '2rem'}}> 
-                    Showing search results for:
-                    <span style={{fontStyle:'italic'}}>
-                        &nbsp;"{searchParams.get('search_query')}"
-                    </span>
-                </h4> */}
-
                 {searchResults.count === null ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
                     : searchResults.length === 0 ? listEmpty
                     : listResults

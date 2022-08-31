@@ -6,7 +6,7 @@ import { Tab, Nav, Col, Row, Spinner  } from 'react-bootstrap';
 import EditForm from './forms/EditForm';
 
 import Game from './Game'
-import SortableGame from './utils/SortableGame';
+import SortableGame from './SortableGame';
 
 const List = (props) => {
     const {list, handleEditRemoveItem} = props;
