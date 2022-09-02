@@ -16,10 +16,14 @@ const EditForm = (props) => {
     const [publisher, setPublisher] = useState([]);
     const [platform, setPlatform] = useState("");
     const [genres, setGenres] = useState([]);
-    const [playtime, setPlaytime] = useState('00:00');
+    const [playtime, setPlaytime] = useState('');
+    const [playtimeCache, setPlaytimeCache] = useState('');
     const [rating, setRating] = useState([0, 0, 0]);
-    const [playdate, setPlaydate] = useState(new Date());
+    const [ratingCache, setRatingCache] = useState([0, 0, 0]);
+    const [playdate, setPlaydate] = useState('');
+    const [playdateCache, setPlaydateCache] = useState('');
     const [playstatus, setPlaystatus] = useState("");
+    const [playstatusCache, setPlaystatusCache] = useState("");
     const [backgroundImage, setBackgroundImage] = useState('');
     const [detail, setDetail] = useState("");
 
@@ -37,27 +41,49 @@ const EditForm = (props) => {
         } else {
             setShow(false)
         }
-        }, [shouldShow]);
+    }, [shouldShow]);
 
-        useEffect (() => {
-            if(id !== -1 && fetched === false) {
-                let existingGames = JSON.parse(sessionStorage.getItem('games'));
-                let result = existingGames.filter(game => (game.id === id))[0]
-                setFetched(true);
-                setId(result.id)
-                setTitle(result.title);
-                setPlatform(result.platform);
-                setPlaytime(result.playtime);
-                setPlaydate(result.playdate);
-                setPlaystatus(result.playstatus);
-                setDeveloper(result.developer);
-                setGenres(result.genres);
-                setPublisher(result.publisher);
-                setRating(result.rating);
-                setBackgroundImage(result.image);
-                setDetail(result.detail);
-                }
-        }, [id]);
+    useEffect (() => {
+        if(id !== -1 && fetched === false) {
+            let existingGames = JSON.parse(sessionStorage.getItem('games'));
+            let result = existingGames.filter(game => (game.id === id))[0]
+            setFetched(true);
+            setId(result.id)
+            setTitle(result.title);
+            setPlatform(result.platform);
+            setPlaytime(result.playtime);
+            setPlaytimeCache(result.playtime);
+            setPlaydate(result.playdate);
+            setPlaydateCache(result.playdate);
+            setPlaystatus(result.playstatus);
+            setPlaystatusCache(result.playstatus);
+            setDeveloper(result.developer);
+            setGenres(result.genres);
+            setPublisher(result.publisher);
+            setRating(result.rating);
+            setBackgroundImage(result.image);
+            setDetail(result.detail);
+            }
+    }, [id]);
+
+    useEffect (() => {
+        if(playstatus === 'plantoplay') {
+            setPlaydate('');
+            setPlaytime('');
+            setRating([0,0,0]);
+        } else {
+            if(playstatusCache === 'plantoplay' && playdateCache === '') {
+                setPlaytime(playtimeCache);
+                setPlaydate(new Date().getFullYear().toString())
+                setRating(ratingCache);
+            } else {
+                setPlaytime(playtimeCache);
+                setPlaydate(playdateCache);
+                setRating(ratingCache);
+            }
+        }
+        setPlaystatusCache(playstatus)
+    }, [playstatus])
 
     const handleClose = () => {
         props.handleCloseModal();   
@@ -161,28 +187,45 @@ const EditForm = (props) => {
                     </FloatingLabel>
                 </Form.Group>
 
-                <Form.Group className='mb-3'>
-                    <FloatingLabel
+                <Form.Group className='mb-3' >
+                    <FloatingLabel style={{opacity: playstatus === 'plantoplay' ? '0.50' : '1'}}
                     controlId='playtimeLabel'
                     label='Playtime (Hours)'
                     className='formLabel'
                     >   
-                        <Form.Control type='text' className="inputText" placeholder='00:00' value={playtime} onChange={e => handlePlaytime(e.target.value)} readOnly = {playstatus=== 'plantoplay' ? true : false}/>
+                        <Form.Control  
+                        disabled={playstatus === 'plantoplay'}
+                        type='text' 
+                        className="inputText" 
+                        placeholder= '0,0' 
+                        value={playtime} 
+                        onChange={e => {handlePlaytime(e.target.value); setPlaytimeCache(e.target.value)}} 
+                        readOnly = {playstatus === 'plantoplay'}/>
                     </FloatingLabel>
                 </Form.Group>
 
                 <Form.Group className='mb-3'>
-                    <FloatingLabel
+                    <FloatingLabel style={{opacity: playstatus === 'plantoplay' ? '0.50' : '1'}}
                     controlId='playdateLabel'
                     label='Playdate (Year)'
                     className='formLabel'
                     >   
-                        <Form.Control type='number' min={1000} max={new Date().getFullYear()} maxLength="4" className="inputText" placeholder={(new Date().getFullYear())} value={playdate} onChange={e => setPlaydate(e.target.value.slice(0,4))} readOnly = {playstatus=== 'plantoplay' ? true : false}/>
+                        <Form.Control
+                        disabled={playstatus === 'plantoplay'}
+                        type='number' 
+                        min={1000} 
+                        max={9999} 
+                        maxLength="4" 
+                        placeholder= {new Date().getFullYear()} 
+                        className="inputText" 
+                        value={playdate} 
+                        onChange={e => {setPlaydate(e.target.value.slice(0,4)); setPlaydateCache(e.target.value.slice(0,4))}} 
+                        readOnly = {playstatus === 'plantoplay' ? true: false}/>
                     </FloatingLabel>
                 </Form.Group>
 
-                <Form.Group className='mb-3' style={playstatus === 'plantoplay' ? {opacity: 0.65} : {}}>
-                    <Form.Label className='ratingsLabel'> Ratings </Form.Label>
+                <Form.Group className='mb-3'>
+                <Form.Label style={{opacity: playstatus === 'plantoplay' ? '0.50' : '1'}} className='ratingsLabel'> Ratings </Form.Label>
                         {isTabletOrMobile ? 
                         <Row className='ratingsRowMobile'>
                             <Row>
@@ -190,7 +233,13 @@ const EditForm = (props) => {
                                     <Form.Label className='ratingsSubLabel'> Gameplay </Form.Label>
                                 </Col>
                                 <Col md={6}>
-                                    <Rating className='ratingsStars' onClick={e => setRating([e, rating[1], rating[2]])} ratingValue={rating[0]} transition={true} size='1.5rem' fillColor ={'#fff'} emptyColor= "#262e33" readonly = {playstatus === 'plantoplay' ? true: false}/>
+                                    <Rating 
+                                    className='ratingsStars' 
+                                    onClick={e => {setRating([e, rating[1], rating[2]]); setRatingCache([e, rating[1], rating[2]])}} 
+                                    transition={true} size='1.5rem' 
+                                    fillColor ={'#fff'} 
+                                    emptyColor= "#262e33" 
+                                    readonly = {playstatus === 'plantoplay' ? true: false}/>
                                 </Col>   
                             </Row>
                             <Row>
@@ -198,7 +247,15 @@ const EditForm = (props) => {
                                     <Form.Label className='ratingsSubLabel'> Story </Form.Label>
                                 </Col>
                                 <Col>
-                                    <Rating className='ratingsStars' onClick={e => setRating([rating[0], e, rating[2]])} ratingValue={rating[1]} transition={true} size='1.5rem' fillColor ={'#fff'} emptyColor= "#262e33" readonly = {playstatus === 'plantoplay' ? true: false}/>
+                                    <Rating 
+                                    className='ratingsStars' 
+                                    onClick={e => {setRating([rating[0], e, rating[2]]); setRatingCache([rating[0], e, rating[2]])}} 
+                                    ratingValue={rating[1]} 
+                                    transition={true} 
+                                    size='1.5rem' 
+                                    fillColor ={'#fff'} 
+                                    emptyColor= "#262e33" 
+                                    readonly = {playstatus === 'plantoplay' ? true: false}/>
                                 </Col>  
                             </Row>
                             <Row>
@@ -206,7 +263,13 @@ const EditForm = (props) => {
                                     <Form.Label className='ratingsSubLabel'> Art & Music </Form.Label>
                                 </Col>
                                 <Col>
-                                    <Rating className='ratingsStars' onClick={e => setRating([rating[0], rating[1], e])} ratingValue={rating[2]} transition={true} size='1.5rem' fillColor ={'#fff'} emptyColor= "#262e33" readonly = {playstatus === 'plantoplay' ? true: false}/>
+                                    <Rating 
+                                    className='ratingsStars' 
+                                    onClick={e => {setRating([rating[0], rating[1], e]); setRatingCache([rating[0], rating[1], e])}} 
+                                    transition={true} size='1.5rem' 
+                                    fillColor ={'#fff'} 
+                                    emptyColor= "#262e33" 
+                                    readonly = {playstatus === 'plantoplay' ? true: false}/>
                                 </Col>
                             </Row>
                         </Row>
@@ -216,7 +279,15 @@ const EditForm = (props) => {
                                     <Form.Label className='ratingsSubLabel'> Gameplay </Form.Label>
                                 </Row>
                                 <Row>
-                                    <Rating className='ratingsStars' onClick={e => setRating([e, rating[1], rating[2]])} ratingValue={rating[0]} transition={true} size='2.2rem' fillColor ={'#fff'} emptyColor= "#262e33" readonly = {playstatus === 'plantoplay' ? true: false}/>
+                                    <Rating 
+                                    className='ratingsStars' 
+                                    onClick={e => {setRating([e, rating[1], rating[2]]); setRatingCache([e, rating[1], rating[2]])}} 
+                                    ratingValue={rating[0]} 
+                                    transition={true} 
+                                    size='2.2rem' 
+                                    fillColor ={'#fff'} 
+                                    emptyColor= "#262e33" 
+                                    readonly = {playstatus === 'plantoplay' ? true: false}/>
                                 </Row>   
                             </Col>
                             <Col>
@@ -224,7 +295,15 @@ const EditForm = (props) => {
                                     <Form.Label className='ratingsSubLabel'> Story </Form.Label>
                                 </Row>
                                 <Row>
-                                    <Rating className='ratingsStars' onClick={e => setRating([rating[0], e, rating[2]])} ratingValue={rating[1]} transition={true} size='2.2rem' fillColor ={'#fff'} emptyColor= "#262e33" readonly = {playstatus === 'plantoplay' ? true: false}/>
+                                    <Rating 
+                                    className='ratingsStars' 
+                                    onClick={e => {setRating([rating[0], e, rating[2]]); setRatingCache([rating[0], e, rating[2]])}} 
+                                    ratingValue={rating[1]} 
+                                    transition={true} 
+                                    size='2.2rem' 
+                                    fillColor ={'#fff'} 
+                                    emptyColor= "#262e33" 
+                                    readonly = {playstatus === 'plantoplay' ? true: false}/>
                                 </Row>  
                             </Col>
                             <Col>
@@ -232,7 +311,15 @@ const EditForm = (props) => {
                                     <Form.Label className='ratingsSubLabel'> Art & Music </Form.Label>
                                 </Row>
                                 <Row>
-                                    <Rating className='ratingsStars' onClick={e => setRating([rating[0], rating[1], e])} ratingValue={rating[2]} transition={true} size='2.2rem' fillColor ={'#fff'} emptyColor= "#262e33" readonly = {playstatus === 'plantoplay' ? true: false}/>
+                                    <Rating 
+                                    className='ratingsStars' 
+                                    onClick={e => {setRating([rating[0], rating[1], e]); setRatingCache([rating[0], rating[1], e])}} 
+                                    ratingValue={rating[2]} 
+                                    transition={true} 
+                                    size='2.2rem' 
+                                    fillColor ={'#fff'} 
+                                    emptyColor= "#262e33" 
+                                    readonly = {playstatus === 'plantoplay' ? true: false}/>
                                 </Row>
                             </Col>
                         </Row>

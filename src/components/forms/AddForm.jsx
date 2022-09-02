@@ -26,6 +26,7 @@ const AddForm = (props) => {
     const [playdate, setPlaydate] = useState('');
     const [playdateCache, setPlaydateCache] = useState('');
     const [playstatus, setPlaystatus] = useState("");
+    const [playstatusCache, setPlaystatusCache] = useState("");
     const [backgroundImage, setBackgroundImage] = useState('');
     const [detail, setDetail] = useState("");
 
@@ -71,14 +72,21 @@ const AddForm = (props) => {
 
     useEffect (() => {
         if(playstatus === 'plantoplay') {
-            setPlaydate(9999);
-            setPlaytime("00:00");
+            setPlaydate('');
+            setPlaytime('');
             setRating([0,0,0]);
         } else {
-            setPlaytime(playtimeCache);
-            setPlaydate(playdateCache);
-            setRating(ratingCache);
+            if(playstatusCache === 'plantoplay' && playdateCache === '') {
+                setPlaytime(playtimeCache);
+                setPlaydate(new Date().getFullYear().toString())
+                setRating(ratingCache);
+            } else {
+                setPlaytime(playtimeCache);
+                setPlaydate(playdateCache);
+                setRating(ratingCache);
+            }
         }
+        setPlaystatusCache(playstatus)
     }, [playstatus])
 
 
@@ -135,7 +143,12 @@ const AddForm = (props) => {
         setDetail("");
     }
 
-    const enableButton = (title!== "" && platform !== "" && playtime !== "" && rating[0] !== -1 && rating[1] !== -1 && rating[2] !== -1 && playdate !== "" && playstatus !== "" )
+    const enableButton = (
+        title!== "" && 
+        platform !== "" && 
+        (rating[0] !== -1 && rating[1] !== -1 && rating[2] !== -1) &&
+        ((playdate !== "" &&  playtime !== "" && (playstatus !== "" && playstatus !== "plantoplay")) || playstatus === "plantoplay")
+    )
     const handleSubmit = e => {
         e.preventDefault();
         let existingGames = sessionStorage.getItem('games') === '' ? null : JSON.parse(sessionStorage.getItem('games'));
@@ -147,9 +160,9 @@ const AddForm = (props) => {
                 'publisher': publisher,
                 'genres': genres,
                 'platform': platform,
-                'playtime': playtime,
+                'playtime': playstatus === 'plantoplay' ? "0": playtime,
                 'rating': rating,
-                'playdate': playdate,
+                'playdate': playstatus === 'plantoplay' ? "9999": playdate,
                 'playstatus': playstatus,
                 'image': backgroundImage,
                 'detail': detail,
@@ -215,29 +228,31 @@ const AddForm = (props) => {
                     </FloatingLabel>
                 </Form.Group>
                 
-                <Form.Group className='mb-3'>
-                    <FloatingLabel
+                <Form.Group className='mb-3' >
+                    <FloatingLabel style={{opacity: playstatus === 'plantoplay' ? '0.50' : '1'}}
                     controlId='playtimeLabel'
                     label='Playtime (Hours)'
                     className='formLabel'
                     >   
-                        <Form.Control 
+                        <Form.Control  
+                        disabled={playstatus === 'plantoplay'}
                         type='text' 
                         className="inputText" 
                         placeholder= '0,0' 
                         value={playtime} 
                         onChange={e => {handlePlaytime(e.target.value); setPlaytimeCache(e.target.value)}} 
-                        readOnly = {playstatus === 'plantoplay' ? true: false}/>
+                        readOnly = {playstatus === 'plantoplay'}/>
                     </FloatingLabel>
                 </Form.Group>
 
                 <Form.Group className='mb-3'>
-                    <FloatingLabel
+                    <FloatingLabel style={{opacity: playstatus === 'plantoplay' ? '0.50' : '1'}}
                     controlId='playdateLabel'
                     label='Playdate (Year)'
                     className='formLabel'
                     >   
-                        <Form.Control 
+                        <Form.Control
+                        disabled={playstatus === 'plantoplay'}
                         type='number' 
                         min={1000} 
                         max={9999} 
@@ -251,7 +266,7 @@ const AddForm = (props) => {
                 </Form.Group>
 
                 <Form.Group className='mb-3'>
-                <Form.Label className='ratingsLabel'> Ratings </Form.Label>
+                <Form.Label style={{opacity: playstatus === 'plantoplay' ? '0.50' : '1'}} className='ratingsLabel'> Ratings </Form.Label>
                         {isTabletOrMobile ? 
                         <Row className='ratingsRowMobile'>
                             <Row>

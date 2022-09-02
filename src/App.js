@@ -29,7 +29,7 @@ function App(){
         );
     };
 
-    const AuthWrapper = ({children, fallback,}) => {
+    const AuthWrapper = ({children, fallback}) => {
         const { status, data: signInCheckResult } = useSigninCheck();
       
         if (!children) {
@@ -63,6 +63,9 @@ function App(){
                             <Route path ='/stats' element ={<><NavBar /><StatsContainer /></>}/>
                             <Route path ='/search' element ={<><NavBar /><SearchResultsContainer /></>}/>
                             <Route path ='/game/:game' element ={<><NavBar /><GameDetailContainer /></>}/>
+
+                            <Route path ='/list/:userId' element ={<><NavBar /><ListContainer /></>}/>
+                            
                             <Route path ='/error' element ={<ErrorContainer />}/>
                         </Routes>
                     </ AuthWrapper>

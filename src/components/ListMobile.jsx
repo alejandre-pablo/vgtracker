@@ -1,5 +1,5 @@
 import React, { useState} from 'react'
-import { Col, Row} from 'react-bootstrap';
+import { Col, Row, Spinner} from 'react-bootstrap';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -109,23 +109,41 @@ const ListMobile = (props) => {
                     arrows={false} 
                     style={{maxHeight: 'min-content'}}
                     swipe={false}>
-                    <Row className='scrollableMobile'> 
-                        {list.length ? gameListFinished : "No games added yet"}
-                    </Row>
-                    <Row className='scrollableMobile'> 
-                        {list.length ? gameListPlaying : "No games added yet"}
-                    </Row>
-                    <Row className='scrollableMobile'> 
-                        {list.length ? gameListOnHold : "No games added yet"}
-                    </Row>
-                    <Row className='scrollableMobile'> 
-                        {list.length ? gameListDropped : "No games added yet"}
-                    </Row>
-                    <Row className='scrollableMobile'> 
-                        {list.length ? gameListOther : "No games added yet"}
+                    <Row className='scrollableMobile'>
+                         {!list.length ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> : 
+                        list.length === 0 ? "No games added yet"
+                        : gameListFinished
+                        }
                     </Row>
                     <Row className='scrollableMobile'>
-                        {list.length ? gameListPlanToPlay : "No games added yet"} 
+                         {!list.length ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> : 
+                        list.length === 0 ? "No games added yet"
+                        : gameListPlaying
+                        }
+                    </Row>
+                    <Row className='scrollableMobile'>
+                         {!list.length ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> : 
+                        list.length === 0 ? "No games added yet"
+                        : gameListOnHold
+                        }
+                    </Row>
+                    <Row className='scrollableMobile'> 
+                        {!list.length ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> : 
+                        list.length === 0 ? "No games added yet"
+                        : gameListDropped
+                        }
+                    </Row>
+                    <Row className='scrollableMobile'> 
+                        {!list.length ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> : 
+                        list.length === 0 ? "No games added yet"
+                        : gameListOther
+                        }
+                    </Row>
+                    <Row className='scrollableMobile'>
+                        {!list.length ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> : 
+                        list.length === 0 ? "No games added yet"
+                        : gameListPlanToPlay
+                        }
                     </Row>
                 </Slider>
             </Col>
