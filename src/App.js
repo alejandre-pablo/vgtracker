@@ -7,7 +7,7 @@ import LoginContainer from './routes/auth/LoginContainer';
 import SignupContainer from './routes/auth/SignupContainer';
 import ErrorContainer from './routes/auth/ErrorContainer';
 import NavBar from './components/NavBar';
-import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
 import { AuthProvider, FirestoreProvider, useFirebaseApp, useSigninCheck } from 'reactfire';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
@@ -58,14 +58,12 @@ function App(){
                 <BrowserRouter>
                     <AuthWrapper fallback={<AuthRoute />}>
                         <Routes>
-                            <Route path ='/' element ={<><NavBar /><ListContainer /></>}/>
+                            <Route path='/' element ={<Navigate to='/list' replace={true}/>}/>
+                            <Route path ='/list' element ={<><NavBar /><ListContainer /></>}/>
                             <Route path ='/home' element ={<><NavBar /><ListContainer /></>}/>
                             <Route path ='/stats' element ={<><NavBar /><StatsContainer /></>}/>
                             <Route path ='/search' element ={<><NavBar /><SearchResultsContainer /></>}/>
                             <Route path ='/game/:game' element ={<><NavBar /><GameDetailContainer /></>}/>
-
-                            <Route path ='/list/:userId' element ={<><NavBar /><ListContainer /></>}/>
-                            
                             <Route path ='/error' element ={<ErrorContainer />}/>
                         </Routes>
                     </ AuthWrapper>

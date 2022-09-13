@@ -2,7 +2,7 @@ import { doc, setDoc } from 'firebase/firestore';
 import React, {useEffect, useState} from 'react'
 import { Row } from 'react-bootstrap';
 import { useMediaQuery } from 'react-responsive';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { useAuth, useFirebaseApp, useFirestore, useFirestoreDocDataOnce } from 'reactfire';
 
 import List from '../components/List'
@@ -12,11 +12,13 @@ const ListContainer = () => {
 
     const isTabletOrMobile = useMediaQuery({query: '(max-width: 1224px)'})
 
+    const [searchParams, setSearchParams] = useSearchParams();
+
     const location = useLocation();
     const firebaseApp = useFirebaseApp();
     const auth = useAuth(firebaseApp);
     const firestore = useFirestore();
-    const userDataRef = doc(firestore, 'lists', auth.currentUser.uid);
+    const userDataRef = doc(firestore, 'lists', searchParams.get('user_id') === null ? auth.currentUser.uid : searchParams.get('user_id'));
 
     const {status, data } = useFirestoreDocDataOnce(userDataRef);
 
