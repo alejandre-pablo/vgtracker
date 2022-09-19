@@ -62,54 +62,54 @@ const List = (props) => {
     const gameListFinished = 
         <ul>
             {list.filter(game => game.playstatus === "finished" ).map ((game, index) => (
-                <div className={index % 2 === 0 ? 'highlight' : ''}>
+                <li key = {game.id} className={index % 2 === 0 ? 'highlight' : ''}>
                     <SortableGame key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game} index ={index + 1}/>
-                </div>))
+                </li>))
             }
         </ul>   
 
     const gameListPlaying = 
         <ul>
             {list.filter(game => game.playstatus === "playing" ).map ((game, index) => (
-                <div className={index % 2 === 0 ? 'highlight' : ''}>
+                <li key = {game.id} className={index % 2 === 0 ? 'highlight' : ''}>
                     <SortableGame key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game} index ={index + 1}/>
-                </div>))
+                </li>))
             }
         </ul>  
 
     const gameListOnHold = 
         <ul>
             {list.filter(game => game.playstatus === "onhold" ).map ((game, index) => (
-                <div className={index % 2 === 0 ? 'highlight' : ''}>
+                <li key = {game.id} className={index % 2 === 0 ? 'highlight' : ''}>
                     <SortableGame key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game} index ={index + 1}/>
-                </div>))
+                </li>))
             }
         </ul>  
 
     const gameListDropped = 
         <ul>
             {list.filter(game => game.playstatus === "dropped" ).map ((game, index) => (
-                <div className={index % 2 === 0 ? 'highlight' : ''}>
+                <li key = {game.id} className={index % 2 === 0 ? 'highlight' : ''}>
                     <SortableGame key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game} index ={index + 1}/>
-                </div>))
+                </li>))
             }
         </ul>  
 
     const gameListOther = 
         <ul>
             {list.filter(game => game.playstatus === "other" ).map ((game, index) => (
-                <div className={index % 2 === 0 ? 'highlight' : ''}>
+                <li key = {game.id} className={index % 2 === 0 ? 'highlight' : ''}>
                     <SortableGame key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game} index ={index + 1}/>
-                </div>))
+                </li>))
             }
         </ul>  
 
     const gameListPlanToPlay = 
         <ul>
             {list.filter(game => game.playstatus === "plantoplay" ).map ((game, index) => (
-                <div className={index % 2 === 0 ? 'highlight' : ''}>
+                <li key = {game.id} className={index % 2 === 0 ? 'highlight' : ''}>
                     <SortableGame key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game} index ={index + 1}/>
-                </div>))
+                </li>))
             }
         </ul> 
 

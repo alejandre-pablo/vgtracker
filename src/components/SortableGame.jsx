@@ -22,11 +22,11 @@ const SortableGame = (props) => {
     };
       
     return (
-        <li ref={setNodeRef} {...attributes} style={style} className='gameWrapper'>
+        <div ref={setNodeRef} {...attributes} style={style} className='gameWrapper'>
             <span className='gameSortIndex'>{props.index}</span>
             <button ref={setActivatorNodeRef} {...listeners} className='gameSortHandle'><TiArrowUnsorted/></button>
             <Game ref={setNodeRef} onClickRemoveItem = {props.onClickRemoveItem} onClickEditItem = {props.onClickEditItem} game = {props.game}/> 
-        </li>
+        </div>
         
     );
 }

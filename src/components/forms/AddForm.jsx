@@ -153,7 +153,7 @@ const AddForm = (props) => {
         e.preventDefault();
         let existingGames = sessionStorage.getItem('games') === '' ? null : JSON.parse(sessionStorage.getItem('games'));
         if(existingGames === null || existingGames.filter(game => (game.id === id)).length === 0 ) {
-            navigate('/', {state: {addedGame: {
+            navigate('/list', {state: {addedGame: {
                 'id': id,
                 'title': title,
                 'developer': developer,
