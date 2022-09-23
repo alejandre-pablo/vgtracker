@@ -5,8 +5,9 @@ import { useMediaQuery } from 'react-responsive';
 import { useLocation, useParams, useSearchParams } from 'react-router-dom';
 import { useAuth, useFirebaseApp, useFirestore, useFirestoreDocDataOnce } from 'reactfire';
 
-import List from '../components/List'
+
 import ListMobile from '../components/ListMobile';
+import SharedList from '../components/SharedList';
 const UserListContainer = () => {
  
     const isTabletOrMobile = useMediaQuery({query: '(max-width: 1224px)'})
@@ -20,7 +21,7 @@ const UserListContainer = () => {
     const firestore = useFirestore();
     const userDataRef = doc(firestore, 'lists', userId);
 
-    const {status, data } = useFirestoreDocDataOnce(userDataRef);
+    const {status, data} = useFirestoreDocDataOnce(userDataRef);
 
     const [list, setList] = useState([]);
 
@@ -42,9 +43,8 @@ const UserListContainer = () => {
             ?   <>
                     <ListMobile list = {list} />
                 </>
-            :   <List list = {list} />
-            }
-           
+            :   <SharedList list = {list} />
+            } 
         </ Row>
     )
 }
