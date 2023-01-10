@@ -26,8 +26,8 @@ const ListContainer = () => {
     const [prevStatus, setPrevStatus] = useState('none')
 
     useEffect(() => {
-        if(location.state !== null && status === 'success') {
-            let addedGame = location.state.addedGame
+        if(location.state.addedGame !== undefined && status === 'success') {
+            let addedGame: string = location.state.addedGame
             window.history.replaceState({}, document.title)
             handleAddItem(addedGame);
         }
@@ -44,7 +44,7 @@ const ListContainer = () => {
         setPrevStatus(status);
     },[status])
 
-    const safeWrite = newList => {
+    const safeWrite = (newList: Array<Object>) => {
         setList(newList);
         sessionStorage.setItem('games', JSON.stringify(newList))
         setDoc(userDataRef, {games: JSON.stringify(newList)})

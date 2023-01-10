@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react'
+import React, { ForwardedRef, forwardRef } from 'react'
 import { Rating } from 'react-simple-star-rating'
 import { MdClose } from 'react-icons/md';
 import { AiOutlineEdit } from 'react-icons/ai'
@@ -7,10 +7,27 @@ import { useMediaQuery } from 'react-responsive';
 import { useState } from 'react';
 import { RiArrowDropUpLine, RiArrowDropDownLine } from 'react-icons/ri'
 
-const Game = forwardRef((props, ref) => {
+interface GameProps {
+    game: {
+        id: string,
+        title: string,
+        image: string,
+        platform: Array<string>,
+        playtime: string,
+        playdate: string,
+        playstatus: string,
+        rating: Array<number>,
+        detail: string
+    };
+    onClickEditItem: (game: Object) => void;
+    onClickRemoveItem: (id: string) => void;
+}
+
+const Game = forwardRef<HTMLInputElement, GameProps>((props, ref) => {
 
     const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' })
 
+    
     const {game, onClickEditItem, onClickRemoveItem} = props;
 
     const [isCollapsed, setCollapsed] = useState(true);

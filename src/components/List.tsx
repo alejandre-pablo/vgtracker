@@ -8,15 +8,20 @@ import EditForm from './forms/EditForm';
 import Game from './Game'
 import SortableGame from './SortableGame';
 
-const List = (props) => {
+interface ListProps {
+    list: Array<Game>;
+    handleEditRemoveItem: (newList: Array<Object>) => void;
+}
+
+const List = (props : ListProps) => {
     const {list, handleEditRemoveItem} = props;
 
-    function handleRemoveItem (id)  {
-        var tmpList = list.filter((item => item.id !== id))
+    function handleRemoveItem (id: string)  {
+        var tmpList = list.filter(((item: object) => item.id !== id))
         handleEditRemoveItem(tmpList);
     };
 
-    function handleUpdateItem (game)  {
+    function handleUpdateItem (game: Object)  {
         var gameIndex = list.findIndex((item => item.id === game.id))
         let tmpList = [...list];
         tmpList.splice(gameIndex, 1);
@@ -42,7 +47,7 @@ const List = (props) => {
     )
 
     const [activeId, setActiveId] = useState(null);
-    const [dragGame, setDragGame] = useState({});
+    const [dragGame, setDragGame] = useState<GameProps>({});
     
     function handleDragStart(event) {
         setDragGame(list.find(game => game.id === event.active.id))
