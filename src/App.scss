@@ -1,12 +1,20 @@
 @import "~bootstrap/scss/bootstrap";
 
 :root {
-    --base: #2d333c;
-    --accent: #9fa6cc;
-    --accentTranslucid: #9fa6cc88;
-    --darkAccent: #646983;
+
+    --lightBase: #e4e4e4;
+    --lightAccent: #542375;
+    --lightAccentTranslucid: #54237588;
+    --lightBgAccent: #e4e4e488;
+    --lightBgBase: #ffffff;
+    --lightBgHighlight: #f1f1f15b;
+    --lightBgHover: #b4b4b420;
+
+    --darkBase: #1a1c24;
+    --darkAccent: #9fa6cc;
+    --darkAccentTranslucid: #9fa6cc88;
     --darkBgAccent: #2d333c88;
-    --darkBgBase: #242b3a65;
+    --darkBgBase: #1a1c24; /* Opaco, modificado */
     --darkBgHighlight: #2d303c5b;
     --darkBgHover: #9fa6cc20;
 }
@@ -14,17 +22,17 @@
 html {
     display: flex;
     height: 100%;
-    background: linear-gradient(#181d20fa,
-            #181d20fa),
+    background: linear-gradient(#0f1214fa,
+            #0f1214fa),
         url(../public/img/background.png);
     background-size: auto;
     background-repeat: repeat-y;
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Nunito', sans-serif;
     background: none;
-    color: var(--accent);
+    color: var(--darkAccent);
     width: 100%;
     height: 100%;
     max-width: 100%;
@@ -32,7 +40,7 @@ body {
 }
 
 ::placeholder {
-    color:var(--accent);
+    color:var(--darkAccent);
 }
 
 ul {
@@ -56,7 +64,7 @@ ul {
     max-height: 100vh;
     margin: 0;
     padding: 0.5rem;
-    padding-top: 9.5vh;
+    padding-top: 9.8vh;
     /* background-color: var(--darkBgBase); */
 }
 
@@ -77,7 +85,7 @@ ul {
     margin-left: auto;
     margin-bottom: 0;
     display: inline-block;
-    color: var(--accent);
+    color: var(--darkAccent);
 }
 
 .appTitleWrapper {
@@ -90,7 +98,7 @@ ul {
 .appTitleSubheader {
     margin-left: 5.5vw;
     font-size: 1.7vh;
-    color: var(--accent);
+    color: var(--darkAccent);
     text-decoration: none;
 }
 
@@ -114,14 +122,14 @@ ul {
     justify-content: center;
     text-align: center;
     width: 50%;
-    border: 1px solid var(--accent);
-    background-color: var(--base);
+    border: 1px solid var(--darkAccent);
+    background-color: var(--darkBase);
 }
 
 
 .authFormSubmitButton {
-    color: var(--base);
-    background-color: var(--accent);
+    color: var(--darkBase);
+    background-color: var(--darkAccent);
     border: 1px solid white;
     border-radius: 0px;
     margin: auto;
@@ -131,9 +139,9 @@ ul {
 }
 
 .authFormSubmitButton:hover {
-    color: var(--accent);
-    background-color: var(--base);
-    border: 1px solid var(--accent);
+    color: var(--darkAccent);
+    background-color: var(--darkBase);
+    border: 1px solid var(--darkAccent);
 }
 
 .authFormProviderButton {
@@ -146,12 +154,12 @@ ul {
 }
 
 .authFormText {
-    color: var(--accent);
+    color: var(--darkAccent);
     width: 80%;
     margin: auto;
     margin-top: 2rem;
     margin-bottom: 2rem;
-    border-bottom: 1px solid var(--accent);
+    border-bottom: 1px solid var(--darkAccent);
 
 }
 
@@ -175,9 +183,9 @@ ul {
     width: auto;
     flex:auto;
     font-size: 1.3rem;
-    color: var(--accent);
+    color: var(--darkAccent);
     text-decoration: none;
-    border-bottom: 1px solid var(--accent);
+    border-bottom: 1px solid var(--darkAccent);
 }
 
 .authNavItem:hover {
@@ -193,7 +201,7 @@ ul {
     padding-top: 0.8rem;
     cursor: default;
     font-size: 1.5rem;
-    color: var(--accent);
+    color: var(--darkAccent);
     text-decoration: none;
 }
 
@@ -206,7 +214,7 @@ ul {
 .navItem {
     padding: 0.25rem 0.75rem 0.25rem 0.75rem;
     text-decoration: none;
-    color:var(--accent);
+    color:var(--darkAccent);
     font-size: 1.2rem;
     border-radius: 1rem;
     display: flex;
@@ -227,17 +235,17 @@ ul {
 .navLogOutButton {
     background: none;
     border: none;
-    color:var(--accent);
+    color:var(--darkAccent);
 }
 
 .sidebar {
-    background-color: var(--base);
-    color: var(--accent);
+    background-color: var(--darkBase);
+    color: var(--darkAccent);
     width: 80%;
 }
 
 .btn-close {
-    color: var(--accent) ;
+    color: var(--darkAccent) ;
 }
 
 /* --------------------- GAMES LIST --------------------- */
@@ -247,12 +255,12 @@ ul {
 }
 
 .scrollable {
-    margin-top: 1.3vh;
-    height: 83vh;
-    max-height: 83vh;
+    margin-top: 1.7vh;
+    height: 82.5vh;
+    max-height: 82.5vh;
     overflow-x: hidden;
     overflow-y: scroll;
-    border: 1px solid var(--accent);
+    border-radius: 12px;
     background-color: var(--darkBgBase);
 }
 .scrollable ul, .scrollableMobile ul {
@@ -269,7 +277,7 @@ ul {
     
     height: 6.2vh;
     color: white;
-    border: 1px solid var(--accent);
+    border: 1px solid var(--darkAccent);
 }
 
 .mobileTabTitleWrapper {
@@ -332,6 +340,7 @@ ul {
 
 .highlight {
     background-color: var(--darkBgHighlight);
+    border-radius: 12px;
 }
 
 .gameWrapper {
@@ -348,7 +357,7 @@ ul {
     border: none;
     background: none;
     font-size: 1.5rem;
-    color: var(--accent);
+    color: var(--darkAccent);
     display: none;
 }
 
@@ -359,7 +368,7 @@ ul {
     display: flex;
     justify-content: center;
     align-items: center;
-    color: var(--accent);
+    color: var(--darkAccent);
 }
 
 .gameMobile {
@@ -373,12 +382,12 @@ ul {
     min-height: 27vh;
     overflow: hidden;
     background-color: black;
-    border: 1px solid var(--accent);
+    border: 1px solid var(--darkAccent);
 }
 .gameCardInfo {
     background: rgb(45,51,60);
-    background: linear-gradient(90deg, var(--base) 0%, rgba(0,0,0,0) 600%);
-    color: var(--accent);
+    background: linear-gradient(90deg, var(--darkBase) 0%, rgba(0,0,0,0) 600%);
+    color: var(--darkAccent);
     border-radius: 0;
     padding: 0.5rem;
     padding-left: 1rem;
@@ -389,8 +398,8 @@ ul {
     position: absolute;
     top:76%;
     background: rgb(45,51,60);
-    background: linear-gradient(90deg, var(--base) 0%, rgba(0,0,0,0) 600%);
-    color: var(--accent);
+    background: linear-gradient(90deg, var(--darkBase) 0%, rgba(0,0,0,0) 600%);
+    color: var(--darkAccent);
     border-radius: 0;
     padding: 0.2rem;
     padding-left: 1rem;
@@ -424,7 +433,7 @@ ul {
 }
 
 .gameCardRating {
-    background-color: var(--base);
+    background-color: var(--darkBase);
     margin-left: 60%;
     width: 40%;
     height: 65%;
@@ -433,7 +442,7 @@ ul {
 }
 
  .card-text {
-    border-top: 1px solid var(--accent);
+    border-top: 1px solid var(--darkAccent);
     color: white;
     padding-left: 1rem;
 }
@@ -451,7 +460,7 @@ ul {
     outline: none;
     border: none;
     background: none;
-    color: var(--accent)
+    color: var(--darkAccent)
 }
 
 
@@ -462,7 +471,6 @@ ul {
 }
 .gameTitle {
     margin: auto;
-    font-style: italic;
     display: inline-block;
     color: white;
     width: 100%;
@@ -530,7 +538,7 @@ ul {
     border: none;
     background: none;
     font-size: 1.7rem;
-    color: var(--accent);
+    color: var(--darkAccent);
 }
 
 .buttonEdit {
@@ -540,7 +548,7 @@ ul {
     border: none;
     background: none;
     font-size: 1.5rem;
-    color: var(--accent);
+    color: var(--darkAccent);
 }
 
 .buttonAddGame {
@@ -549,9 +557,10 @@ ul {
     align-items: center;
     padding: 0.25rem 1rem 0.25rem 1rem;
     background: none;
-    color: var(--accent);
+    color: var(--darkAccent);
     font-size: 1.1rem;
-    border: 1px solid var(--accent);
+    border: 1px solid var(--darkAccent);
+    border-radius: 8px;
 }
 
 .buttonAddGameMobile {
@@ -559,10 +568,10 @@ ul {
     justify-content: center;
     align-items: center;
     padding: 0.25rem 1rem 0.25rem 1rem;
-    background: linear-gradient(90deg, var(--base) 0%, rgba(0, 0, 0, 0) 600%);
-    color: var(--accent);
+    background: linear-gradient(90deg, var(--darkBase) 0%, rgba(0, 0, 0, 0) 600%);
+    color: var(--darkAccent);
     font-size: 1.1rem;
-    border: 1px solid var(--accent);
+    border: 1px solid var(--darkAccent);
 }
 
 .buttonAddGameDisabled {
@@ -593,10 +602,11 @@ ul {
 }
 
 .modal-content {
-    background-color: var(--base) !important;
+    background-color: var(--darkBase) !important;
+    border-radius: 12px;
 }
 .modal-body {
-    background-color: var(--accent);
+    background-color: var(--darkAccent);
 }
 
 .modalOverlay {
@@ -616,9 +626,9 @@ ul {
 /* --------------------- ADD GAME FORM --------------------- */
 .inputText {
     background: none;
-    background-color: var(--base);
+    background-color: var(--darkBase);
     border: none;
-    border-bottom: 1px solid var(--accent);
+    border-bottom: 1px solid var(--darkAccent);
 }
 .inputText:hover, .inputText:focus{
     color: white;
@@ -626,7 +636,7 @@ ul {
 }
 
 .formLabel {
-    color:var(--accent);
+    color:var(--darkAccent);
 }
 
 .formLabel input{
@@ -645,9 +655,10 @@ ul {
     margin: 0.5rem;
     padding-bottom: 0;
     margin-bottom: 0;
-    background-color: var(--base);
-    border: 1px solid var(--accent);
-    box-shadow: 5px 5px 3px #15181a;
+    background-color: var(--darkBase);
+    /* border: 1px solid var(--darkAccent); */
+    border-radius: 12px;
+    /* box-shadow: 5px 5px 3px #15181a; */
 }
 
 .formHeader {
@@ -659,7 +670,7 @@ ul {
 
 .ratingsLabel {
     padding-left: 0.8rem;
-    color:var(--accent);
+    color:var(--darkAccent);
 }
 
 .ratingsSubLabel {
@@ -682,8 +693,9 @@ ul {
 .ratingsRow > div {
     max-width: 30%;
     padding: 0.3rem;
-    border: 1px solid var(--accent);
+    border: 1px solid var(--darkAccent);
     box-shadow: 5px 5px 3px #15181a;
+    border-radius: 12px;
 }
 
 .ratingsRowMobile > .row {
@@ -713,13 +725,13 @@ ul {
 
 /* --------------------- FIRST ROW ---------------------*/
 .listHeader {
-    border: 1px solid var(--accent);
+    border-radius: 12px;
     height: 4.5vh;
-    background-color: var(--darkBgAccent);
+    background-color: var(--darkBgBase);
 }
 
 .columnTitle {
-    color: var(--accent);
+    color: var(--darkAccent);
     font-size: 1.1rem;
     min-width: fit-content;
     display: inline-flex;
@@ -745,43 +757,46 @@ ul {
     padding: 0;
 }
 .tabSelectors {
+    margin-right: 0.5rem;
     margin-top: 5rem;
+    background-color: var(--darkBase);
+    border-radius: 12px;
 }
 
 .nav-link {
-    color: white;
+    color: var(--darkAccent);
     text-align: center;
+    cursor: pointer;
 }
 
 .nav-pills .active,
 .nav-pills .show>.nav-link {
     transition: 0.5s;
-    background: var(--c1) !important;
-    border-radius: 0 !important;
+    background: none !important;
 }
 
 .nav-link:hover,
 .nav-link:focus {
+    background: var(--darkBgHighlight);
     color: white;
 }
 
 .nav-item {
-    border-radius: 0;
-    margin: 0.5rem;
-    margin-right: 0;
-    transition: 0.5s;
-    background: linear-gradient(90deg, var(--c1, rgb(92, 187, 79)) 0%, var(--c1, rgb(92, 187, 79)) 48%, var(--darkBgBase) 56%, var(--darkBgBase) 90%) var(--x, 83%)/200%;
-    border: 1px solid var(--accent);
-    border-right: 0;
+    /* border-radius: 12px; */
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+    /* background: linear-gradient(90deg, var(--c1, rgb(92, 187, 79)) 0%, var(--c1, rgb(92, 187, 79)) 48%, var(--darkBgBase) 56%, var(--darkBgBase) 90%) var(--x, 83%)/200%; */
+    /* border-right: 0; */
     /* border-top-left-radius: 8px;
     border-bottom-left-radius: 8px; */
 }
 
 .nav-item:hover {
-    --x: 0;
+    /* --x: 0; */
+    color: white;
 }
 
-.tabFinished, #tabs-tabpane-Finished {
+/* .tabFinished, #tabs-tabpane-Finished {
     --c1: #66cc66;
 }
 
@@ -802,13 +817,15 @@ ul {
 }
 .tabPlanToPlay, #tabs-tabpane-PlanToPlay {
     --c1: #804d99;
-}
+} */
 
 .bookmark {
     width: 6rem;
     height: 100%;
     background: rgb(45,55,60);
     background: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, var(--c1) 100%);
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
     /* clip-path: polygon(0 0, 100% 0, 100% 100%); */
 }
 
@@ -818,8 +835,9 @@ ul {
     position: fixed;
     width: 100%;
     z-index: 999;
-    background-color: var(--base);
-    border-bottom: 1px solid var(--accent);
+    background-color: var(--darkBase);
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
     padding: 0.5rem;
     height: 8vh;
 }
@@ -829,8 +847,8 @@ ul {
     position: fixed;
     width: 100%;
     z-index: 999;
-    background-color: var(--base);
-    border-bottom: 1px solid var(--accent);
+    background-color: var(--darkBase);
+    border-bottom: 1px solid var(--darkAccent);
     padding-left: 1rem;
     height: 8vh;
 }
@@ -850,12 +868,12 @@ ul {
     font-size: 1.1rem;
     background: none;
     border: none;
-    color:var(--accent);
+    color:var(--darkAccent);
 
 }
 
 .searchBarLoading {
-    color: var(--accent);
+    color: var(--darkAccent);
 }
 .buttonContainer {
     width: 30px;
@@ -870,7 +888,7 @@ ul {
     height: 90vh;
     overflow-x: hidden;
     overflow-y: auto;
-    border: 1px solid var(--accent);
+    border: 1px solid var(--darkAccent);
     background-color: var(--darkBgBase);
     margin: 0 auto 0 auto;
 }
@@ -884,7 +902,7 @@ ul {
 }
 
 .resultsContainer {
-    padding-top: 8.2vh;
+    padding-top: 9vh;
     height: 100%;
     margin: 0;
 }
@@ -910,6 +928,7 @@ ul {
   }
 .searchedGame {
     padding: 0.75rem 0 0.75rem 0.75rem;
+    border-radius: 12px;
 }
 
 .searchText {
@@ -917,7 +936,7 @@ ul {
     margin: 0 auto;
     padding-bottom: 0.5rem;
     font-size: 1.6rem;
-    color: var(--accent);
+    color: var(--darkAccent);
 }
 
 .gameName {
@@ -942,6 +961,7 @@ ul {
 
 .gameListImage {
     margin-right: 1.5rem;
+    border-radius: 8px;
     display: block;
     width: 80px;
     height: 45px;
@@ -988,7 +1008,7 @@ ul {
     width: 4%;
     height: 50%;
     transition: .5s ease;
-    border: 2px solid var(--accent);
+    border: 2px solid var(--darkAccent);
     border-right: none;
     background-color: rgba(0, 0, 0, 0.6);
 }
@@ -999,7 +1019,7 @@ ul {
 }
 
 .imageOverlay * {
-    color: var(--accent);
+    color: var(--darkAccent);
     font-size: 1.8rem;
     position: relative;
     top: 25%;
@@ -1022,18 +1042,18 @@ ul {
     text-decoration: none;
     background: none;
     border: none;
-    color: var(--accent);
+    color: var(--darkAccent);
 }
 
 .searchCardInfo {
     height: 28%;
     position: absolute;
     top: 72%;
-    border-top: 1px solid var(--accent);
+    border-top: 1px solid var(--darkAccent);
     border-radius: 0;
     background: #2d333c;
-    background: linear-gradient(90deg, var(--base) 0%, rgba(0, 0, 0, 0) 600%);
-    color: var(--accent);
+    background: linear-gradient(90deg, var(--darkBase) 0%, rgba(0, 0, 0, 0) 600%);
+    color: var(--darkAccent);
     border-radius: 0;
 }
 
@@ -1046,20 +1066,28 @@ ul {
     /* background-color: var(--darkBgBase); */
 }
 
+.statsBox {
+    padding: 1rem;
+    border-radius: 12px;
+    background-color: var(--darkBase);
+}
+
 .statsMainRow {
+    margin-left: 0.3rem;
+    margin-right: 0.3rem;
     padding-left: 1rem;
-    border-bottom: 1px solid var(--accent);
+    border-bottom: 1px solid var(--darkAccent);
 }
 
 .statsYearDropdown button {
-    color: var(--accent);
+    color: var(--darkAccent);
     margin-left: 50%;
     width: 50%;
     background: none;
     outline: 0;
     border: 0;
     border-radius: 0;
-    border-bottom: 1px solid var(--accent);
+    border-bottom: 1px solid var(--darkAccent);
     padding: 0;
     padding-left: 0.5rem;
     text-align: start;
@@ -1084,7 +1112,7 @@ ul {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border: 1px solid var(--accent);
+    border: 1px solid var(--darkAccent);
     background-color: var(--darkBgHighlight);
     box-shadow: 5px 5px 3px #15181a;
 }
@@ -1117,18 +1145,18 @@ input[type="text"] {
     padding: 0.25rem 4rem 0.25rem 0.75rem;
     background: none;
     border: none;
-    border-bottom: 1px solid var(--accent);
+    border-bottom: 1px solid var(--darkAccent);
 }
 input[type="text"]:hover, input[type="text"]:focus {
     border-bottom: 1px solid white;
 }
 
 select {
-    color:var(--accent);
+    color:var(--darkAccent);
     padding: 0.25rem 4rem 0.25rem 0.75rem;
     background: none;
     border: none;
-    border-bottom: 1px solid var(--accent);
+    border-bottom: 1px solid var(--darkAccent);
     font-size: 1.05rem;
 }
 select:hover, select:focus {
@@ -1149,12 +1177,12 @@ select:hover, select:focus {
 }
 .form-control[readonly] {
     color: rgba(255, 255, 255, 0.63);
-    background-color: var(--base);
+    background-color: var(--darkBase);
 }
 
 .form-control:disabled {
-    color: var(--accentTranslucid);
-    background-color: var(--base);
+    color: var(--darkAccentTranslucid);
+    background-color: var(--darkBase);
 }
 
 .mb-3{
@@ -1200,7 +1228,7 @@ ul {
 }
 
 a {
-    color: var(--accent);
+    color: var(--darkAccent);
 }
 
 a:hover {
@@ -1231,11 +1259,11 @@ a:hover {
 }
 
 .offcanvas {
-    border-right: 1px solid var(--accent);
+    border-right: 1px solid var(--darkAccent);
 }
 .offcanvas-header {
     margin: 0 0.5rem 0 0.5rem;
-    border-bottom: 1px solid var(--accent);
+    border-bottom: 1px solid var(--darkAccent);
 }
 
 /* --------------------- SCROLLBARS ---------------------*/
@@ -1247,12 +1275,15 @@ a:hover {
   
 /* Track */
 ::-webkit-scrollbar-track {
-    background: var(--base); 
+    background: var(--darkBase); 
+    border-radius: 10px;
 }
    
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: var(--accent); 
+    background: var(--darkAccent); 
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
   
 /* Handle on hover */
@@ -1312,7 +1343,7 @@ a:hover {
         overflow: hidden;
         width: 50%;
         height: 50%;
-        border: 2px solid var(--accent);
+        border: 2px solid var(--darkAccent);
         border-right: none;
         background-color: rgba(0, 0, 0, 0.8);
     }

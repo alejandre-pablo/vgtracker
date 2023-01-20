@@ -144,22 +144,22 @@ const List = (props) => {
                     <Col className='sideBarColumn'>
                         <Nav variant="pills" className="flex-column tabSelectors">
                             <Nav.Item className='tabFinished'>
-                                <Nav.Link eventKey="Finished">Completed</Nav.Link>
+                                <Nav.Link eventKey="Finished">COMPLETED</Nav.Link>
                             </Nav.Item>
                             <Nav.Item className='tabPlaying'>
-                                <Nav.Link eventKey="Playing">Playing</Nav.Link>
+                                <Nav.Link eventKey="Playing">PLAYING</Nav.Link>
                             </Nav.Item>
                             <Nav.Item className='tabOnHold'>
-                                <Nav.Link eventKey="OnHold">On Hold</Nav.Link>
+                                <Nav.Link eventKey="OnHold">ON HOLD</Nav.Link>
                             </Nav.Item>
                             <Nav.Item className='tabDropped'>
-                                <Nav.Link eventKey="Dropped">Dropped</Nav.Link>
+                                <Nav.Link eventKey="Dropped">DROPPED</Nav.Link>
                             </Nav.Item>
                             <Nav.Item className='tabOthers'>
-                                <Nav.Link eventKey="Other">Other</Nav.Link>
+                                <Nav.Link eventKey="Other">OTHER</Nav.Link>
                             </Nav.Item>
                             <Nav.Item className='tabPlanToPlay'>
-                                <Nav.Link eventKey="PlanToPlay">Plan to Play</Nav.Link>
+                                <Nav.Link eventKey="PlanToPlay">PLAN TO PLAY</Nav.Link>
                             </Nav.Item>
                         </Nav>
                     </Col>

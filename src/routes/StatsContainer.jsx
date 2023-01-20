@@ -1,6 +1,5 @@
 import { useEffect, useState, useMemo } from "react"
 import { Col, Container, Dropdown, DropdownButton, Row } from "react-bootstrap"
-import { Rating } from "react-simple-star-rating";
 import { AiOutlineTrophy } from 'react-icons/ai'
 import StatsBarChart from "../components/charts/StatsBarChart";
 import StatsPieChart from "../components/charts/StatsPieChart";
@@ -254,7 +253,7 @@ const StatsContainer = () => {
         <Container fluid>
             <Row className="statsContainer">
                 <Col md={9}>
-                    <div style={{ height: '42%', border: '1px solid var(--accent)', backgroundColor: 'var(--darkBgBase)', padding: '1rem'}}>
+                    <div className="statsBox" style={{ height: '42%'}}>
                         <Row className="statsMainRow">
                             <h3> Games Played</h3>
                         </Row>
@@ -262,7 +261,7 @@ const StatsContainer = () => {
                             <StatsBarChart data={yearsCount} handleBarClick={clickBarHandler}/>
                         </div>
                     </div>
-                    <div style={{margin: 'auto', marginTop:'1rem', height: '54%', border: '1px solid var(--accent)', backgroundColor: 'var(--darkBgBase)', padding: '1rem', paddingBottom: '0'}}>
+                    <div className="statsBox" style={{margin: 'auto', marginTop:'1rem', height: '54%', paddingBottom: '0'}}>
                         <Row className="statsMainRow">
                             <Col md={9}>
                                 <h3> {activeYear} Play Stats</h3>
@@ -277,7 +276,7 @@ const StatsContainer = () => {
                                     <AnimatedNumber
                                         style={{
                                             transition: '0.8s ease-out',
-                                            fontSize: '2.5rem',
+                                            fontSize: '2.2rem',
                                             fontWeight: 'bold',
                                             paddingRight: '0',
                                             transitionProperty:
@@ -294,7 +293,7 @@ const StatsContainer = () => {
                                     <AnimatedNumber
                                         style={{
                                             transition: '0.8s ease-out',
-                                            fontSize: '2.5rem',
+                                            fontSize: '2.2rem',
                                             fontWeight: 'bold',
                                             transitionProperty:
                                                 'background-color, color, opacity'
@@ -312,7 +311,7 @@ const StatsContainer = () => {
                                     <AnimatedNumber
                                         style={{
                                             transition: '0.8s ease-out',
-                                            fontSize: '2.5rem',
+                                            fontSize: '2.2rem',
                                             fontWeight: 'bold', 
                                             paddingRight: '0',
                                             transitionProperty:
@@ -344,20 +343,20 @@ const StatsContainer = () => {
                     </div>
                 </Col>
                 <Col style={{ height:'99%', marginRight: '0.8rem'}}>
-                    <Row style={{ height: '30%', border: '1px solid var(--accent)', padding: '1rem', backgroundColor: 'var(--darkBgBase)'}}>
-                        <h5 style={{paddingBottom: '0.5rem', borderBottom: '1px solid var(--accent)', display: 'flex', alignItems: 'center'}}> <AiOutlineTrophy />&nbsp;Top Genres</h5>
+                    <Row className="statsBox" style={{ height: '30%'}}>
+                        <h5 style={{paddingBottom: '0.5rem', borderBottom: '1px solid var(--darkAccent)', display: 'flex', alignItems: 'center'}}> <AiOutlineTrophy />&nbsp;Top Genres</h5>
                         <div style={{margin: 'auto', height: '85%', padding: '0.5rem 0 1rem 1.5rem'}}>
                             {genresList}
                         </div>
                     </Row>
-                    <Row style={{ marginTop: '2.3rem', height: '30%', border: '1px solid var(--accent)', padding: '1rem', backgroundColor: 'var(--darkBgBase)'}}>
-                        <h5 style={{paddingBottom: '0.5rem', borderBottom: '1px solid var(--accent)', display: 'flex', alignItems: 'center'}}> <AiOutlineTrophy />&nbsp;Top Devs</h5>
+                    <Row className="statsBox" style={{ marginTop: '2.3rem', height: '30%'}}>
+                        <h5 style={{paddingBottom: '0.5rem', borderBottom: '1px solid var(--darkAccent)', display: 'flex', alignItems: 'center'}}> <AiOutlineTrophy />&nbsp;Top Devs</h5>
                         <div style={{margin: 'auto', height: '85%', padding: '0.5rem 0 1rem 1.5rem'}}>
                             {devsList}
                         </div>
                     </Row>
-                    <Row style={{ marginTop: '2.3rem', height: '30%', border: '1px solid var(--accent)', padding: '1rem', backgroundColor: 'var(--darkBgBase)'}}>
-                        <h5 style={{paddingBottom: '0.5rem', borderBottom: '1px solid var(--accent)', display: 'flex', alignItems: 'center'}}> <AiOutlineTrophy />&nbsp;Top Publishers</h5>
+                    <Row className="statsBox" style={{ marginTop: '2.3rem', height: '30%'}}>
+                        <h5 style={{paddingBottom: '0.5rem', borderBottom: '1px solid var(--darkAccent)', display: 'flex', alignItems: 'center'}}> <AiOutlineTrophy />&nbsp;Top Publishers</h5>
                         <div style={{margin: 'auto', height: '85%', padding: '0.5rem 0 1rem 1.5rem'}}>
                             {pubsList}
                         </div>
