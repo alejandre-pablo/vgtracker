@@ -115,18 +115,14 @@ const List = (props) => {
 
     const listHeader = 
     <Row className='listHeader'>
-        <Col md = {2}> 
-        </Col>
-        <Col md = {10}>
-            <Row>
-                <Col md = {3} className="columnTitle" style={{marginLeft: '-1rem'}}>TITLE</Col>
-                <Col md = {3} className='columnTitle'>PLATFORM</Col>
-                <Col md = {1} className='columnTitle'style={{paddingLeft: '1.5rem'}}>PLAYTIME</Col>
-                <Col md = {3} className='columnTitle' style={{paddingLeft: '3rem'}}>RATING</Col>
-                <Col className='columnFill'><div className='bookmark'></div></Col>
-            </Row>
-        </Col>
-        
+        <div className='columnTitle' style={{width:'6vw'}}> # </div>
+        <div className='columnTitle' style={{width:'9vw'}}></div>
+        <div className='columnTitle' style={{width:'22vw'}}> TITLE </div>
+        <div className='columnTitle' style={{width:'9vw'}}> PLATFORM</div>
+        <div className='columnTitle' style={{width:'9vw'}}> PLAYTIME </div>
+        <div className='columnTitle' style={{width:'9vw'}}> DATE </div>
+        <div className='columnTitle' style={{width:'18vw'}}> RATING </div>
+        <div className='columnTitle' style={{width:'6vw'}}></div>
     </Row>
 
     const listHeaderPlanToPlay = 

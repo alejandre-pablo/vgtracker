@@ -12,9 +12,8 @@
 
     --darkBase: #1a1c24;
     --darkAccent: #9fa6cc;
-    --darkAccentTranslucid: #9fa6cc88;
+    --darkAccentTranslucid: #9fa6ccbb;
     --darkBgAccent: #2d333c88;
-    --darkBgBase: #1a1c24; /* Opaco, modificado */
     --darkBgHighlight: #2d303c5b;
     --darkBgHover: #9fa6cc20;
 }
@@ -64,7 +63,7 @@ ul {
     max-height: 100vh;
     margin: 0;
     padding: 0.5rem;
-    padding-top: 9.8vh;
+    padding-top: 8.7vh;
     /* background-color: var(--darkBgBase); */
 }
 
@@ -122,26 +121,25 @@ ul {
     justify-content: center;
     text-align: center;
     width: 50%;
-    border: 1px solid var(--darkAccent);
+    border-radius: 12px;
     background-color: var(--darkBase);
 }
 
 
 .authFormSubmitButton {
     color: var(--darkBase);
+    border-radius: 12px;
     background-color: var(--darkAccent);
-    border: 1px solid white;
-    border-radius: 0px;
+    border: none;
     margin: auto;
     margin-top: 1.2rem;
-    width: 50%;
+    width: 52% !important;
     font-weight: bold;
 }
 
 .authFormSubmitButton:hover {
-    color: var(--darkAccent);
-    background-color: var(--darkBase);
-    border: 1px solid var(--darkAccent);
+    color: var(--darkBase);
+    background-color: var(--darkAccentTranslucid);
 }
 
 .authFormProviderButton {
@@ -149,8 +147,12 @@ ul {
     height: 2.5rem;
     margin: auto;
     margin-bottom: 1.5rem;
+    border-radius: 12px;
     border: none;
     font-weight: bold;
+}
+.authFormProviderButton:hover {
+    background-color: #ffffffbb;
 }
 
 .authFormText {
@@ -255,13 +257,13 @@ ul {
 }
 
 .scrollable {
-    margin-top: 1.7vh;
-    height: 82.5vh;
-    max-height: 82.5vh;
+    margin-top: 0.8vh;
+    height: 85.2vh;
+    max-height: 85.2vh;
     overflow-x: hidden;
     overflow-y: scroll;
     border-radius: 12px;
-    background-color: var(--darkBgBase);
+    background-color: var(--darkBase);
 }
 .scrollable ul, .scrollableMobile ul {
     margin-bottom: 0 !important;
@@ -298,12 +300,6 @@ ul {
     width: 80%;
 }
 
-.game {
-    width: 90%;
-    padding: 0.14rem;
-    padding-left: 0.75rem;
-}
-
 .gamesForm {
     font-size: 1rem;
     max-width: 1400px;
@@ -324,6 +320,7 @@ ul {
 
 .gameWrapper:hover {
     background-color: var(--darkBgHover);
+    border-radius: 12px;
 }
 
 .gameWrapper:hover .gameSortIndex{
@@ -331,7 +328,7 @@ ul {
 }
 
 .gameWrapper:hover .gameSortHandle{
-    display: block;
+    display: inline-block;
 }
 
 .gameWrapper:hover .rightButton{
@@ -350,10 +347,7 @@ ul {
 }
 
 .gameSortHandle{
-    width: 3rem;
     outline: none;
-    padding: 0;
-    padding-left: 2rem;
     border: none;
     background: none;
     font-size: 1.5rem;
@@ -362,12 +356,9 @@ ul {
 }
 
 .gameSortIndex{
-    width: 3rem;
-    padding: 0;
-    padding-left: 2.5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 1.1rem;
     color: var(--darkAccent);
 }
 
@@ -465,34 +456,32 @@ ul {
 
 
 /* --------------------- GAME ROW FIELDS --------------------- */
-.game > .row > .col, .game > .row > .col-md-4, 
-.game > .row > .col, .game > .row > .col-md-5 {
-    display: flex;
-}
-.gameTitle {
-    margin: auto;
-    display: inline-block;
+
+.gameInfo {
     color: white;
-    width: 100%;
+    max-width: 100%;
+    font-size: 1.1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center; 
+}
+
+.gameInfoUncentered {
+    color: white;
+    max-width: 100%;
+    font-size: 1.1rem;
+    display: inline-flex;
+    align-items: center;
+}
+
+.gameTitle {
+    color: white;
+    font-size: 1.1rem;
+    display: inline-block;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-}
-
-.gamePlatform {
-    margin: auto;
-    display: flex;
-    justify-content: center;
-    vertical-align: center;
-    color: white;
-}
-
-.gamePlaytime {
-    margin: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
+    padding-right: 1rem;
 }
 
 .gameRating {
@@ -727,13 +716,12 @@ ul {
 .listHeader {
     border-radius: 12px;
     height: 4.5vh;
-    background-color: var(--darkBgBase);
+    background-color: var(--darkBase);
 }
 
 .columnTitle {
     color: var(--darkAccent);
     font-size: 1.1rem;
-    min-width: fit-content;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -764,6 +752,7 @@ ul {
 }
 
 .nav-link {
+    font-size: 1.1rem;
     color: var(--darkAccent);
     text-align: center;
     cursor: pointer;
@@ -889,7 +878,7 @@ ul {
     overflow-x: hidden;
     overflow-y: auto;
     border: 1px solid var(--darkAccent);
-    background-color: var(--darkBgBase);
+    background-color: var(--darkBase);
     margin: 0 auto 0 auto;
 }
 
@@ -946,12 +935,6 @@ ul {
     margin-bottom: 0.5rem;
 }
 
-.gameInfo {
-    font-size: 0.95rem;
-    color:white;
-}
-
-
 .gameImage {
     display: block;
     width: 12vw;
@@ -960,16 +943,15 @@ ul {
 }
 
 .gameListImage {
-    margin-right: 1.5rem;
     border-radius: 8px;
     display: block;
-    width: 80px;
-    height: 45px;
+    width: 100px;
+    height: 60px;
 }
 
 .gameImageWrapper {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
 }
 
 /* .game:hover .gameListImage {
@@ -1282,8 +1264,7 @@ a:hover {
 /* Handle */
 ::-webkit-scrollbar-thumb {
     background: var(--darkAccent); 
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
+    border-radius: 10px;
 }
   
 /* Handle on hover */

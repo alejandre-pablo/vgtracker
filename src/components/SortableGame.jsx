@@ -4,6 +4,7 @@ import {CSS} from '@dnd-kit/utilities';
 
 import Game from './Game';
 import { TiArrowUnsorted } from 'react-icons/ti';
+import { Row } from 'react-bootstrap';
 const SortableGame = (props) => {
     const {
         attributes,
@@ -22,11 +23,15 @@ const SortableGame = (props) => {
     };
       
     return (
-        <div ref={setNodeRef} {...attributes} style={style} className='gameWrapper'>
+        <Row ref={setNodeRef} {...attributes} style={style} className='gameWrapper'>
+            <div style={{width: '6vw', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
             <span className='gameSortIndex'>{props.index}</span>
             <button ref={setActivatorNodeRef} {...listeners} className='gameSortHandle'><TiArrowUnsorted/></button>
-            <Game ref={setNodeRef} onClickRemoveItem = {props.onClickRemoveItem} onClickEditItem = {props.onClickEditItem} game = {props.game}/> 
-        </div>
+            </div>
+            <div style={{width: '93%'}}>
+                <Game ref={setNodeRef} onClickRemoveItem = {props.onClickRemoveItem} onClickEditItem = {props.onClickEditItem} game = {props.game}/> 
+            </div>    
+        </Row>
         
     );
 }
