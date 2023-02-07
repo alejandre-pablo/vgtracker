@@ -78,10 +78,34 @@ const ListContainer = () => {
         if(way === "desc") {
             sortOrder = -1;
         }
-        return function (a,b) {
-            var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
-            return result * sortOrder;
+        
+        switch (property) {
+            case 'title':
+            case 'platform':
+                return function (a,b) {
+                    return (a[property].localeCompare(b[property])) * sortOrder;
+                }
+            case 'playtime':
+                return function (a,b) {
+                    var normalizedA = parseInt(a[property].replace(',', '.').replace(':', '.'))
+                    var normalizedB = parseInt(b[property].replace(',', '.').replace(':', '.'))
+                    var result = (normalizedA < normalizedB) ? -1 : (normalizedA > normalizedB) ? 1 : 0;
+                    return result * sortOrder;
+                }
+            case 'rating':
+                return function (a,b) {
+                    var normalizedA = parseInt(a[property].reduce((partialSum, a) => partialSum + a, 0));
+                    var normalizedB = parseInt(b[property].reduce((partialSum, a) => partialSum + a, 0));
+                    var result = (normalizedA < normalizedB) ? -1 : (normalizedA > normalizedB) ? 1 : 0;
+                    return result * sortOrder;
+                }
+            default:
+                return function (a,b) {
+                    var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+                    return result * sortOrder;
+                }
         }
+        
     }
 
     return (

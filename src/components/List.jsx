@@ -19,11 +19,11 @@ const List = (props) => {
     };
 
     function handleUpdateItem (game)  {
-        var gameIndex = list.findIndex((item => item.id === game.id))
-        let tmpList = [...list];
+        var gameIndex = JSON.parse(sessionStorage.getItem('games')).findIndex((item => item.id === game.id));
+        let tmpList = JSON.parse(sessionStorage.getItem('games'))
         tmpList[gameIndex] = game;
-
         handleEditRemoveItem(tmpList);
+        handleSorting(sortingCache);
     }
 
     const [sortingCache, setSortingCache] = useState(['order', 'default'])
@@ -41,6 +41,7 @@ const List = (props) => {
     }
     useEffect(() => {
         if(list.length > 0) {
+            console.log(sortingCache)
             handleSorting(sortingCache);
         }
     }, [sortingCache])
