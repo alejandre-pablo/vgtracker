@@ -62,13 +62,35 @@ const ListContainer = () => {
     const handleEditRemoveItem = newList => {
         safeWrite(newList);
     }
+
+    const handleSorting = (sorting) => {
+        var tmpList = [];
+        if(sorting[0] === 'order') {
+            tmpList = JSON.parse(sessionStorage.getItem('games'));
+        } else {
+            tmpList = [...list.sort(sortByProperty(sorting[0], sorting[1]))];
+        }
+        setList(tmpList)    
+    }
+
+    function sortByProperty(property, way) {
+        var sortOrder = 1;
+        if(way === "desc") {
+            sortOrder = -1;
+        }
+        return function (a,b) {
+            var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+            return result * sortOrder;
+        }
+    }
+
     return (
         <Row className={isTabletOrMobile ? 'mainContainerMobile' : 'mainContainer'}>
             {isTabletOrMobile 
             ?   <>
                     <ListMobile list = {list} handleEditRemoveItem = {handleEditRemoveItem} />
                 </>
-            :   <List list = {list} handleEditRemoveItem = {handleEditRemoveItem} />
+            :   <List list = {list} handleEditRemoveItem = {handleEditRemoveItem} handleSorting = {handleSorting} />
             }
            
         </ Row>

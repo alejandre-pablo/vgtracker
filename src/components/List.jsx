@@ -1,15 +1,17 @@
 import { DndContext, KeyboardSensor, useSensor, useSensors, closestCenter, DragOverlay, PointerSensor } from '@dnd-kit/core';
 import { restrictToVerticalAxis, restrictToWindowEdges } from '@dnd-kit/modifiers';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import React, { useState} from 'react'
-import { Tab, Nav, Col, Row, Spinner  } from 'react-bootstrap';
+import React, { useState } from 'react'
+import { useEffect } from 'react';
+import { Tab, Nav, Col, Row, Spinner } from 'react-bootstrap';
+import { AiFillCaretDown, AiFillCaretUp } from 'react-icons/ai'
 import EditForm from './forms/EditForm';
 
 import Game from './Game'
 import SortableGame from './SortableGame';
 
 const List = (props) => {
-    const {list, handleEditRemoveItem} = props;
+    const {list, handleEditRemoveItem, handleSorting} = props;
 
     function handleRemoveItem (id)  {
         var tmpList = list.filter((item => item.id !== id))
@@ -19,10 +21,29 @@ const List = (props) => {
     function handleUpdateItem (game)  {
         var gameIndex = list.findIndex((item => item.id === game.id))
         let tmpList = [...list];
-        tmpList.splice(gameIndex, 1);
-        tmpList.push(game);
+        tmpList[gameIndex] = game;
+
         handleEditRemoveItem(tmpList);
     }
+
+    const [sortingCache, setSortingCache] = useState(['order', 'default'])
+
+    function handleSort (sorting) {
+        if(sortingCache[0] === sorting) {
+            if (sortingCache[1] === 'asc') {
+                setSortingCache([sorting,'desc'])
+            } else {
+                setSortingCache(['order','default'])
+            }
+        } else {
+            setSortingCache([sorting, 'asc'])
+        }
+    }
+    useEffect(() => {
+        if(list.length > 0) {
+            handleSorting(sortingCache);
+        }
+    }, [sortingCache])
 
     const [gameId, setGameId] = useState(-1);
     const [showModal, setShowModal] = useState(false);
@@ -117,19 +138,51 @@ const List = (props) => {
     <Row className='listHeader'>
         <div className='columnTitle' style={{width:'6vw'}}> # </div>
         <div className='columnTitle' style={{width:'9vw'}}></div>
-        <div className='columnTitle' style={{width:'22vw'}}> TITLE </div>
-        <div className='columnTitle' style={{width:'9vw'}}> PLATFORM</div>
-        <div className='columnTitle' style={{width:'9vw'}}> PLAYTIME </div>
-        <div className='columnTitle' style={{width:'9vw'}}> DATE </div>
-        <div className='columnTitle' style={{width:'18vw'}}> RATING </div>
+        <div className='columnTitle' style={{width:'22vw', cursor: 'default'}} onClick={() => handleSort('title')}> 
+            TITLE 
+            {sortingCache[0] !== 'title' ? <></>
+            : sortingCache[1] === 'asc' ? <AiFillCaretUp/>
+                :<AiFillCaretDown/>
+            }
+            
+        </div>
+        <div className='columnTitle' style={{width:'10vw', cursor: 'default'}} onClick={() => handleSort('platform')}> 
+            PLATFORM
+            {sortingCache[0] !== 'platform' ? <></>
+            : sortingCache[1] === 'asc' ? <AiFillCaretUp/>
+                :<AiFillCaretDown/>
+            }
+        </div>
+        <div className='columnTitle' style={{width:'10vw', cursor: 'default'}} onClick={() => handleSort('playtime')}> 
+            PLAYTIME
+            {sortingCache[0] !== 'playtime' ? <></>
+            : sortingCache[1] === 'asc' ? <AiFillCaretUp/>
+                :<AiFillCaretDown/>
+            }
+            </div>
+        <div className='columnTitle' style={{width:'10vw', cursor: 'default'}} onClick={() => handleSort('playdate')}>
+            DATE
+            {sortingCache[0] !== 'playdate' ? <></>
+            : sortingCache[1] === 'asc' ? <AiFillCaretUp/>
+                :<AiFillCaretDown/>
+            }
+            </div>
+        <div className='columnTitle' style={{width:'15vw', cursor: 'default'}} onClick={() => handleSort('rating')}>
+            RATING
+            {sortingCache[0] !== 'rating' ? <></>
+            : sortingCache[1] === 'asc' ? <AiFillCaretUp/>
+                :<AiFillCaretDown/>
+            }
+            </div>
         <div className='columnTitle' style={{width:'6vw'}}></div>
     </Row>
 
     const listHeaderPlanToPlay = 
     <Row className='listHeader'>
-        <Col md = {4} className="columnTitle">TITLE</Col>
-        <Col md = {5} className='columnTitle '>PLAY DETAILS</Col>
-        <Col className='columnFill'><div className='bookmark'></div></Col>
+        <div className='columnTitle' style={{width:'6vw'}}> # </div>
+        <div className='columnTitle' style={{width:'9vw'}}></div>
+        <div className='columnTitle' style={{width:'30vw'}}>TITLE</div>
+        <div className='columnTitle' style={{width:'33vw'}}></div>
     </Row>
 
     return (

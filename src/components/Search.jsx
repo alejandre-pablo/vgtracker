@@ -13,18 +13,20 @@ const Search = () => {
     const onSubmit = (e) => {
         e.preventDefault();
         let normalizedString = searchString.toLowerCase();
-        searchString === '' ? alert('Enter a valid title')
-        : navigate({
-            pathname: "/search",
-            search: createSearchParams({
-                search_query: normalizedString
-            }).toString()
-        });
+        if(searchString !== '') {
+
+            navigate({
+                pathname: "/search",
+                search: createSearchParams({
+                    search_query: normalizedString
+                }).toString()
+            });
+        }
     }
     return (
-        <div>
-            <form onSubmit={onSubmit}>
-                <input type= 'text' className='searchBar' value={searchString} onChange={handleChange} placeholder={"Search"}/>
+        <div style={{width: '100%'}}>
+            <form style={{width: '100%'}} onSubmit={onSubmit}>
+                <input style={{width: '100%'}} type= 'text' className='searchBar' value={searchString} onChange={handleChange} placeholder={"Search"}/>
                 <span className='buttonContainer'>
                     <button type='submit' className='searchBarButton'> <FaSearch/></button> 
                 </span>

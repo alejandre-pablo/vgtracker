@@ -2,7 +2,7 @@ import React, { forwardRef } from 'react'
 import { Rating } from 'react-simple-star-rating'
 import { MdClose } from 'react-icons/md';
 import { AiOutlineEdit } from 'react-icons/ai'
-import { Row, Col, Card } from 'react-bootstrap';
+import { Row, Card } from 'react-bootstrap';
 import { useMediaQuery } from 'react-responsive';
 import { useState } from 'react';
 import { RiArrowDropUpLine, RiArrowDropDownLine } from 'react-icons/ri'
@@ -61,41 +61,39 @@ const Game = forwardRef((props, ref) => {
                     <div className="gameImageWrapper" style={{width:'9vw'}} >
                         <img className='gameListImage' src={game.image} alt=''/>
                     </div>
-                        <div className='gameInfoUncentered' style={{width:'22vw'}}> 
-                            <div className='gameTitle'>{game.title}</div> 
-                        </div>
-                        <div className='gameInfo' style={{width:'9vw'}}> {game.platform} </div>
-                        <div className='gameInfo' style={{width:'9vw'}}> {game.playtime} </div>
-                        <div className='gameInfo' style={{width:'9vw'}}> {game.playdate} </div>
-                        <div className='gameInfo' style={{width:'18vw'}}>
-                            <span className='gameRating' >
-                                <Rating 
-                                    readonly={true} 
-                                    size={20} 
-                                    ratingValue={game.rating.reduce((a, b) => a + b, 0) / game.rating.length} 
-                                    fillColor ={(game.rating.reduce((a, b) => a + b, 0) / game.rating.length) === 100 ? '#FFBC0D' : '#fff'} 
-                                    emptyColor={'#2d373c'}/>
-                            </span>
-                        </div>
-                        <div className='rightButton' style={{width:'5vw'}}>
-                            <button className="buttonEdit" onClick={(e) => { onClickEditItem(game.id) }} title="Edit entry"><AiOutlineEdit /></button>
-                            <button className="buttonRemove" onClick={(e) => { onClickRemoveItem(game.id) }} title="Delete entry" ><MdClose /></button>
-                        </div>
-                    </Row>    
-                :<Row>
-                    <Col md={1}>
-                        <img className='gameListImage' src={game.image} alt=''/>
-                    </Col>
-                    <Col md ={4}>
-                        <span className='gameTitle'>{game.title}</span>
-                    </Col>
-                    <Col md ={5}>
-                    <span className='gamePlatform'> {game.detail} </span> 
-                    </Col>
-                    <Col className='rightButton'>
+                    <div className='gameInfoUncentered' style={{width:'22vw'}}> 
+                        <div className='gameTitle'>{game.title}</div> 
+                    </div>
+                    <div className='gameInfo' style={{width:'10vw'}}> {game.platform} </div>
+                    <div className='gameInfo' style={{width:'10vw'}}> {game.playtime} h </div>
+                    <div className='gameInfo' style={{width:'10vw'}}> {game.playdate} </div>
+                    <div className='gameInfo' style={{width:'15vw'}}>
+                        <span className='gameRating' >
+                            <Rating 
+                                readonly={true} 
+                                size={20} 
+                                ratingValue={game.rating.reduce((a, b) => a + b, 0) / game.rating.length} 
+                                fillColor ={(game.rating.reduce((a, b) => a + b, 0) / game.rating.length) === 100 ? '#FFBC0D' : '#fff'} 
+                                emptyColor={'#2d373c'}/>
+                        </span>
+                    </div>
+                    <div className='rightButton hoverShown' style={{width:'5vw'}}>
                         <button className="buttonEdit" onClick={(e) => { onClickEditItem(game.id) }} title="Edit entry"><AiOutlineEdit /></button>
                         <button className="buttonRemove" onClick={(e) => { onClickRemoveItem(game.id) }} title="Delete entry" ><MdClose /></button>
-                    </Col>
+                    </div>
+                </Row>    
+                :<Row>
+                    <div className="gameImageWrapper" style={{width:'9vw'}} >
+                        <img className='gameListImage' src={game.image} alt=''/>
+                    </div>
+                    <div className='gameInfoUncentered' style={{width:'30vw'}}> 
+                        <div className='gameTitle'>{game.title}</div> 
+                    </div>
+                    <div className='gameInfo hoverShown' style={{width:'30vw'}}> {game.detail} </div>
+                    <div className='rightButton hoverShown' style={{width:'5vw'}}>
+                        <button className="buttonEdit" onClick={(e) => { onClickEditItem(game.id) }} title="Edit entry"><AiOutlineEdit /></button>
+                        <button className="buttonRemove" onClick={(e) => { onClickRemoveItem(game.id) }} title="Delete entry" ><MdClose /></button>
+                    </div>
                 </Row>
             }
         </div>

@@ -23,16 +23,16 @@ const SearchedGame = ({gameItem, addGameHandler}) => {
                 </Col>
                 <Col sm={8}>
                     <Row>
-                        <span className='gameName'>{game.name}&nbsp;</span>
+                        <span className='gameInfoUncentered'style={{marginBottom:'0.5rem'}}>{game.name}&nbsp;</span>
                     </Row>
                     <Row>  
-                        <span className='gameInfo'>&nbsp;&nbsp;&nbsp;&nbsp;Platforms: &nbsp;&nbsp;&nbsp;&nbsp;{listPlatforms !== '' ? listPlatforms : '-'}&nbsp;</span>
+                        <span className='gameInfoUncentered' style={{fontSize:'1rem'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Platforms: &nbsp;&nbsp;&nbsp;&nbsp;{listPlatforms !== '' ? listPlatforms : '-'}&nbsp;</span>
                     </Row>
                     <Row>   
-                        <span className='gameInfo'>&nbsp;&nbsp;&nbsp;&nbsp;User Rating: &nbsp;&nbsp;&nbsp;&nbsp;{game.rating !== 0 ? game.rating : '-'}</span>
+                        <span className='gameInfoUncentered'style={{fontSize:'1rem'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;User Rating: &nbsp;&nbsp;&nbsp;&nbsp;{game.rating !== 0 ? game.rating : '-'}</span>
                     </Row>
                     <Row>   
-                        <span className='gameInfo'>&nbsp;&nbsp;&nbsp;&nbsp;Tags: &nbsp;&nbsp;&nbsp;&nbsp;{listTags !== '' ? listTags : '-'}</span>
+                        <span className='gameInfoUncentered'style={{fontSize:'1rem'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tags: &nbsp;&nbsp;&nbsp;&nbsp;{listTags !== '' ? listTags : '-'}</span>
                     </Row>
                 </Col>
                 <Col sm={2} className='buttonAddGameWrapper'>

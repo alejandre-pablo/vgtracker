@@ -1,7 +1,6 @@
 import React from 'react';
 import {useSortable} from '@dnd-kit/sortable';
 import {CSS} from '@dnd-kit/utilities';
-
 import Game from './Game';
 import { TiArrowUnsorted } from 'react-icons/ti';
 import { Row } from 'react-bootstrap';

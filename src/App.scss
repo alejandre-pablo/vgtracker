@@ -16,6 +16,7 @@
     --darkBgAccent: #2d333c88;
     --darkBgHighlight: #2d303c5b;
     --darkBgHover: #9fa6cc20;
+    --darkFormField: #121318;
 }
 
 html {
@@ -39,7 +40,8 @@ body {
 }
 
 ::placeholder {
-    color:var(--darkAccent);
+    color: rgb(78, 91, 109);
+    font-size: 1.05rem;
 }
 
 ul {
@@ -331,7 +333,10 @@ ul {
     display: inline-block;
 }
 
-.gameWrapper:hover .rightButton{
+.hoverShown {
+    display: none !important;
+}
+.gameWrapper:hover .hoverShown{
     display: flex !important;
 }
 
@@ -474,16 +479,6 @@ ul {
     align-items: center;
 }
 
-.gameTitle {
-    color: white;
-    font-size: 1.1rem;
-    display: inline-block;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    padding-right: 1rem;
-}
-
 .gameRating {
     margin: auto;
     width: 100%;
@@ -549,7 +544,7 @@ ul {
     color: var(--darkAccent);
     font-size: 1.1rem;
     border: 1px solid var(--darkAccent);
-    border-radius: 8px;
+    border-radius: 200px;
 }
 
 .buttonAddGameMobile {
@@ -615,13 +610,13 @@ ul {
 /* --------------------- ADD GAME FORM --------------------- */
 .inputText {
     background: none;
-    background-color: var(--darkBase);
+    background-color: var(--darkFormField);
     border: none;
-    border-bottom: 1px solid var(--darkAccent);
+    border-radius: 12px;
 }
 .inputText:hover, .inputText:focus{
     color: white;
-    background: none;
+    background-color: var(--darkFormField);
 }
 
 .formLabel {
@@ -682,8 +677,7 @@ ul {
 .ratingsRow > div {
     max-width: 30%;
     padding: 0.3rem;
-    border: 1px solid var(--darkAccent);
-    box-shadow: 5px 5px 3px #15181a;
+    background-color: var(--darkFormField);
     border-radius: 12px;
 }
 
@@ -854,7 +848,6 @@ ul {
 /* --------------------- SEARCH BAR ---------------------*/
 
 .searchBarButton {
-    font-size: 1.1rem;
     background: none;
     border: none;
     color:var(--darkAccent);
@@ -867,8 +860,7 @@ ul {
 .buttonContainer {
     width: 30px;
     height: 30px;
-    margin-left: -2rem;
-    position: fixed;
+    margin-left: -2.1rem;
 }
 
 /* --------------------- SEARCH RESULTS ---------------------*/
@@ -1124,42 +1116,31 @@ ul {
 
 input[type="text"] {
     color:white;
-    padding: 0.25rem 4rem 0.25rem 0.75rem;
-    background: none;
+    padding: 0.4rem 4rem 0.4rem 1rem;
+    background-color: var(--darkFormField);
     border: none;
-    border-bottom: 1px solid var(--darkAccent);
+    border-radius: 12px;
+    /* background: none;
+    border-bottom: 1px solid var(--darkAccent); */
 }
-input[type="text"]:hover, input[type="text"]:focus {
+/* input[type="text"]:hover, input[type="text"]:focus {
     border-bottom: 1px solid white;
-}
-
-select {
-    color:var(--darkAccent);
-    padding: 0.25rem 4rem 0.25rem 0.75rem;
-    background: none;
-    border: none;
-    border-bottom: 1px solid var(--darkAccent);
-    font-size: 1.05rem;
-}
-select:hover, select:focus {
-    border-bottom: 1px solid white;
-}
+} */
 
 .form-select {
+    border-radius: 12px;
+    background-color: var(--darkFormField);
+    border: none;
     outline: none;
     color:white;
-    border-radius: 0;
     appearance: button;
     padding-top: 1.5rem !important;
     padding-bottom: 0 !important;
 }
-.form-control {
-    outline: none;
-    border-radius: 0;
-}
+
 .form-control[readonly] {
     color: rgba(255, 255, 255, 0.63);
-    background-color: var(--darkBase);
+    background-color: var(--darkFormField);
 }
 
 .form-control:disabled {
@@ -1181,7 +1162,7 @@ select:hover, select:focus {
 }
 
 option {
-    color: black;
+    color: white;
 }
 
 .form-floating > .form-control:focus, .form-floating > .form-control:not(:placeholder-shown) {

@@ -61,27 +61,25 @@ const SharedList = (props) => {
         </ul> 
 
     const listHeader = 
-        <Row className='listHeader'>
-            <Col md = {2}> 
-            </Col>
-            <Col md = {10}>
-                <Row>
-                    <Col md = {3} className="columnTitle" style={{marginLeft: '-1rem'}}>TITLE</Col>
-                    <Col md = {3} className='columnTitle'>PLATFORM</Col>
-                    <Col md = {1} className='columnTitle'style={{paddingLeft: '1.5rem'}}>PLAYTIME</Col>
-                    <Col md = {3} className='columnTitle' style={{paddingLeft: '3rem'}}>RATING</Col>
-                    <Col className='columnFill'><div className='bookmark'></div></Col>
-                </Row>
-            </Col>
-        </Row>
+    <Row className='listHeader'>
+        <div className='columnTitle' style={{width:'6vw'}}> # </div>
+        <div className='columnTitle' style={{width:'9vw'}}></div>
+        <div className='columnTitle' style={{width:'22vw'}}> TITLE </div>
+        <div className='columnTitle' style={{width:'10vw'}}> PLATFORM</div>
+        <div className='columnTitle' style={{width:'10vw'}}> PLAYTIME </div>
+        <div className='columnTitle' style={{width:'10vw'}}> DATE </div>
+        <div className='columnTitle' style={{width:'15vw'}}> RATING </div>
+        <div className='columnTitle' style={{width:'6vw'}}></div>
+    </Row>
 
     const listHeaderPlanToPlay = 
-        <Row className='listHeader'>
-            <Col md = {4} className="columnTitle">TITLE</Col>
-            <Col md = {5} className='columnTitle '>PLAY DETAILS</Col>
-            <Col className='columnFill'><div className='bookmark'></div></Col>
-        </Row>
-
+    <Row className='listHeader'>
+        <div className='columnTitle' style={{width:'6vw'}}> # </div>
+        <div className='columnTitle' style={{width:'9vw'}}></div>
+        <div className='columnTitle' style={{width:'30vw'}}>TITLE</div>
+        <div className='columnTitle' style={{width:'33vw'}}></div>
+    </Row>
+    
     return (
         <>
         <Tab.Container id="tabs" defaultActiveKey="Finished" className='gamesList'>

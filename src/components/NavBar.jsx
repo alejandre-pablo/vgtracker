@@ -53,7 +53,7 @@ const NavBar = () => {
                                 <strong>STATS</strong>
                             </Link>
                         </li>
-                        <li>
+                        <li style={{width: '18vw'}}>
                             <Search />
                         </li>
                         <li>

@@ -1,7 +1,8 @@
-import React, {useEffect, useState} from 'react'
-import { Rating } from 'react-simple-star-rating'
-import { Row, Col, Form, FloatingLabel, Modal } from 'react-bootstrap'
-import { useMediaQuery } from 'react-responsive'
+import React, {useEffect, useState, useReducer} from 'react';
+import { Rating } from 'react-simple-star-rating';
+import { Row, Col, Form, FloatingLabel, Modal } from 'react-bootstrap';
+import { useMediaQuery } from 'react-responsive';
+import { gameReducer, defaultGame }from './utils/gameFormReducer';
 
 const EditForm = (props) => {
 
@@ -10,138 +11,120 @@ const EditForm = (props) => {
     const shouldShow = props.show;
     const gameId = props.gameId;
     const updateItem = props.updateItemHandler;
-    const [id, setId] = useState(-1);
-    const [title, setTitle] = useState("");
-    const [developer, setDeveloper] = useState([]);
-    const [publisher, setPublisher] = useState([]);
-    const [platform, setPlatform] = useState("");
-    const [genres, setGenres] = useState([]);
-    const [playtime, setPlaytime] = useState('');
-    const [playtimeCache, setPlaytimeCache] = useState('');
-    const [rating, setRating] = useState([0, 0, 0]);
-    const [ratingCache, setRatingCache] = useState([0, 0, 0]);
-    const [playdate, setPlaydate] = useState('');
-    const [playdateCache, setPlaydateCache] = useState('');
-    const [playstatus, setPlaystatus] = useState("");
-    const [playstatusCache, setPlaystatusCache] = useState("");
-    const [backgroundImage, setBackgroundImage] = useState('');
-    const [detail, setDetail] = useState("");
 
+    const [game, dispatch] = useReducer(gameReducer, defaultGame);
     const [show, setShow] = useState(false);
-    const [fetched, setFetched] = useState(false);
-    
+
     useEffect (() => {
         if(shouldShow === true) {
             setShow(true);
-            if(gameId !== id){
-                setId(gameId);
-                clearData();
-                setFetched(false);
-            } 
         } else {
-            setShow(false)
+            setShow(false);
         }
     }, [shouldShow]);
 
-    useEffect (() => {
-        if(id !== -1 && fetched === false) {
-            let existingGames = JSON.parse(sessionStorage.getItem('games'));
-            let result = existingGames.filter(game => (game.id === id))[0]
-            setFetched(true);
-            setId(result.id)
-            setTitle(result.title);
-            setPlatform(result.platform);
-            setPlaytime(result.playtime);
-            setPlaytimeCache(result.playtime);
-            setPlaydate(result.playdate);
-            setPlaydateCache(result.playdate);
-            setPlaystatus(result.playstatus);
-            setPlaystatusCache(result.playstatus);
-            setDeveloper(result.developer);
-            setGenres(result.genres);
-            setPublisher(result.publisher);
-            setRating(result.rating);
-            setBackgroundImage(result.image);
-            setDetail(result.detail);
-            }
-    }, [id]);
-
-    useEffect (() => {
-        if(playstatus === 'plantoplay') {
-            setPlaydate('');
-            setPlaytime('');
-            setRating([0,0,0]);
-        } else {
-            if(playstatusCache === 'plantoplay' && playdateCache === '') {
-                setPlaytime(playtimeCache);
-                setPlaydate(new Date().getFullYear().toString())
-                setRating(ratingCache);
-            } else {
-                setPlaytime(playtimeCache);
-                setPlaydate(playdateCache);
-                setRating(ratingCache);
-            }
-        }
-        setPlaystatusCache(playstatus)
-    }, [playstatus])
-
-    const handleClose = () => {
+    function handleClose() {
         props.handleCloseModal();   
     }
+    
+    function handleShow() {
+        if(gameId !== game.id){
+            handleOpen(gameId);
+        }
+    }
 
-    const handlePlaytime = (e) => {
+    function handleEdit(fields) {
+        dispatch({
+            type: 'edited',
+            fields: fields
+        });
+    }
+
+    function handleClear() {
+        dispatch({
+            type: 'cleared',
+        });
+    }
+
+    function handleSubmit() {
+        return {
+            id: game.id,
+            title: game.title,
+            developer: game.developer,
+            publisher: game.publisher,
+            genres: game.genres,
+            platform: game.platform,
+            playtime: game.playtime,
+            rating: game.rating,
+            playdate: game.playdate,
+            playstatus: game.playstatus,
+            image: game.customImage !== '' ? game.customImage : game.image,
+            detail: game.detail,
+        }
+    }
+
+    function handleOpen(gameId) {
+        if(gameId.id !== -1) {
+            let existingGames = JSON.parse(sessionStorage.getItem('games'));
+            dispatch({
+                type: 'edited',
+                fields: existingGames.filter(res => (res.id === gameId))[0]
+            })
+        }
+    }
+
+
+    function handlePlaytime (value)  {
         let regex = /(\d)*([,]?)?([0-9]{1})?/g;
-        if(e.match(regex) === null) {
-            setPlaytime(e)
+        if(value.match(regex) === null) {
+            handleEdit({playtime: value, playtimeCache: value})
         } else {
-            if (e.match(regex).length <= 2) {
-                setPlaytime(e)
+            if (value.match(regex).length <= 2) {
+                handleEdit({playtime: value, playtimeCache: value})
             }
         }
     }
-    
-    const clearData = () => {
-        setTitle("");
-        setDeveloper([]);
-        setPublisher([]);
-        setGenres([]);
-        setPlatform("");
-        setPlaytime("");
-        setRating([0, 0, 0]);
-        setPlaydate("");
-        setPlaystatus("");
-        setBackgroundImage("");
-        setDetail("");
+
+    function handlePlaystatus (value) {
+        if(value === 'plantoplay') {
+            handleEdit({
+                playstatus: value,
+                playtime: '', 
+                playdate: '',
+                rating: [0,0,0]
+            })
+        } else {
+            if(game.playstatusCache === 'plantoplay' && game.playdateCache === '') {
+                handleEdit({
+                    playstatus: value,
+                    playtime: game.playtimeCache, 
+                    playdate: new Date().getFullYear().toString(),
+                    rating: game.ratingCache
+                })
+            } else {
+                handleEdit({
+                    playstatus: value,
+                    playtime: game.playtimeCache, 
+                    playdate: game.playdateCache,
+                    rating: game.ratingCache
+                })
+            }
+        }
     }
 
-    const enableButton = (title!== "" && platform !== "" && playtime !== "" && rating !== "" && playdate !== "" && playstatus !== "" && (playstatus !== "plantoplay" || (playstatus === "plantoplay" && detail !== "")))
-    const handleSubmit = e => {
+    const enableButton = (game.title!== "" && game.platform !== "" && game.playtime !== "" && game.rating !== "" && game.playdate !== "" && game.playstatus !== "" && (game.playstatus !== "plantoplay" || (game.playstatus === "plantoplay" && game.detail !== "")))
+    const handleFormSubmit = e => {
         e.preventDefault();
-        updateItem({
-            'id': id,
-            'title': title,
-            'developer': developer,
-            'publisher': publisher,
-            'genres': genres,
-            'platform': platform,
-            'playtime': playtime,
-            'rating': rating,
-            'playdate': playdate,
-            'playstatus': playstatus,
-            'image': backgroundImage,
-            'detail': detail,
-        });
-        clearData();
-        setFetched(false);
+        updateItem(handleSubmit());
         setShow(false);
-        setId(-1);
+        handleClear();
         handleClose();
     };
 
     return (
-        <Modal show={show} onHide={handleClose} size="lg" fullscreen={isTabletOrMobile} className="modalForm">
+        <Modal show={show} onHide={handleClose} onShow={handleShow} size="lg" fullscreen={isTabletOrMobile} className="modalForm">
         <Modal.Header closeButton>
-            {fetched === true ? <Modal.Title>Edit game</Modal.Title> : <Modal.Title>Cargando</Modal.Title>}
+            <Modal.Title>Edit game</Modal.Title>
         </Modal.Header>
         <Modal.Body>
             <Form>
@@ -153,7 +136,7 @@ const EditForm = (props) => {
                     label='Game Title'
                     className='formLabel'
                     >   
-                        <Form.Control type='text' className="inputText" placeholder='Title' value={title} readOnly/>
+                        <Form.Control type='text' className="inputText" placeholder='Title' value={game.title} readOnly/>
                     </FloatingLabel>
                 </Form.Group>
 
@@ -163,7 +146,7 @@ const EditForm = (props) => {
                     label='Platform'
                     className='formLabel'
                     >   
-                        <Form.Control type='text' className="inputText" placeholder='Platform' value={platform} readOnly/>
+                        <Form.Control type='text' className="inputText" placeholder='Platform' value={game.platform} readOnly/>
                     </FloatingLabel>
                 </Form.Group>
                 </Row>
@@ -176,7 +159,7 @@ const EditForm = (props) => {
                     label='Status'
                     className='formLabel'
                     >   
-                        <Form.Select type='text' className="inputText" placeholder='Status' value={playstatus} onChange={e => setPlaystatus(e.target.value)}>
+                        <Form.Select type='text' className="inputText" placeholder='Status' value={game.playstatus} onChange={e => handlePlaystatus(e.target.value)}>
                                 <option value="finished">Finished</option>
                                 <option value="playing">Playing</option>
                                 <option value="onhold">On Hold</option>
@@ -188,44 +171,44 @@ const EditForm = (props) => {
                 </Form.Group>
 
                 <Form.Group className='mb-3' >
-                    <FloatingLabel style={{opacity: playstatus === 'plantoplay' ? '0.50' : '1'}}
+                    <FloatingLabel style={{opacity: game.playstatus === 'plantoplay' ? '0.50' : '1'}}
                     controlId='playtimeLabel'
                     label='Playtime (Hours)'
                     className='formLabel'
                     >   
                         <Form.Control  
-                        disabled={playstatus === 'plantoplay'}
+                        disabled={game.playstatus === 'plantoplay'}
                         type='text' 
                         className="inputText" 
                         placeholder= '0,0' 
-                        value={playtime} 
-                        onChange={e => {handlePlaytime(e.target.value); setPlaytimeCache(e.target.value)}} 
-                        readOnly = {playstatus === 'plantoplay'}/>
+                        value={game.playtime} 
+                        onChange={e => {handlePlaytime(e.target.value)} }
+                        readOnly = {game.playstatus === 'plantoplay'}/>
                     </FloatingLabel>
                 </Form.Group>
 
                 <Form.Group className='mb-3'>
-                    <FloatingLabel style={{opacity: playstatus === 'plantoplay' ? '0.50' : '1'}}
+                    <FloatingLabel style={{opacity: game.playstatus === 'plantoplay' ? '0.50' : '1'}}
                     controlId='playdateLabel'
                     label='Playdate (Year)'
                     className='formLabel'
                     >   
                         <Form.Control
-                        disabled={playstatus === 'plantoplay'}
+                        disabled={game.playstatus === 'plantoplay'}
                         type='number' 
                         min={1000} 
                         max={9999} 
                         maxLength="4" 
                         placeholder= {new Date().getFullYear()} 
                         className="inputText" 
-                        value={playdate} 
-                        onChange={e => {setPlaydate(e.target.value.slice(0,4)); setPlaydateCache(e.target.value.slice(0,4))}} 
-                        readOnly = {playstatus === 'plantoplay' ? true: false}/>
+                        value={game.playdate} 
+                        onChange={e => {handleEdit({playdate: e.target.value.slice(0,4), playdateCache: e.target.value.slice(0,4)})} }
+                        readOnly = {game.playstatus === 'plantoplay' ? true: false}/>
                     </FloatingLabel>
                 </Form.Group>
 
                 <Form.Group className='mb-3'>
-                <Form.Label style={{opacity: playstatus === 'plantoplay' ? '0.50' : '1'}} className='ratingsLabel'> Ratings </Form.Label>
+                <Form.Label style={{opacity: game.playstatus === 'plantoplay' ? '0.50' : '1'}} className='ratingsLabel'> Ratings </Form.Label>
                         {isTabletOrMobile ? 
                         <Row className='ratingsRowMobile'>
                             <Row>
@@ -235,11 +218,11 @@ const EditForm = (props) => {
                                 <Col md={6}>
                                     <Rating 
                                     className='ratingsStars' 
-                                    onClick={e => {setRating([e, rating[1], rating[2]]); setRatingCache([e, rating[1], rating[2]])}} 
+                                    onClick={e => {handleEdit({rating:[e, game.rating[1], game.rating[2]], ratingCache:[e, game.rating[1], game.rating[2]]})} }
                                     transition={true} size='1.5rem' 
                                     fillColor ={'#fff'} 
-                                    emptyColor= "#262e33" 
-                                    readonly = {playstatus === 'plantoplay' ? true: false}/>
+                                    emptyColor= "#1a1c24" 
+                                    readonly = {game.playstatus === 'plantoplay' ? true: false}/>
                                 </Col>   
                             </Row>
                             <Row>
@@ -249,13 +232,13 @@ const EditForm = (props) => {
                                 <Col>
                                     <Rating 
                                     className='ratingsStars' 
-                                    onClick={e => {setRating([rating[0], e, rating[2]]); setRatingCache([rating[0], e, rating[2]])}} 
-                                    ratingValue={rating[1]} 
+                                    onClick={e => {handleEdit({rating:[game.rating[0], e, game.rating[2]], ratingCache:[game.rating[0], e, game.rating[2]]})} }
+                                    ratingValue={game.rating[1]} 
                                     transition={true} 
                                     size='1.5rem' 
                                     fillColor ={'#fff'} 
-                                    emptyColor= "#262e33" 
-                                    readonly = {playstatus === 'plantoplay' ? true: false}/>
+                                    emptyColor= "#1a1c24" 
+                                    readonly = {game.playstatus === 'plantoplay' ? true: false}/>
                                 </Col>  
                             </Row>
                             <Row>
@@ -265,11 +248,11 @@ const EditForm = (props) => {
                                 <Col>
                                     <Rating 
                                     className='ratingsStars' 
-                                    onClick={e => {setRating([rating[0], rating[1], e]); setRatingCache([rating[0], rating[1], e])}} 
+                                    onClick={e => {handleEdit({rating:[game.rating[0], game.rating[1], e], ratingCache: [game.rating[0], game.rating[1], e]})} }
                                     transition={true} size='1.5rem' 
                                     fillColor ={'#fff'} 
-                                    emptyColor= "#262e33" 
-                                    readonly = {playstatus === 'plantoplay' ? true: false}/>
+                                    emptyColor= "#1a1c24" 
+                                    readonly = {game.playstatus === 'plantoplay' ? true: false}/>
                                 </Col>
                             </Row>
                         </Row>
@@ -281,13 +264,13 @@ const EditForm = (props) => {
                                 <Row>
                                     <Rating 
                                     className='ratingsStars' 
-                                    onClick={e => {setRating([e, rating[1], rating[2]]); setRatingCache([e, rating[1], rating[2]])}} 
-                                    ratingValue={rating[0]} 
+                                    onClick={e => {handleEdit({rating: [e, game.rating[1], game.rating[2]], ratingCache:[e, game.rating[1], game.rating[2]]})} }
+                                    ratingValue={game.rating[0]} 
                                     transition={true} 
                                     size='2.2rem' 
                                     fillColor ={'#fff'} 
-                                    emptyColor= "#262e33" 
-                                    readonly = {playstatus === 'plantoplay' ? true: false}/>
+                                    emptyColor= "#1a1c24" 
+                                    readonly = {game.playstatus === 'plantoplay' ? true: false}/>
                                 </Row>   
                             </Col>
                             <Col>
@@ -297,13 +280,13 @@ const EditForm = (props) => {
                                 <Row>
                                     <Rating 
                                     className='ratingsStars' 
-                                    onClick={e => {setRating([rating[0], e, rating[2]]); setRatingCache([rating[0], e, rating[2]])}} 
-                                    ratingValue={rating[1]} 
+                                    onClick={e => {handleEdit({rating:[game.rating[0], e, game.rating[2]], ratingCache:[game.rating[0], e, game.rating[2]]})} }
+                                    ratingValue={game.rating[1]} 
                                     transition={true} 
                                     size='2.2rem' 
                                     fillColor ={'#fff'} 
-                                    emptyColor= "#262e33" 
-                                    readonly = {playstatus === 'plantoplay' ? true: false}/>
+                                    emptyColor= "#1a1c24" 
+                                    readonly = {game.playstatus === 'plantoplay' ? true: false}/>
                                 </Row>  
                             </Col>
                             <Col>
@@ -313,13 +296,13 @@ const EditForm = (props) => {
                                 <Row>
                                     <Rating 
                                     className='ratingsStars' 
-                                    onClick={e => {setRating([rating[0], rating[1], e]); setRatingCache([rating[0], rating[1], e])}} 
-                                    ratingValue={rating[2]} 
+                                    onClick={e => {handleEdit({rating: [game.rating[0], game.rating[1], e]}); handleEdit({ratingCache: [game.rating[0], game.rating[1], e]})}} 
+                                    ratingValue={game.rating[2]} 
                                     transition={true} 
                                     size='2.2rem' 
                                     fillColor ={'#fff'} 
-                                    emptyColor= "#262e33" 
-                                    readonly = {playstatus === 'plantoplay' ? true: false}/>
+                                    emptyColor= "#1a1c24" 
+                                    readonly = {game.playstatus === 'plantoplay' ? true: false}/>
                                 </Row>
                             </Col>
                         </Row>
@@ -332,14 +315,24 @@ const EditForm = (props) => {
                     label='Extra Details'
                     className='formLabel'
                     >   
-                        <Form.Control type='text' className="inputText" placeholder='Detail' value={detail} onChange={e => setDetail(e.target.value)} />
+                        <Form.Control type='text' className="inputText" placeholder='Detail' value={game.detail} onChange={e => handleEdit({detail:e.target.value})} />
+                    </FloatingLabel>
+                </Form.Group>
+
+                <Form.Group className='mb-3' >
+                    <FloatingLabel 
+                    controlId='customImageLabel'
+                    label='Custom Image URL'
+                    className='formLabel'
+                    >   
+                        <Form.Control type='text' className="inputText" placeholder= 'URL' value={game.customImage} onChange={e => {handleEdit({customImage: e.target.value})}} />
                     </FloatingLabel>
                 </Form.Group>
                 </Row>
             </Form>
         </Modal.Body>
         <Modal.Footer>
-            <button className="buttonAdd" onClick={handleSubmit} disabled={ enableButton ? "" : "disabled"}>
+            <button className="buttonAdd" onClick={handleFormSubmit} disabled={ enableButton ? "" : "disabled"}>
                 Edit
             </button>
         </Modal.Footer>
