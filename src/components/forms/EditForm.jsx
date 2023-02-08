@@ -66,9 +66,14 @@ const EditForm = (props) => {
     function handleOpen(gameId) {
         if(gameId.id !== -1) {
             let existingGames = JSON.parse(sessionStorage.getItem('games'));
+            let gameOpened = existingGames.filter(res => (res.id === gameId))[0]
             dispatch({
                 type: 'edited',
-                fields: existingGames.filter(res => (res.id === gameId))[0]
+                fields: {...gameOpened,
+                    playtimeCache: gameOpened.playtime,
+                    playdateCache: gameOpened.playdate,
+                    ratingCache: gameOpened.rating
+                }
             })
         }
     }
@@ -89,12 +94,12 @@ const EditForm = (props) => {
         if(value === 'plantoplay') {
             handleEdit({
                 playstatus: value,
-                playtime: '', 
+                playtime: '',
                 playdate: '',
                 rating: [0,0,0]
             })
         } else {
-            if(game.playstatusCache === 'plantoplay' && game.playdateCache === '') {
+            if(game.playstatus === 'plantoplay' && (game.playdateCache === '9999' || game.playdateCache === '')) {
                 handleEdit({
                     playstatus: value,
                     playtime: game.playtimeCache, 
@@ -112,7 +117,7 @@ const EditForm = (props) => {
         }
     }
 
-    const enableButton = (game.title!== "" && game.platform !== "" && game.playtime !== "" && game.rating !== "" && game.playdate !== "" && game.playstatus !== "" && (game.playstatus !== "plantoplay" || (game.playstatus === "plantoplay" && game.detail !== "")))
+    const enableButton = (game.playtime !== "" && game.playdate !== "" && game.playstatus !== "" && game.playstatus !== "plantoplay") || (game.playstatus === "plantoplay" )
     const handleFormSubmit = e => {
         e.preventDefault();
         updateItem(handleSubmit());
@@ -171,13 +176,12 @@ const EditForm = (props) => {
                 </Form.Group>
 
                 <Form.Group className='mb-3' >
-                    <FloatingLabel style={{opacity: game.playstatus === 'plantoplay' ? '0.50' : '1'}}
+                    <FloatingLabel 
                     controlId='playtimeLabel'
                     label='Playtime (Hours)'
                     className='formLabel'
                     >   
-                        <Form.Control  
-                        disabled={game.playstatus === 'plantoplay'}
+                        <Form.Control 
                         type='text' 
                         className="inputText" 
                         placeholder= '0,0' 
@@ -188,18 +192,17 @@ const EditForm = (props) => {
                 </Form.Group>
 
                 <Form.Group className='mb-3'>
-                    <FloatingLabel style={{opacity: game.playstatus === 'plantoplay' ? '0.50' : '1'}}
+                    <FloatingLabel
                     controlId='playdateLabel'
                     label='Playdate (Year)'
                     className='formLabel'
                     >   
                         <Form.Control
-                        disabled={game.playstatus === 'plantoplay'}
                         type='number' 
                         min={1000} 
                         max={9999} 
                         maxLength="4" 
-                        placeholder= {new Date().getFullYear()} 
+                        placeholder= {new Date().getFullYear().toString()} 
                         className="inputText" 
                         value={game.playdate} 
                         onChange={e => {handleEdit({playdate: e.target.value.slice(0,4), playdateCache: e.target.value.slice(0,4)})} }
@@ -213,7 +216,7 @@ const EditForm = (props) => {
                         <Row className='ratingsRowMobile'>
                             <Row>
                                 <Col md={6}>
-                                    <Form.Label className='ratingsSubLabel'> Gameplay </Form.Label>
+                                    <Form.Label className='ratingsSubLabel' style={{opacity: game.playstatus === 'plantoplay' ? '0.50' : '1'}}> Gameplay </Form.Label>
                                 </Col>
                                 <Col md={6}>
                                     <Rating 
@@ -227,7 +230,7 @@ const EditForm = (props) => {
                             </Row>
                             <Row>
                                 <Col>
-                                    <Form.Label className='ratingsSubLabel'> Story </Form.Label>
+                                    <Form.Label className='ratingsSubLabel' style={{opacity: game.playstatus === 'plantoplay' ? '0.50' : '1'}}> Story </Form.Label>
                                 </Col>
                                 <Col>
                                     <Rating 
@@ -243,7 +246,7 @@ const EditForm = (props) => {
                             </Row>
                             <Row>
                                 <Col>
-                                    <Form.Label className='ratingsSubLabel'> Art & Music </Form.Label>
+                                    <Form.Label className='ratingsSubLabel' style={{opacity: game.playstatus === 'plantoplay' ? '0.50' : '1'}}> Art & Music </Form.Label>
                                 </Col>
                                 <Col>
                                     <Rating 
@@ -256,10 +259,10 @@ const EditForm = (props) => {
                                 </Col>
                             </Row>
                         </Row>
-                        : <Row className='ratingsRow'>
+                        : <Row className='ratingsRow' >
                             <Col>
                                 <Row>
-                                    <Form.Label className='ratingsSubLabel'> Gameplay </Form.Label>
+                                    <Form.Label className='ratingsSubLabel' style={{opacity: game.playstatus === 'plantoplay' ? '0.50' : '1'}}> Gameplay </Form.Label>
                                 </Row>
                                 <Row>
                                     <Rating 
@@ -275,7 +278,7 @@ const EditForm = (props) => {
                             </Col>
                             <Col>
                                 <Row>
-                                    <Form.Label className='ratingsSubLabel'> Story </Form.Label>
+                                    <Form.Label className='ratingsSubLabel' style={{opacity: game.playstatus === 'plantoplay' ? '0.50' : '1'}}> Story </Form.Label>
                                 </Row>
                                 <Row>
                                     <Rating 
@@ -291,7 +294,7 @@ const EditForm = (props) => {
                             </Col>
                             <Col>
                                 <Row>
-                                    <Form.Label className='ratingsSubLabel'> Art & Music </Form.Label>
+                                    <Form.Label className='ratingsSubLabel' style={{opacity: game.playstatus === 'plantoplay' ? '0.50' : '1'}}> Art & Music </Form.Label>
                                 </Row>
                                 <Row>
                                     <Rating 

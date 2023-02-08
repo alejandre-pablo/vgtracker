@@ -109,7 +109,6 @@ const AddForm = (props) => {
                         playdate: '',
                         playdateCache: '',
                         playstatus:'',
-                        playstatusCache: '',
                         image: result.background_image,
                         detail: ''
                     }
@@ -141,7 +140,7 @@ const AddForm = (props) => {
                 rating: [0,0,0]
             })
         } else {
-            if(game.playstatusCache === 'plantoplay' && game.playdateCache === '') {
+            if(game.playstatus === 'plantoplay' && (game.playdateCache === '9999' || game.playdateCache === '')) {
                 handleEdit({
                     playstatus: value,
                     playtime: game.playtimeCache, 
@@ -164,8 +163,7 @@ const AddForm = (props) => {
     }
 
     const enableButton = (
-        game.title!== "" && 
-        game.platform !== "" && 
+        game.title!== "" && game.platform !== "" && 
         (game.rating[0] !== -1 && game.rating[1] !== -1 && game.rating[2] !== -1) &&
         ((game.playdate !== "" &&  game.playtime !== "" && (game.playstatus !== "" && game.playstatus !== "plantoplay")) || game.playstatus === "plantoplay")
     )
@@ -236,13 +234,12 @@ const AddForm = (props) => {
                 </Form.Group>
                 
                 <Form.Group className='mb-3' >
-                    <FloatingLabel style={{opacity: game.playstatus === 'plantoplay' ? '0.50' : '1'}}
+                    <FloatingLabel
                     controlId='playtimeLabel'
                     label='Playtime (Hours)'
                     className='formLabel'
                     >   
                         <Form.Control  
-                        disabled={game.playstatus === 'plantoplay'}
                         type='text' 
                         className="inputText" 
                         placeholder= '0,0' 
@@ -253,22 +250,21 @@ const AddForm = (props) => {
                 </Form.Group>
 
                 <Form.Group className='mb-3'>
-                    <FloatingLabel style={{opacity: game.playstatus === 'plantoplay' ? '0.50' : '1'}}
+                    <FloatingLabel
                     controlId='playdateLabel'
                     label='Playdate (Year)'
                     className='formLabel'
                     >   
                         <Form.Control
-                        disabled={game.playstatus === 'plantoplay'}
                         type='number' 
                         min={1000} 
                         max={9999} 
                         maxLength="4" 
-                        placeholder= {new Date().getFullYear()} 
+                        placeholder= {new Date().getFullYear().toString()} 
                         className="inputText" 
                         value={game.playdate} 
                         onChange={e => {handleEdit({playdate: e.target.value.slice(0,4), playdateCache: e.target.value.slice(0,4)})}} 
-                        readOnly = {game.playstatus === 'plantoplay' ? true: false}/>
+                        readOnly = {game.playstatus === 'plantoplay'}/>
                     </FloatingLabel>
                 </Form.Group>
 
@@ -278,7 +274,7 @@ const AddForm = (props) => {
                         <Row className='ratingsRowMobile'>
                             <Row>
                                 <Col md={6}>
-                                    <Form.Label className='ratingsSubLabel'> Gameplay </Form.Label>
+                                    <Form.Label className='ratingsSubLabel' style={{opacity: game.playstatus === 'plantoplay' ? '0.50' : '1'}}> Gameplay </Form.Label>
                                 </Col>
                                 <Col md={6}>
                                     <Rating 
@@ -292,7 +288,7 @@ const AddForm = (props) => {
                             </Row>
                             <Row>
                                 <Col>
-                                    <Form.Label className='ratingsSubLabel'> Story </Form.Label>
+                                    <Form.Label className='ratingsSubLabel' style={{opacity: game.playstatus === 'plantoplay' ? '0.50' : '1'}}> Story </Form.Label>
                                 </Col>
                                 <Col>
                                     <Rating 
@@ -308,7 +304,7 @@ const AddForm = (props) => {
                             </Row>
                             <Row>
                                 <Col>
-                                    <Form.Label className='ratingsSubLabel'> Art & Music </Form.Label>
+                                    <Form.Label className='ratingsSubLabel' style={{opacity: game.playstatus === 'plantoplay' ? '0.50' : '1'}}> Art & Music </Form.Label>
                                 </Col>
                                 <Col>
                                     <Rating 
@@ -324,7 +320,7 @@ const AddForm = (props) => {
                         : <Row className='ratingsRow'>
                             <Col>
                                 <Row>
-                                    <Form.Label className='ratingsSubLabel'> Gameplay </Form.Label>
+                                    <Form.Label className='ratingsSubLabel' style={{opacity: game.playstatus === 'plantoplay' ? '0.50' : '1'}}> Gameplay </Form.Label>
                                 </Row>
                                 <Row>
                                     <Rating 
@@ -340,7 +336,7 @@ const AddForm = (props) => {
                             </Col>
                             <Col>
                                 <Row>
-                                    <Form.Label className='ratingsSubLabel'> Story </Form.Label>
+                                    <Form.Label className='ratingsSubLabel' style={{opacity: game.playstatus === 'plantoplay' ? '0.50' : '1'}}> Story </Form.Label>
                                 </Row>
                                 <Row>
                                     <Rating 
@@ -356,7 +352,7 @@ const AddForm = (props) => {
                             </Col>
                             <Col>
                                 <Row>
-                                    <Form.Label className='ratingsSubLabel'> Art & Music </Form.Label>
+                                    <Form.Label className='ratingsSubLabel' style={{opacity: game.playstatus === 'plantoplay' ? '0.50' : '1'}}> Art & Music </Form.Label>
                                 </Row>
                                 <Row>
                                     <Rating 
@@ -393,7 +389,7 @@ const AddForm = (props) => {
                         <Form.Control  
                         type='text' 
                         className="inputText" 
-                        placeholder= '' 
+                        placeholder= 'URL' 
                         value={game.customImage} 
                         onChange={e => {handleEdit({customImage: e.target.value})}} />
                     </FloatingLabel>

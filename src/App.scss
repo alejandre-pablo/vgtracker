@@ -1139,13 +1139,13 @@ input[type="text"] {
 }
 
 .form-control[readonly] {
-    color: rgba(255, 255, 255, 0.63);
+    color: rgba(255, 255, 255, 0.315);
     background-color: var(--darkFormField);
 }
 
 .form-control:disabled {
-    color: var(--darkAccentTranslucid);
-    background-color: var(--darkBase);
+    color: white;
+    background-color: var(--darkFormField);
 }
 
 .mb-3{
