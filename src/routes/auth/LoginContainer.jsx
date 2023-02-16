@@ -59,8 +59,7 @@ const LoginContainer = () => {
                     sessionStorage.setItem('games', []);
                     navigate('/', {replace: true});
                 })
-            )
-                
+            )  
         } catch (error) {
             console.log(error)
         }

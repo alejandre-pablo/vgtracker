@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from "react"
-import { Col, Container, Dropdown, DropdownButton, Row } from "react-bootstrap"
+import { Col, Container, Row } from "react-bootstrap"
 import { AiOutlineTrophy } from 'react-icons/ai'
 import StatsBarChart from "../components/charts/StatsBarChart";
 import StatsPieChart from "../components/charts/StatsPieChart";
@@ -49,11 +49,11 @@ const StatsContainer = () => {
             other: {"status": "other", "count": 0}
         }))
 
-    const yearTags = 
+/*     const yearTags = 
         <DropdownButton onSelect={handleYearSelect} className="statsYearDropdown" title={activeYear} variant='dark'>
             {yearsCount.map(year => <Dropdown.Item eventKey={year.year}>{year.year}</Dropdown.Item>)}
             <Dropdown.Item eventKey={'All Time'}>All Time</Dropdown.Item>
-        </DropdownButton>
+        </DropdownButton> */
 
     const genres =  useMemo(() => Object.values( 
         list.filter(game => game.playstatus !== 'plantoplay')
@@ -266,9 +266,9 @@ const StatsContainer = () => {
                             <Col md={9}>
                                 <h3> {activeYear} Play Stats</h3>
                             </Col>
-                            <Col>
+                            {/* <Col>
                                 {yearTags}
-                            </Col>
+                            </Col> */}
                         </Row>
                         <Row style={{height: '90%'}}>
                             <Col md={5} className='flexCentered' style={{flexDirection: 'column', padding: '1rem'}}>

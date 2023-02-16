@@ -1,5 +1,5 @@
 import React from 'react'
-import { Row, Col, Offcanvas, Dropdown, Toast } from 'react-bootstrap'
+import { Row, Col, Offcanvas, Dropdown } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import Search from './Search'
 import { useFirebaseApp} from 'reactfire';
@@ -24,7 +24,6 @@ const NavBar = () => {
     const user = auth.currentUser;
 
     const [showSidebar, setShowSidebar] = useState(false);
-    const [showToast, setShowToast] = useState(false);
 
     const handleCloseSidebar = () => setShowSidebar(false);
     const handleShowSidebar = () => setShowSidebar(true);
@@ -43,9 +42,6 @@ const NavBar = () => {
                 </h5> 
             </Col>
             <Col sm={8}>
-                <Toast onClose={() => setShowToast(false)} show={showToast} delay={1500} autohide className='toast'>
-                    <Toast.Body>Link copied to clipboard!</Toast.Body>
-                </Toast>
                 <nav>
                     <ul className='navbar'>
                         <li>
@@ -57,9 +53,6 @@ const NavBar = () => {
                             <Link className='navItem' to={'/stats'}>
                                 <strong>STATS</strong>
                             </Link>
-                        </li>
-                        <li style={{width: '18vw'}}>
-                            <Search />
                         </li>
                         <li> 
                             <Dropdown>
@@ -95,13 +88,7 @@ const NavBar = () => {
                                         </button>    
                                     </Dropdown.Item>
                                     <Dropdown.Item>
-                                        <button 
-                                            className ='profileDropdownLink' 
-                                            style={{ borderBottom: '2px solid var(--darkBgAccent)'}} 
-                                            onClick={() => {
-                                                navigator.clipboard.writeText(window.location.protocol + '//' + window.location.host + '/user/' + auth.currentUser.uid);
-                                                setShowToast(true)
-                                            }}>
+                                        <button className ='profileDropdownLink' style={{ borderBottom: '2px solid var(--darkBgAccent)'}} onClick={() => {navigator.clipboard.writeText(window.location.protocol + '//' + window.location.host + '/user/' + auth.currentUser.uid)}}>
                                             <BiShareAlt/> <span>Share Your Tracker</span>
                                         </button>    
                                     </Dropdown.Item>

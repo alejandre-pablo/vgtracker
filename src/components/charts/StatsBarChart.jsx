@@ -7,11 +7,20 @@ const StatsBarChart = (props) => {
 
     const handleClick = props.handleBarClick
 
-    const [activeIndex, setActiveIndex] = useState(0);
+    const [activeIndex, setActiveIndex] = useState(-1);
+    const [hoverIndex, setHoverIndex] = useState(-1);
 
     function handleClickWrapper (data, index) {
         setActiveIndex(index);
         handleClick(data);
+    }
+
+    function handleHover(data, index) {
+        setHoverIndex(index);
+    }
+
+    function handleHoverOut(data, index) {
+        setHoverIndex(-1);
     }
 
     return (
@@ -28,9 +37,9 @@ const StatsBarChart = (props) => {
             >
                 <YAxis dataKey="count" stroke="#9fa6cc" />
                 <XAxis dataKey="year" stroke="#9fa6cc"/>
-                <Bar dataKey="count" fill="#9fa6cc" radius={[8, 8, 0, 0]} animationDuration={2000} onClick={handleClickWrapper}>
+                <Bar dataKey="count" fill="#9fa6cc" radius={[8, 8, 0, 0]} animationDuration={2000} onClick={handleClickWrapper} onMouseOver={handleHover} onMouseOut={handleHoverOut}>
                 {data.map((entry, index) => (
-                    <Cell cursor="pointer" fill={index === activeIndex ? '#fff' : '#9fa6cc'} key={`cell-${index}`} />
+                    <Cell cursor="pointer" fill={index === activeIndex ? '#fff' : index === hoverIndex ? '#9fa6cc99' : '#9fa6cc'} key={`cell-${index}`} />
                 ))}
                 </Bar>
             </BarChart>

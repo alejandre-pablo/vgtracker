@@ -13,7 +13,6 @@ const UserListContainer = () => {
     const isTabletOrMobile = useMediaQuery({query: '(max-width: 1224px)'})
 
     const {userId} = useParams();
-    debugger
 
     const location = useLocation();
     const firebaseApp = useFirebaseApp();
