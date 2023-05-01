@@ -21,7 +21,13 @@ const List = (props) => {
     function handleUpdateItem (game)  {
         var gameIndex = JSON.parse(sessionStorage.getItem('games')).findIndex((item => item.id === game.id));
         let tmpList = JSON.parse(sessionStorage.getItem('games'))
-        tmpList[gameIndex] = game;
+        if(tmpList[gameIndex].playstatus !== game.playstatus) {
+            tmpList.splice(gameIndex, 1)
+            tmpList.push(game)
+        } else {
+            tmpList[gameIndex] = game;
+        }
+        
         handleEditRemoveItem(tmpList);
         handleSorting(sortingCache);
     }

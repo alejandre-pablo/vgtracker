@@ -1,16 +1,17 @@
 import React from 'react'
-import { Row, Col, Offcanvas, Dropdown, Toast } from 'react-bootstrap'
+import { Row, Col, Offcanvas, Dropdown, Toast, Navbar, Nav, Container, FormControl, Button, Form } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import Search from './Search'
 import { useFirebaseApp} from 'reactfire';
 import { getAuth, signOut } from 'firebase/auth';
-import { FaHome } from 'react-icons/fa'
+import { FaEnvelope, FaHome, FaSearch, FaUser } from 'react-icons/fa'
 import { BiLogOut, BiEdit, BiShareAlt } from 'react-icons/bi'
 import { CgProfile } from 'react-icons/cg'
 import { IoIosStats } from 'react-icons/io'
 import { GoThreeBars } from 'react-icons/go'
 import { useMediaQuery } from 'react-responsive';
 import { useState } from 'react';
+import EditProfileForm from './forms/EditProfileForm';
 
 const { version } = require('../../package.json');
 
@@ -24,14 +25,24 @@ const NavBar = () => {
     const user = auth.currentUser;
 
     const [showSidebar, setShowSidebar] = useState(false);
+    const [showModal, setShowModal] = useState(false);
     const [showToast, setShowToast] = useState(false);
 
+    const handleCloseModal = () => setShowModal(false);
     const handleCloseSidebar = () => setShowSidebar(false);
     const handleShowSidebar = () => setShowSidebar(true);
+
+    function handleEditProfile() {
+        console.log('aaa')
+        setShowModal(true);
+    }
     
     return (
-        !isTabletOrMobile 
-        ? <Row className='topMenu'>
+        !isTabletOrMobile
+        ? 
+        <>
+        <EditProfileForm show ={showModal} handleCloseModal = {handleCloseModal}/>
+        <Row className='topMenu'>
             <Col>
                 <Link to={'/'}>
                     <h2 className='appTitle'>
@@ -91,7 +102,7 @@ const NavBar = () => {
                                             </Col>
                                         </Row> */}
                                         <button className ='profileDropdownLink' style={{ borderBottom: '2px solid var(--darkBgAccent)'}}>
-                                            <BiEdit/> <span>Edit Profile</span>
+                                            <BiEdit/> <span onClick={handleEditProfile}>Edit Profile</span>
                                         </button>    
                                     </Dropdown.Item>
                                     <Dropdown.Item>
@@ -124,63 +135,86 @@ const NavBar = () => {
                 </nav>
             </Col>
         </Row>
+        </>
         :<>
-            <Col className='topMenuMobile'>
-                <button className="buttonEdit" onClick={handleShowSidebar} title="Show sidebar"><GoThreeBars/></button>
-                <Link to={'/'}>
-                    <img className = 'appLogo' src={window.location.origin +'/img/logo_cutre.png'} alt="logo"></img>
-                </Link>
-                <Search/>
-                <Offcanvas show={showSidebar} onHide={handleCloseSidebar} className='sidebar'>
-                <Offcanvas.Header closeButton>
-                    <Offcanvas.Title>
-                        <Link to={'/'}>
-                            <h1 className='appTitle'>
-                                VGTracker
-                            </h1>
-                        </Link>
-                        <h5 className='appTitleSubheader'>
-                            v{version} Powered by <a href='https://rawg.io/'>RAWG.io</a>
-                        </h5> 
-                    </Offcanvas.Title>
-                </Offcanvas.Header>
-                <Offcanvas.Body>
-                <nav>
-                    <ul className='navbarMobile'>
-                        <li>
-                            <Link className='navItem' to={'/'} onClick={handleCloseSidebar}>
-                                <FaHome className='navSideButton'/>
-                                <span>HOME</span>
+            <EditProfileForm show ={showModal} handleCloseModal = {handleCloseModal}/>
+            {/* <Row className='topMenuMobile'>
+                <Col md={1}>
+                    <button className="buttonEdit" onClick={handleShowSidebar} title="Show sidebar"><GoThreeBars/></button>
+                </Col>
+                <Col md={1}>
+                    <Link to={'/'}>
+                        <img className = 'appLogo' maxHeight='100%' width='auto' src={window.location.origin +'/img/logo_cutre.png'} alt="logo"></img>
+                    </Link>
+                </Col>
+                <Col md={10}>
+                    <Search/>
+                </Col>
+            </Row> */}
+            <Navbar className='topMenuMobile' display='flex'>
+                <div style={{width: '10%'}}>
+                    <button className="buttonEdit" onClick={handleShowSidebar} title="Show sidebar"><GoThreeBars/></button>
+                </div>
+                <div style={{width:'10%'}}>
+                    <Navbar.Brand href="/" style={{height:'100%', padding:'0' }}>
+                        <img className = 'appLogo' src={window.location.origin +'/img/logo_cutre.png'} alt="logo"></img>
+                    </Navbar.Brand>
+                </div>
+                <div style={{width: '80%', margin: '5%', paddingLeft: '10%', display: 'flex'}}>
+                        <Form className="d-flex">
+                            <Search/>
+                        </Form>
+                </div>
+            </Navbar>   
+            <Offcanvas show={showSidebar} onHide={handleCloseSidebar} className='sidebar'>
+                    <Offcanvas.Header closeButton>
+                        <Offcanvas.Title>
+                            <Link to={'/'}>
+                                <h1 className='appTitle'>
+                                    VGTracker
+                                </h1>
                             </Link>
-                        </li>
-                        <li>
-                            <Link className='navItem' to={'/stats'} onClick={handleCloseSidebar}>
-                                <IoIosStats className='navSideButton'/>   
-                                <span>STATS</span>
-                            </Link>
-                        </li>
-                        <li>
-                            <Link className='navItem' to={'/'} onClick={handleCloseSidebar}>
-                                <CgProfile className='navSideButton'/>
-                                <span>PROFILE</span>
-                            </Link>
-                        </li>
-                        <li>
-                            <button className='navItem navLogOutButton' onClick={async () => {
-                                    signOut(auth).then(() => {
-                                        sessionStorage.setItem('games', []);
-                                        navigate('/', {replace: true});
-                                    });
-                                }}>
-                                <BiLogOut className='navSideButton'/>
-                                <span>LOG OUT</span>
-                            </button>
-                        </li>
-                    </ul>
-                </nav>
-                </Offcanvas.Body>
-            </Offcanvas>
-            </Col>
+                            <h5 className='appTitleSubheader'>
+                                v{version} Powered by <a href='https://rawg.io/'>RAWG.io</a>
+                            </h5> 
+                        </Offcanvas.Title>
+                    </Offcanvas.Header>
+                    <Offcanvas.Body>
+                        <nav>
+                            <ul className='navbarMobile'>
+                                <li>
+                                    <Link className='navItem' to={'/'} onClick={handleCloseSidebar}>
+                                        <FaHome className='navSideButton'/>
+                                        <span>HOME</span>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link className='navItem' to={'/stats'} onClick={handleCloseSidebar}>
+                                        <IoIosStats className='navSideButton'/>   
+                                        <span>STATS</span>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link className='navItem' to={'/'} onClick={handleCloseSidebar}>
+                                        <CgProfile className='navSideButton'/>
+                                        <span>PROFILE</span>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <button className='navItem navLogOutButton' onClick={async () => {
+                                            signOut(auth).then(() => {
+                                                sessionStorage.setItem('games', []);
+                                                navigate('/', {replace: true});
+                                            });
+                                        }}>
+                                        <BiLogOut className='navSideButton'/>
+                                        <span>LOG OUT</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </nav>
+                    </Offcanvas.Body>
+                </Offcanvas>
         </>
     )
 }

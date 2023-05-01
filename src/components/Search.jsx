@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import {createSearchParams, useNavigate } from 'react-router-dom';
 import { FaSearch } from 'react-icons/fa'
+import { Button, Form, FormControl } from 'react-bootstrap';
 
 const Search = () => {
 
@@ -24,15 +25,20 @@ const Search = () => {
         }
     }
     return (
-        <div style={{width: '100%'}}>
-            <form style={{width: '100%'}} onSubmit={onSubmit}>
-                <input style={{width: '100%'}} type= 'text' className='searchBar' value={searchString} onChange={handleChange} placeholder={"Search"}/>
-                <span className='buttonContainer'>
-                    <button type='submit' className='searchBarButton'> <FaSearch/></button> 
-                </span>
-                
-            </form>
-        </div>
+        <Form className="d-flex searchBar" onSubmit={onSubmit}>
+            <div className="input-group">
+                <FormControl
+                    type='search'
+                    placeholder='Search'
+                    className='searchBarField'
+                    aria-label="Search"
+                    value={searchString}
+                    onChange={handleChange}
+                />
+                <Button type='submit' className='searchBarButton'> <FaSearch/></Button> 
+            </div>
+            
+        </Form>
     )
 }
 
