@@ -1,10 +1,10 @@
 import React from 'react'
-import { Row, Col, Offcanvas, Dropdown, Toast, Navbar, Nav, Container, FormControl, Button, Form } from 'react-bootstrap'
+import { Row, Col, Offcanvas, Dropdown, Toast, Navbar} from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import Search from './Search'
 import { useFirebaseApp} from 'reactfire';
 import { getAuth, signOut } from 'firebase/auth';
-import { FaEnvelope, FaHome, FaSearch, FaUser } from 'react-icons/fa'
+import { FaHome} from 'react-icons/fa'
 import { BiLogOut, BiEdit, BiShareAlt } from 'react-icons/bi'
 import { CgProfile } from 'react-icons/cg'
 import { IoIosStats } from 'react-icons/io'
@@ -152,18 +152,16 @@ const NavBar = () => {
                 </Col>
             </Row> */}
             <Navbar className='topMenuMobile' display='flex'>
-                <div style={{width: '10%'}}>
-                    <button className="buttonEdit" onClick={handleShowSidebar} title="Show sidebar"><GoThreeBars/></button>
+                <div style={{width: '10%', position: 'relative'}}>
+                    <button className="buttonEdit" onClick={handleShowSidebar} title="Show sidebar" style={{position: 'absolute', top: "50%", transform: "translateY(-50%)"}}><GoThreeBars/></button>
                 </div>
-                <div style={{width:'10%'}}>
+                <div style={{width:'20%'}}>
                     <Navbar.Brand href="/" style={{height:'100%', padding:'0' }}>
                         <img className = 'appLogo' src={window.location.origin +'/img/logo_cutre.png'} alt="logo"></img>
                     </Navbar.Brand>
                 </div>
-                <div style={{width: '80%', margin: '5%', paddingLeft: '10%', display: 'flex'}}>
-                        <Form className="d-flex">
-                            <Search/>
-                        </Form>
+                <div style={{width: '80%',  paddingLeft: '15%', display: 'flex', height: '65%'}}>
+                        <Search/>
                 </div>
             </Navbar>   
             <Offcanvas show={showSidebar} onHide={handleCloseSidebar} className='sidebar'>

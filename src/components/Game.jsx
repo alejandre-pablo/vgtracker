@@ -31,7 +31,7 @@ const Game = forwardRef((props, ref) => {
                             {isCollapsed ? <RiArrowDropUpLine/> : <RiArrowDropDownLine/>}
                         </button>
                     </Card.Title>
-                    <Card.Text >
+                    <Card.Body >
                         <div> 
                             <Rating 
                                 readonly={true} 
@@ -51,7 +51,7 @@ const Game = forwardRef((props, ref) => {
                             <span>| </span>
                             <button className="textButtonMobile" onClick={(e) => { onClickRemoveItem(game.id) }} title="Delete entry" >Remove</button>
                         </div>
-                    </Card.Text>
+                    </Card.Body>
                 </Card.ImgOverlay>
             </Card>
         </div>

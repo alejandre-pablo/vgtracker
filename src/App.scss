@@ -51,6 +51,7 @@ ul {
 }
 
 #root {
+    height: 100%;
     display: flex;
     flex-direction: column;
 }
@@ -72,11 +73,12 @@ ul {
 }
 
 .mainContainerMobile {
+    height: 105vh;
     flex: 1;
     margin: 0;
     padding: 0.5rem;
-    padding-top: 9vh;
-    /* background-color: var(--darkBgBase); */
+    padding-top: 8vh;
+    background-color: rgba(17, 17, 17, 0.363)
 }
 
 .mainContainer > .row, .mainContainerMobile > .row {
@@ -281,15 +283,14 @@ ul {
 
 .scrollableMobile {
     margin-top: 0.5%;
-    height: 81vh;
+    height: 86vh;
     overflow-x: hidden;
 }
 
 .mobileTabTitle {
-    
-    height: 6.2vh;
+    height: 5.5vh;
     color: white;
-    border: 1px solid var(--darkAccent);
+    
 }
 
 .mobileTabTitleWrapper {
@@ -302,6 +303,7 @@ ul {
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 16px;
 }
 
 .listColumn {
@@ -386,7 +388,8 @@ ul {
     min-height: 27vh;
     overflow: hidden;
     background-color: black;
-    border: 1px solid var(--darkAccent);
+    border: none;
+    border-radius: 16px;
 }
 .gameCardInfo {
     background: rgb(45,51,60);
@@ -445,17 +448,17 @@ ul {
     border-radius: 0;
 }
 
- .card-text {
+ .card-body {
     border-top: 1px solid var(--darkAccent);
     color: white;
     padding-left: 1rem;
 }
 
-.card-text div{
+.card-body div{
     padding: 0.3rem;
 }
 
-.gameCardInfoCollapsed .card-text {
+.gameCardInfoCollapsed .card-body {
     border: none;
 }
 
@@ -563,7 +566,8 @@ ul {
     background: linear-gradient(90deg, var(--darkBase) 0%, rgba(0, 0, 0, 0) 600%);
     color: var(--darkAccent);
     font-size: 1.1rem;
-    border: 1px solid var(--darkAccent);
+    border: none;
+    border-radius: 16px;
 }
 
 .buttonAddGameDisabled {
@@ -572,8 +576,7 @@ ul {
 }
 
 .buttonAddGameDisabledMobile {
-    color: var(--darkAccent);
-    border: 1px solid var(--darkAccent);
+    color: white;
 }
 
 .buttonAddGame:hover:not(.buttonAddGameDisabled)  {
@@ -840,9 +843,9 @@ ul {
     width: 100%;
     z-index: 999;
     background-color: var(--darkBase);
-    border-bottom: 1px solid var(--darkAccent);
-    padding-left: 1rem;
-    height: 8vh;
+    border-bottom-right-radius: 16px;
+    border-bottom-left-radius: 16px;
+    height: 7vh;
     display: flex;
     justify-content: space-around;
 }
@@ -908,13 +911,15 @@ ul {
 }
 /* --------------------- SEARCH BAR ---------------------*/
 
-.searchBarButton {
+.searchBarButton, .searchBarButton:hover, .searchBarButton:focus{
     background: none;
     border: none;
-    color:var(--darkAccent);
+    background-color:var(--darkFormField);
+    color: var(--darkAccent);
+    border-radius: 0.5rem;
 }
 
-.searchBarField {
+.searchBarField, searchBar:focus {
     background: none;
     border: none;
     color:var(--darkAccent);
@@ -926,7 +931,8 @@ ul {
 .searchBar {
     color: white;
     background-color: var(--darkFormField);
-    border-radius: 16px;
+    border: none;
+    border-radius: 0.5rem;
 }
 
 /* --------------------- SEARCH RESULTS ---------------------*/
@@ -1086,10 +1092,9 @@ ul {
 }
 
 .searchCardInfo {
-    height: 28%;
+    height: 25%;
     position: absolute;
-    top: 72%;
-    border-top: 1px solid var(--darkAccent);
+    top: 76%;
     border-radius: 0;
     background: #2d333c;
     background: linear-gradient(90deg, var(--darkBase) 0%, rgba(0, 0, 0, 0) 600%);
@@ -1217,6 +1222,13 @@ input[type="text"] {
     padding-bottom: 0 !important;
 }
 
+.form-control:focus {
+    border-radius: 12px;
+    background-color: var(--darkFormField);
+    color: var(--darkAccent);
+    box-shadow: 0 0 0 0.15rem rgba(159, 166, 204, 0.25);;
+}
+
 .form-control[readonly] {
     color: rgba(255, 255, 255, 0.315);
     background-color: var(--darkFormField);
@@ -1298,7 +1310,7 @@ a:hover {
 .slick-arrow {
     z-index: 100;
     background: none;
-    top: 3.4vh !important;
+    top: 2.9vh !important;
 }
 
 .btn-dark:focus, .btn-dark:hover, .show > .btn-dark.dropdown-toggle {

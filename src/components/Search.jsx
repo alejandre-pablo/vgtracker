@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import {createSearchParams, useNavigate } from 'react-router-dom';
 import { FaSearch } from 'react-icons/fa'
-import { Button, Form, FormControl } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 
 const Search = () => {
 
@@ -27,8 +27,8 @@ const Search = () => {
     return (
         <Form className="d-flex searchBar" onSubmit={onSubmit}>
             <div className="input-group">
-                <FormControl
-                    type='search'
+                <Form.Control
+                    type='text'
                     placeholder='Search'
                     className='searchBarField'
                     aria-label="Search"

@@ -84,19 +84,19 @@ const ListMobile = (props) => {
             <Col className='listColumn'>
                 <Slider asNavFor={nav2} ref={(slider1) => setNav1(slider1)} className='mobileTabTitleWrapper'>
                     <Row className='mobileTabTitle'> 
-                        <div style={{background: 'radial-gradient(circle, rgba(0,0,0,0) 0%, #66cc66 100%)'}}>COMPLETED</div>
+                        <div style={{background: '#66cc66bb'}}>COMPLETED</div>
                     </Row>
                     <Row className='mobileTabTitle'> 
-                        <div style={{background: 'radial-gradient(circle, rgba(0,0,0,0) 0%, #ffcc80 100%)'}}>PLAYING</div>
+                        <div style={{background: '#ffcc80bb'}}>PLAYING</div>
                     </Row>
                     <Row className='mobileTabTitle'> 
-                        <div style={{background: 'radial-gradient(circle, rgba(0,0,0,0) 0%, #6080cc 100%)'}}>ON HOLD</div>
+                        <div style={{background: '#6080ccbb'}}>ON HOLD</div>
                     </Row>
                     <Row className='mobileTabTitle'> 
-                        <div style={{background: 'radial-gradient(circle, rgba(0,0,0,0) 0%, #ff8080 100%)'}}>DROPPED</div>
+                        <div style={{background: '#ff8080bb'}}>DROPPED</div>
                     </Row>
                     <Row className='mobileTabTitle'> 
-                        <div style={{background: 'radial-gradient(circle, rgba(0,0,0,0) 0%, #ffff80 100%)'}}>OTHER</div>
+                        <div style={{background: '#ffff80bb'}}>OTHER</div>
                     </Row>
                     <Row className='mobileTabTitle'> 
                         <div style={{background: 'radial-gradient(circle, rgba(0,0,0,0) 0%, rgba(128,77,153,1) 100%)'}}>PLAN TO PLAY</div>
@@ -107,40 +107,40 @@ const ListMobile = (props) => {
                     ref={(slider2) => setNav2(slider2)} 
                     slidesToShow={1} 
                     arrows={false} 
-                    style={{maxHeight: 'min-content'}}
+                    style={{height: '100%'}}
                     swipe={false}>
-                    <Row className='scrollableMobile'>
-                         {!list.length ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> : 
+                    <Row className='scrollableMobile d-flex justify-content-center' >
+                        {!list.length ? <Spinner animation='grow' variant='primary' style={{marginTop: '50%'}}/> : 
                         list.length === 0 ? "No games added yet"
                         : gameListFinished
                         }
                     </Row>
-                    <Row className='scrollableMobile'>
-                         {!list.length ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> : 
-                        list.length === 0 ? "No games added yet"
+                    <Row className='scrollableMobile d-flex justify-content-center'>
+                        {!list.length ? <Spinner animation='grow' variant='primary' style={{marginTop: '50%'}}/> : 
+                            list.length === 0 ? "No games added yet"
                         : gameListPlaying
                         }
                     </Row>
-                    <Row className='scrollableMobile'>
-                         {!list.length ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> : 
+                    <Row className='scrollableMobile d-flex justify-content-center'>
+                        {!list.length ? <Spinner animation='grow' variant='primary' style={{marginTop: '50%'}}/> : 
                         list.length === 0 ? "No games added yet"
                         : gameListOnHold
                         }
                     </Row>
-                    <Row className='scrollableMobile'> 
-                        {!list.length ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> : 
+                    <Row className='scrollableMobile d-flex justify-content-center'>
+                        {!list.length ? <Spinner animation='grow' variant='primary' style={{marginTop: '50%'}}/> : 
                         list.length === 0 ? "No games added yet"
                         : gameListDropped
                         }
                     </Row>
-                    <Row className='scrollableMobile'> 
-                        {!list.length ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> : 
+                    <Row className='scrollableMobile d-flex justify-content-center'>
+                        {!list.length ? <Spinner animation='grow' variant='primary' style={{marginTop: '50%'}}/> : 
                         list.length === 0 ? "No games added yet"
                         : gameListOther
                         }
                     </Row>
-                    <Row className='scrollableMobile'>
-                        {!list.length ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> : 
+                    <Row className='scrollableMobile d-flex justify-content-center'>
+                        {!list.length ? <Spinner animation='grow' variant='primary' style={{marginTop: '50%'}}/> : 
                         list.length === 0 ? "No games added yet"
                         : gameListPlanToPlay
                         }
