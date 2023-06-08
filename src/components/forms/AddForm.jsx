@@ -280,7 +280,8 @@ const AddForm = (props) => {
                                     <Rating 
                                     className='ratingsStars' 
                                     onClick={e => {handleEdit({rating: [e, game.rating[1], game.rating[2]], ratingCache:[e, game.rating[1], game.rating[2]]})}} 
-                                    transition={true} size='1.5rem' 
+                                    transition={true} 
+                                    size='1.5rem' 
                                     fillColor ={'#fff'} 
                                     emptyColor= "#1a1c24" 
                                     readonly = {game.playstatus === 'plantoplay' ? true: false}/>
@@ -310,7 +311,8 @@ const AddForm = (props) => {
                                     <Rating 
                                     className='ratingsStars' 
                                     onClick={e => {handleEdit({rating:[game.rating[0], game.rating[1], e], ratingCache:[game.rating[0], game.rating[1], e]})}} 
-                                    transition={true} size='1.5rem' 
+                                    transition={true} 
+                                    size='1.5rem' 
                                     fillColor ={'#fff'} 
                                     emptyColor= "#1a1c24" 
                                     readonly = {game.playstatus === 'plantoplay' ? true: false}/>

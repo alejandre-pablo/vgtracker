@@ -152,17 +152,17 @@ const NavBar = () => {
                 </Col>
             </Row> */}
             <Navbar className='topMenuMobile' display='flex'>
-                <div style={{width: '10%', position: 'relative'}}>
+                <Col md='3' style={{position: 'relative'}}>
                     <button className="buttonEdit" onClick={handleShowSidebar} title="Show sidebar" style={{position: 'absolute', top: "50%", transform: "translateY(-50%)"}}><GoThreeBars/></button>
-                </div>
-                <div style={{width:'20%'}}>
+                </Col>
+                <Col md='3'>
                     <Navbar.Brand href="/" style={{height:'100%', padding:'0' }}>
                         <img className = 'appLogo' src={window.location.origin +'/img/logo_cutre.png'} alt="logo"></img>
                     </Navbar.Brand>
-                </div>
-                <div style={{width: '80%',  paddingLeft: '15%', display: 'flex', height: '65%'}}>
+                </Col>
+                <Col md='6'  style={{ display: 'flex', height: '65%'}}>
                         <Search/>
-                </div>
+                </Col>
             </Navbar>   
             <Offcanvas show={showSidebar} onHide={handleCloseSidebar} className='sidebar'>
                     <Offcanvas.Header closeButton>

@@ -36,9 +36,10 @@ const Game = forwardRef((props, ref) => {
                             <Rating 
                                 readonly={true} 
                                 size={20} 
-                                ratingValue={game.rating.reduce((a, b) => a + b, 0) / game.rating.length} 
-                                fillColor ={(game.rating.reduce((a, b) => a + b, 0) / game.rating.length) === 100 ? '#FFBC0D' : '#fff'} 
-                                emptyColor={'#000'}/>
+                                allowFraction
+                                initialValue={game.rating.reduce((a, b) => a + b, 0) / game.rating.length} 
+                                fillColor ={(game.rating.reduce((a, b) => a + b, 0) / game.rating.length) === 5 ? '#FFBC0D' : '#fff'} 
+                                emptyColor={'#121318'}/>
                         </div>
                         <div> 
                             Played on {game.platform} 
@@ -72,9 +73,10 @@ const Game = forwardRef((props, ref) => {
                             <Rating 
                                 readonly={true} 
                                 size={20} 
-                                ratingValue={game.rating.reduce((a, b) => a + b, 0) / game.rating.length} 
-                                fillColor ={(game.rating.reduce((a, b) => a + b, 0) / game.rating.length) === 100 ? '#FFBC0D' : '#fff'} 
-                                emptyColor={'#2d373c'}/>
+                                allowFraction
+                                initialValue={game.rating.reduce((a, b) => a + b, 0) / game.rating.length} 
+                                fillColor ={(game.rating.reduce((a, b) => a + b, 0) / game.rating.length) === 5 ? '#FFBC0D' : '#fff'} 
+                                emptyColor={'#121318'}/>
                         </span>
                     </div>
                     <div className='rightButton hoverShown' style={{width:'5vw'}}>

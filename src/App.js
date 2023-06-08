@@ -59,14 +59,15 @@ function App(){
             <FirestoreProvider sdk={firestoreDatabase}>
                 <BrowserRouter>
                     <AuthWrapper fallback={<AuthRoute />}>
+                        <NavBar />
                         <Routes>
                             <Route path='/' element ={<Navigate to='/list' replace={true}/>}/>
-                            <Route path ='/list' element ={<><NavBar /><ListContainer /></>}/>
-                            <Route path ='/home' element ={<><NavBar /><ListContainer /></>}/>
-                            <Route path ='/stats' element ={<><NavBar /><StatsContainer /></>}/>
-                            <Route path ='/user/:userId' element ={<><SharedNavBar /><SharedListContainer /></>}/>
-                            <Route path ='/search' element ={<><NavBar /><SearchResultsContainer /></>}/>
-                            <Route path ='/game/:game' element ={<><NavBar /><GameDetailContainer /></>}/>
+                            <Route path ='/list' element ={<ListContainer/>}/>
+                            <Route path ='/home' element ={<ListContainer />}/>
+                            <Route path ='/stats' element ={<StatsContainer />}/>
+                            <Route path ='/user/:userId' element ={<SharedListContainer />}/>
+                            <Route path ='/search' element ={<SearchResultsContainer />}/>
+                            <Route path ='/game/:game' element ={<GameDetailContainer />}/>
                             <Route path ='/error' element ={<ErrorContainer />}/>
                         </Routes>
                     </ AuthWrapper>

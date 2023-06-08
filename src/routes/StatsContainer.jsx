@@ -3,9 +3,12 @@ import { Col, Container, Row } from "react-bootstrap"
 import { AiOutlineTrophy } from 'react-icons/ai'
 import StatsBarChart from "../components/charts/StatsBarChart";
 import StatsPieChart from "../components/charts/StatsPieChart";
-import AnimatedNumber from "react-animated-number";
+import AnimatedNumbers from "react-animated-numbers";
+import { useMediaQuery } from "react-responsive";
 
 const StatsContainer = () => {
+
+    const isTabletOrMobile = useMediaQuery({query: '(max-width: 1224px)'})
 
     const [list, setList] = useState([])
     const [activeList, setActiveList] = useState([]);
@@ -72,44 +75,44 @@ const StatsContainer = () => {
         {genres.map((genre, index)=> {
             switch (index) {
                 case 0:
-                    return <Row>
-                    <Col md={1} className="flexCentered">
+                    return <Row key={index}>
+                    <Col md={1} sm={2} className="flexCentered">
                         <img className = 'topPositionIcon' src={window.location.origin +'/img/gold_medal.png'} alt="first position"/>
                     </Col>
-                    <Col  md={11}>
+                    <Col md={11} sm={10}>
                         <span>{genre.name} </span>
                         <span>({genre.count} games)</span>
                     </Col>
                     
                 </Row>
                 case 1:
-                    return <Row>
-                    <Col md={1} className="flexCentered">
+                    return <Row key={index}>
+                    <Col md={1} sm={2} className="flexCentered">
                         <img className = 'topPositionIcon' src={window.location.origin +'/img/silver_medal.png'} alt="second position"/>
                     </Col>
-                    <Col  md={11}>
+                    <Col md={11} sm={10}>
                         <span>{genre.name} </span>
                         <span>({genre.count} games)</span>
                     </Col>
                     
                 </Row>
                 case 2:
-                    return <Row>
-                        <Col md={1} className="flexCentered">
+                    return <Row key={index}>
+                        <Col md={1} sm={2} className="flexCentered">
                             <img className = 'topPositionIcon' src={window.location.origin +'/img/bronze_medal.png'} alt="third position"/>
                         </Col>
-                        <Col  md={11}>
+                        <Col md={11} sm={10}>
                             <span>{genre.name} </span>
                             <span>({genre.count} games)</span>
                         </Col>
                         
                     </Row>
                 default:
-                    return <Row>
-                        <Col md={1} className="flexCentered">
+                    return <Row key={index}>
+                        <Col md={1} sm={2} className="flexCentered">
                             <span className="topPositionText">{index + 1}. </span>
                         </Col>
-                        <Col  md={11}>
+                        <Col md={11} sm={10}>
                             <span>{genre.name} </span>
                             <span>({genre.count} games)</span>
                         </Col>
@@ -135,44 +138,44 @@ const StatsContainer = () => {
         {devs.map((dev, index)=> {
             switch (index) {
             case 0:
-                return <Row>
-                <Col md={1} className="flexCentered">
+                return <Row key={index}>
+                <Col md={1} sm={2} className="flexCentered">
                     <img className = 'topPositionIcon' src={window.location.origin +'/img/gold_medal.png'} alt="first position"/>
                 </Col>
-                <Col  md={11}>
+                <Col md={11} sm={10}>
                     <span>{dev.name} </span>
                     <span>({dev.count} games)</span>
                 </Col>
                 
             </Row>
             case 1:
-                return <Row>
-                <Col md={1} className="flexCentered">
+                return <Row key={index}>
+                <Col md={1} sm={2} className="flexCentered">
                     <img className = 'topPositionIcon' src={window.location.origin +'/img/silver_medal.png'} alt="second position"/>
                 </Col>
-                <Col  md={11}>
+                <Col md={11} sm={10}>
                     <span>{dev.name} </span>
                     <span>({dev.count} games)</span>
                 </Col>
                 
             </Row>
             case 2:
-                return <Row>
-                    <Col md={1} className="flexCentered">
+                return <Row key={index}>
+                    <Col md={1} sm={2} className="flexCentered">
                         <img className = 'topPositionIcon' src={window.location.origin +'/img/bronze_medal.png'} alt="third position"/>
                     </Col>
-                    <Col  md={11}>
+                    <Col md={11} sm={10}>
                         <span>{dev.name} </span>
                         <span>({dev.count} games)</span>
                     </Col>
                     
                 </Row>
             default:
-                return <Row>
-                    <Col md={1} className="flexCentered">
+                return <Row key={index}>
+                    <Col md={1} sm={2} className="flexCentered">
                         <span className="topPositionText">{index + 1}. </span>
                     </Col>
-                    <Col md={11}>
+                    <Col md={11} sm={10}>
                         <span>{dev.name} </span>
                         <span>({dev.count} games)</span>
                     </Col>
@@ -198,44 +201,44 @@ const StatsContainer = () => {
         {pubs.map((pub, index)=> {
             switch (index) {
             case 0:
-                return <Row>
-                <Col md={1} className="flexCentered">
+                return <Row key={index}>
+                <Col md={1} sm={2} className="flexCentered">
                     <img className = 'topPositionIcon' src={window.location.origin +'/img/gold_medal.png'} alt="first position"/>
                 </Col>
-                <Col  md={11}>
+                <Col md={11} sm={10}>
                     <span>{pub.name} </span>
                     <span>({pub.count} games)</span>
                 </Col>
                 
             </Row>
             case 1:
-                return <Row>
-                <Col md={1} className="flexCentered">
+                return <Row key={index}>
+                <Col md={1} sm={2} className="flexCentered">
                     <img className = 'topPositionIcon' src={window.location.origin +'/img/silver_medal.png'} alt="second position"/>
                 </Col>
-                <Col  md={11}>
+                <Col md={11} sm={10}>
                     <span>{pub.name} </span>
                     <span>({pub.count} games)</span>
                 </Col>
                 
             </Row>
             case 2:
-                return <Row>
-                    <Col md={1} className="flexCentered">
+                return <Row key={index}>
+                    <Col md={1} sm={2} className="flexCentered">
                         <img className = 'topPositionIcon' src={window.location.origin +'/img/bronze_medal.png'} alt="third position"/>
                     </Col>
-                    <Col  md={11}>
+                    <Col md={11} sm={10}>
                         <span>{pub.name} </span>
                         <span>({pub.count} games)</span>
                     </Col>
                     
                 </Row>
             default:
-                return <Row>
-                    <Col md={1} className="flexCentered">
+                return <Row key={index}>
+                    <Col md={1} sm={2} className="flexCentered">
                         <span className="topPositionText">{index + 1}. </span>
                     </Col>
-                    <Col md={11}>
+                    <Col md={11} sm={10}>
                         <span>{pub.name} </span>
                         <span>({pub.count} games)</span>
                     </Col>
@@ -273,55 +276,54 @@ const StatsContainer = () => {
                         <Row style={{height: '90%'}}>
                             <Col md={5} className='flexCentered' style={{flexDirection: 'column', padding: '1rem'}}>
                                 <Row className='statDivRow'>
-                                    <AnimatedNumber
-                                        style={{
-                                            transition: '0.8s ease-out',
+                                    <AnimatedNumbers
+                                        fontStyle={{
                                             fontSize: '2.2rem',
                                             fontWeight: 'bold',
+                                            transition: '0.8s ease-out',
                                             paddingRight: '0',
-                                            transitionProperty:
-                                                'background-color, color, opacity'
+                                            transitionProperty: 'background-color, color, opacity'
                                         }}
-                                        initialValue={0}
-                                        value={activeList.length}
-                                        stepPrecision={0}
-                                        duration={600}  
+                                        includeComma
+                                        locale="es-ES"
+                                        configs={[{ mass: 1, tension: 300, friction: 50 }]}
+                                        animateToNumber={activeList.length ? activeList.length : 0}
                                     />
                                     <h4>Games Played</h4>
                                 </Row>
                                 <Row className='statDivRow'>
-                                    <AnimatedNumber
-                                        style={{
-                                            transition: '0.8s ease-out',
+                                    <AnimatedNumbers
+                                        fontStyle={{
                                             fontSize: '2.2rem',
                                             fontWeight: 'bold',
-                                            transitionProperty:
-                                                'background-color, color, opacity'
+                                            transition: '0.8s ease-out',
+                                            paddingRight: '0',
+                                            transitionProperty: 'background-color, color, opacity'
                                         }}
-                                        initialValue={0}
-                                        value={parseFloat(activeList.map(game => parseFloat(game.playtime.replace(',', '.')))
+                                        includeComma
+                                        locale="es-ES"
+                                        configs={[{ mass: 1, tension: 300, friction: 50}]}
+                                        animateToNumber={parseFloat(activeList.map(game => parseFloat(game.playtime.replace(',', '.')))
                                             .reduce((partialSum, a) => partialSum + a, 0)
                                             .toFixed(1))}
-                                        stepPrecision={1}
-                                        duration={600}  
                                     />
                                     <h4>Hours Spent</h4>
                                 </Row>
                                 <Row className='statDivRow'>
-                                    <AnimatedNumber
-                                        style={{
-                                            transition: '0.8s ease-out',
+                                    <AnimatedNumbers
+                                        fontStyle={{
                                             fontSize: '2.2rem',
-                                            fontWeight: 'bold', 
+                                            fontWeight: 'bold',
+                                            transition: '0.8s ease-out',
                                             paddingRight: '0',
-                                            transitionProperty:
-                                                'background-color, color, opacity'
+                                            transitionProperty: 'background-color, color, opacity'
                                         }}
+                                        includeComma
+                                        locale="es-ES"
+                                        configs={[{ mass: 1, tension: 300, friction: 50 }]}
                                         initialValue={0}
-                                        value={(Math.round(((activeList.map(game => game.rating.reduce((a, b) => a + b, 0) / game.rating.length)
-                                        .reduce((a, b) => a + b, 0) /(20*activeList.length)) + Number.EPSILON)*100)/100)}
-                                        stepPrecision={2}
-                                        duration={600}  
+                                        animateToNumber={(Math.round(((activeList.map(game => game.rating.reduce((a, b) => a + b, 0) / game.rating.length)
+                                        .reduce((a, b) => a + b, 0) /(activeList.length)) + Number.EPSILON)*100)/100)}
                                     />
                                     {/* <span style={{fontSize: '1.8rem',fontWeight: 'bold', display: 'inline-block', width: 'min-content', padding: '0'}}> /5</span> */}
                                     {/* <Rating 
@@ -334,33 +336,35 @@ const StatsContainer = () => {
                                     <h4>Average Rating</h4>
                                 </Row>
                             </Col>
+                            {!isTabletOrMobile ? 
                             <Col md={7} className='statDivChart'>
                                 <div style={{width: '100%', height: '100%'}}>
                                     <StatsPieChart data={activeYearCount} />
                                 </div>
                             </Col>
+                            : <></>}
                         </Row>
                     </div>
                 </Col>
-                <Col style={{ height:'99%', marginRight: '0.8rem'}}>
-                    <Row className="statsBox" style={{ height: '30%'}}>
+                <Col style={{ height:'99%'}}>
+                    <div className="statsBox" style={{ height: '30%'}}>
                         <h5 style={{paddingBottom: '0.5rem', borderBottom: '1px solid var(--darkAccent)', display: 'flex', alignItems: 'center'}}> <AiOutlineTrophy />&nbsp;Top Genres</h5>
                         <div style={{margin: 'auto', height: '85%', padding: '0.5rem 0 1rem 1.5rem'}}>
                             {genresList}
                         </div>
-                    </Row>
-                    <Row className="statsBox" style={{ marginTop: '2.3rem', height: '30%'}}>
+                    </div>
+                    <div className="statsBox" style={{ marginTop: '2.3rem', height: '30%'}}>
                         <h5 style={{paddingBottom: '0.5rem', borderBottom: '1px solid var(--darkAccent)', display: 'flex', alignItems: 'center'}}> <AiOutlineTrophy />&nbsp;Top Devs</h5>
                         <div style={{margin: 'auto', height: '85%', padding: '0.5rem 0 1rem 1.5rem'}}>
                             {devsList}
                         </div>
-                    </Row>
-                    <Row className="statsBox" style={{ marginTop: '2.3rem', height: '30%'}}>
+                    </div>
+                    <div className="statsBox" style={{ marginTop: '2.3rem', height: '30%'}}>
                         <h5 style={{paddingBottom: '0.5rem', borderBottom: '1px solid var(--darkAccent)', display: 'flex', alignItems: 'center'}}> <AiOutlineTrophy />&nbsp;Top Publishers</h5>
                         <div style={{margin: 'auto', height: '85%', padding: '0.5rem 0 1rem 1.5rem'}}>
                             {pubsList}
                         </div>
-                    </Row>
+                    </div>
                 </Col>
             </Row>
         </Container>

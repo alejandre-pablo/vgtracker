@@ -24,6 +24,7 @@ const EditForm = (props) => {
     }, [shouldShow]);
 
     function handleClose() {
+        handleClear();
         props.handleCloseModal();   
     }
     
@@ -222,7 +223,9 @@ const EditForm = (props) => {
                                     <Rating 
                                     className='ratingsStars' 
                                     onClick={e => {handleEdit({rating:[e, game.rating[1], game.rating[2]], ratingCache:[e, game.rating[1], game.rating[2]]})} }
-                                    transition={true} size='1.5rem' 
+                                    initialValue={game.rating[0]} 
+                                    transition={true} 
+                                    size='1.5rem' 
                                     fillColor ={'#fff'} 
                                     emptyColor= "#1a1c24" 
                                     readonly = {game.playstatus === 'plantoplay' ? true: false}/>
@@ -236,7 +239,7 @@ const EditForm = (props) => {
                                     <Rating 
                                     className='ratingsStars' 
                                     onClick={e => {handleEdit({rating:[game.rating[0], e, game.rating[2]], ratingCache:[game.rating[0], e, game.rating[2]]})} }
-                                    ratingValue={game.rating[1]} 
+                                    initialValue={game.rating[1]} 
                                     transition={true} 
                                     size='1.5rem' 
                                     fillColor ={'#fff'} 
@@ -252,7 +255,9 @@ const EditForm = (props) => {
                                     <Rating 
                                     className='ratingsStars' 
                                     onClick={e => {handleEdit({rating:[game.rating[0], game.rating[1], e], ratingCache: [game.rating[0], game.rating[1], e]})} }
-                                    transition={true} size='1.5rem' 
+                                    initialValue={game.rating[2]} 
+                                    transition={true} 
+                                    size='1.5rem' 
                                     fillColor ={'#fff'} 
                                     emptyColor= "#1a1c24" 
                                     readonly = {game.playstatus === 'plantoplay' ? true: false}/>
@@ -268,7 +273,7 @@ const EditForm = (props) => {
                                     <Rating 
                                     className='ratingsStars' 
                                     onClick={e => {handleEdit({rating: [e, game.rating[1], game.rating[2]], ratingCache:[e, game.rating[1], game.rating[2]]})} }
-                                    ratingValue={game.rating[0]} 
+                                    initialValue={game.rating[0]} 
                                     transition={true} 
                                     size='2.2rem' 
                                     fillColor ={'#fff'} 
@@ -284,7 +289,7 @@ const EditForm = (props) => {
                                     <Rating 
                                     className='ratingsStars' 
                                     onClick={e => {handleEdit({rating:[game.rating[0], e, game.rating[2]], ratingCache:[game.rating[0], e, game.rating[2]]})} }
-                                    ratingValue={game.rating[1]} 
+                                    initialValue={game.rating[1]} 
                                     transition={true} 
                                     size='2.2rem' 
                                     fillColor ={'#fff'} 
@@ -300,7 +305,7 @@ const EditForm = (props) => {
                                     <Rating 
                                     className='ratingsStars' 
                                     onClick={e => {handleEdit({rating: [game.rating[0], game.rating[1], e]}); handleEdit({ratingCache: [game.rating[0], game.rating[1], e]})}} 
-                                    ratingValue={game.rating[2]} 
+                                    initialValue={game.rating[2]} 
                                     transition={true} 
                                     size='2.2rem' 
                                     fillColor ={'#fff'} 

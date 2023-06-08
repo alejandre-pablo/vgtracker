@@ -1,4 +1,5 @@
 import React from 'react'
+import { useEffect } from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
 import { useMediaQuery } from 'react-responsive';
 
@@ -12,13 +13,14 @@ const SearchedGame = ({gameItem, addGameHandler}) => {
 
     let localMatch = JSON.parse(sessionStorage.getItem('games')).filter(storedGame => (storedGame.id === game.id));
     const storedGame = localMatch.length > 0 ? localMatch[0] : {};
+    
     return (
         !isTabletOrMobile 
         ?<li className="searchedGame">
             <Row>
                 <Col sm={2}>
                     <div className='imageContainer'>
-                        <img className='gameImage' src={game.background_image} alt='' />
+                        <img className='gameImage' src={game.background_image ? game.background_image : window.location.origin +'/img/no-image.jpg'} alt='' />
                     </div>
                 </Col>
                 <Col sm={8}>
