@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Row, FloatingLabel, Button } from 'react-bootstrap';
 import { FcGoogle } from 'react-icons/fc'
 import { Link, useNavigate } from 'react-router-dom';
@@ -20,35 +20,11 @@ const SignupContainer = () => {
 
     const [errors, setErrors] = useState({});
 
-
-    const validate = () => {
-        let errors = {}
-
-        let emailRegEx = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
-        let passRegEx = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm
-
-        if(!emailRegEx.test(email)) {
-            errors.email = "Enter a valid email"
-        }
-
-        if(!passRegEx.test(password)) {
-            errors.password = "Password must be 8 characters long and contain at least a lowercase and uppercase letter and a number"
-        }
-
-        if(passwordMatch !== password) {
-            errors.match = "Passwords don't match"
-        }
-
-        return errors
-    }
-
+    //Handler for Sign Up using email and password as auth
     const emailAndPasswordHandler = async(e) => {
         e.preventDefault();
 
-        const err = validate();
-        if ( Object.keys(err).length > 0 ) {
-            setErrors(err)
-        } else {
+        if (errors === {}) {
             await createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
                 updateProfile(auth.currentUser, {displayName : username}).then(() => {
                     sessionStorage.setItem('games', []);
@@ -64,6 +40,7 @@ const SignupContainer = () => {
         }
     }
 
+    //Handler for Sign Up using Google as auth provided
     const googleSignupHandler = async() => {
         try {
             const provider = new GoogleAuthProvider();
@@ -75,6 +52,38 @@ const SignupContainer = () => {
         }
         
     }
+
+    //Populate the error array based on RegEx for each input field
+    const validate = () => {
+        let errorArray = {}
+
+        let emailRegEx = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+        let passRegEx = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm
+
+        if(!emailRegEx.test(email) && email !== '') {
+            errorArray.email = "Email is invalid"
+        }
+
+        if(!passRegEx.test(password) && password !== '') {
+            errorArray.password = "Password must be 8 characters long and contain at least a lowercase and uppercase letter and a number"
+        }
+
+        if(passwordMatch !== password && passwordMatch !== '') {
+            errorArray.match = "Passwords don't match"
+        }
+        return errorArray
+    }
+
+    //Delayed call to validate() on input change
+    useEffect(() => {
+        const delayDebounceFn = setTimeout(() => {
+            const err = validate();
+            setErrors(err)
+        }, 1000)
+
+        return () => clearTimeout(delayDebounceFn)
+        
+    }, [username, email, password, passwordMatch]);
 
     return (
         <AuthProvider sdk={auth}>
