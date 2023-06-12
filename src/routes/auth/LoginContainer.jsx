@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
 import { getAuth, getRedirectResult, GoogleAuthProvider, signInWithEmailAndPassword, signInWithRedirect } from 'firebase/auth';
 import { AuthProvider, useFirebaseApp} from 'reactfire';
+import { useEffect } from 'react';
 
 const { version } = require('../../../package.json');
 
@@ -19,26 +20,11 @@ const LoginContainer = () => {
 
     const [errors, setErrors] = useState({});
 
-
-    const validate = () => {
-        let errors = {}
-
-        let emailRegEx = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
-
-        if(!emailRegEx.test(email)) {
-            errors.email = "Enter a valid email"
-        }
-
-        return errors
-    }
-
+    //Handler for login using email and password as auth
     const emailAndPasswordHandler = async(e) => {
         e.preventDefault();
 
-        const err = validate();
-        if ( Object.keys(err).length > 0 ) {
-            setErrors(err)
-        } else {
+        if (errors === {}) {
             await signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
                 sessionStorage.setItem('games', []);
                 navigate('/', {replace: true})
@@ -46,11 +32,12 @@ const LoginContainer = () => {
                 window.location.reload();
               })
               .catch((error) => {
-                // ..
+                //Manage invalid credentials
               });
         }
     }
 
+    //Handler for Login using Google as auth provided
     const googleLoginHandler = async() => {
         try {
             const provider = new GoogleAuthProvider();
@@ -64,6 +51,30 @@ const LoginContainer = () => {
             console.log(error)
         }
     }
+    
+    //Populate the error array based on RegEx for each input field
+    const validate = () => {
+        let errorArray = {}
+
+        let emailRegEx = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+
+        if(!emailRegEx.test(email)) {
+            errorArray.email = "Email is invalid"
+        }
+
+        return errorArray
+    }
+
+    //Delayed call to validate() on input change
+    useEffect(() => {
+        const delayDebounceFn = setTimeout(() => {
+            const err = validate();
+            setErrors(err)
+        }, 1000)
+
+        return () => clearTimeout(delayDebounceFn)
+        
+    }, [email]);
 
     return (
         <AuthProvider sdk={auth}>
