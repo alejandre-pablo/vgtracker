@@ -51,17 +51,17 @@ const SearchResultsContainer = (props) => {
 
     const listEmpty =
         <div className='emptySearchList'> 
-            <div> No games,  big sad :(</div>
+            <div> No games, big sad :(</div>
             <img src= {window.location.origin + '/img/le-sad.gif'} alt='sad' className='emptyListImage'></img>
         </div>
 
     const listResults =
         isTabletOrMobile ?
-        <ul onScroll={handleScroll} ref={listInnerRef} className='searchListMobile'>
+        <ul onScroll={handleScroll} ref={listInnerRef} className='searchListMobile' >
             { searchResults.count === null ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}} />
             : searchResults.count === 0 ? listEmpty
             : searchResults.results.map((result) => 
-                <SearchedGame  key={result.id} gameItem ={result} addGameHandler = {handleAddGame}/>
+                <SearchedGame key={result.id} gameItem ={result} addGameHandler = {handleAddGame}/>
             )}
         </ul>
         :<ul onScroll={handleScroll} ref={listInnerRef} className='searchListMobile'>

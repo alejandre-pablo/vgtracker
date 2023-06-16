@@ -76,10 +76,10 @@ const StatsContainer = () => {
             switch (index) {
                 case 0:
                     return <Row key={index}>
-                    <Col md={1} sm={2} className="flexCentered">
+                    <Col md={2} sm={3} className="flexCentered">
                         <img className = 'topPositionIcon' src={window.location.origin +'/img/gold_medal.png'} alt="first position"/>
                     </Col>
-                    <Col md={11} sm={10}>
+                    <Col md={10} sm={9}>
                         <span>{genre.name} </span>
                         <span>({genre.count} games)</span>
                     </Col>
@@ -87,10 +87,10 @@ const StatsContainer = () => {
                 </Row>
                 case 1:
                     return <Row key={index}>
-                    <Col md={1} sm={2} className="flexCentered">
+                    <Col md={2} sm={3} className="flexCentered">
                         <img className = 'topPositionIcon' src={window.location.origin +'/img/silver_medal.png'} alt="second position"/>
                     </Col>
-                    <Col md={11} sm={10}>
+                    <Col md={10} sm={9}>
                         <span>{genre.name} </span>
                         <span>({genre.count} games)</span>
                     </Col>
@@ -98,10 +98,10 @@ const StatsContainer = () => {
                 </Row>
                 case 2:
                     return <Row key={index}>
-                        <Col md={1} sm={2} className="flexCentered">
+                        <Col md={2} sm={3} className="flexCentered">
                             <img className = 'topPositionIcon' src={window.location.origin +'/img/bronze_medal.png'} alt="third position"/>
                         </Col>
-                        <Col md={11} sm={10}>
+                        <Col md={10} sm={9}>
                             <span>{genre.name} </span>
                             <span>({genre.count} games)</span>
                         </Col>
@@ -109,10 +109,10 @@ const StatsContainer = () => {
                     </Row>
                 default:
                     return <Row key={index}>
-                        <Col md={1} sm={2} className="flexCentered">
+                        <Col md={2} sm={3} className="flexCentered">
                             <span className="topPositionText">{index + 1}. </span>
                         </Col>
-                        <Col md={11} sm={10}>
+                        <Col md={10} sm={9}>
                             <span>{genre.name} </span>
                             <span>({genre.count} games)</span>
                         </Col>

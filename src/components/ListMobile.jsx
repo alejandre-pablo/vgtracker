@@ -8,7 +8,7 @@ import EditForm from './forms/EditForm';
 import Game from './Game'
 
 const ListMobile = (props) => {
-    const {list, handleEditRemoveItem} = props;
+    const {list, isEmptyList, isListLoaded, handleEditRemoveItem} = props;
 
     const [nav1, setNav1] = useState();
     const [nav2, setNav2] = useState();
@@ -110,38 +110,45 @@ const ListMobile = (props) => {
                     style={{height: '100%'}}
                     swipe={false}>
                     <Row className='scrollableMobile d-flex justify-content-center' >
-                        {!list.length ? <Spinner animation='grow' variant='primary' style={{marginTop: '50%'}}/> : 
-                        list.length === 0 ? "No games added yet"
-                        : gameListFinished
+                        {!isListLoaded ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
+                            :isEmptyList ? <span className='emptyListMessage'>Start by adding some games</span>
+                                :gameListFinished.props.children.length === 0 ?  <span className='emptyListMessage'>No games to show in this category</span>
+                                    :gameListFinished
+                        }
+
+                    </Row>
+                    <Row className='scrollableMobile d-flex justify-content-center'>
+                        {!isListLoaded ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
+                            :isEmptyList ? <span className='emptyListMessage'>Start by adding some games</span>
+                                :gameListPlaying.props.children.length === 0 ?  <span className='emptyListMessage'>No games to show in this category</span>
+                                    : gameListPlaying
                         }
                     </Row>
                     <Row className='scrollableMobile d-flex justify-content-center'>
-                        {!list.length ? <Spinner animation='grow' variant='primary' style={{marginTop: '50%'}}/> : 
-                            list.length === 0 ? "No games added yet"
-                        : gameListPlaying
-                        }
-                    </Row>
-                    <Row className='scrollableMobile d-flex justify-content-center'>
-                        {!list.length ? <Spinner animation='grow' variant='primary' style={{marginTop: '50%'}}/> : 
-                        list.length === 0 ? "No games added yet"
+                        {!isListLoaded ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
+                            :isEmptyList ? <span className='emptyListMessage'>Start by adding some games</span>
+                                :gameListOnHold.props.children.length === 0 ?  <span className='emptyListMessage'>No games to show in this category</span>
                         : gameListOnHold
                         }
                     </Row>
                     <Row className='scrollableMobile d-flex justify-content-center'>
-                        {!list.length ? <Spinner animation='grow' variant='primary' style={{marginTop: '50%'}}/> : 
-                        list.length === 0 ? "No games added yet"
+                        {!isListLoaded ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
+                            :isEmptyList ? <span className='emptyListMessage'>Start by adding some games</span>
+                                :gameListDropped.props.children.length === 0 ?  <span className='emptyListMessage'>No games to show in this category</span>
                         : gameListDropped
                         }
                     </Row>
                     <Row className='scrollableMobile d-flex justify-content-center'>
-                        {!list.length ? <Spinner animation='grow' variant='primary' style={{marginTop: '50%'}}/> : 
-                        list.length === 0 ? "No games added yet"
+                        {!isListLoaded ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
+                            :isEmptyList ? <span className='emptyListMessage'>Start by adding some games</span>
+                                :gameListOther.props.children.length === 0 ?  <span className='emptyListMessage'>No games to show in this category</span>
                         : gameListOther
                         }
                     </Row>
                     <Row className='scrollableMobile d-flex justify-content-center'>
-                        {!list.length ? <Spinner animation='grow' variant='primary' style={{marginTop: '50%'}}/> : 
-                        list.length === 0 ? "No games added yet"
+                        {!isListLoaded ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
+                            :isEmptyList ? <span className='emptyListMessage'>Start by adding some games</span>
+                                :gameListPlanToPlay.props.children.length === 0 ?  <span className='emptyListMessage'>No games to show in this category</span>
                         : gameListPlanToPlay
                         }
                     </Row>

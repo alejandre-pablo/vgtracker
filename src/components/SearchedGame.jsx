@@ -11,7 +11,8 @@ const SearchedGame = ({gameItem, addGameHandler}) => {
     const listPlatforms = game.platforms!== null ? game.platforms.map((platform) => `${platform.platform.name}`).join(" | ") : '';
     const listTags = game.tags!== null ?(game.tags.filter((tag) => tag.language === 'eng').slice(0,5).map((tag) => `${tag.name}`).join(" | ") + (game.tags.length > 5 ? ' | ...' : '')) : '';
 
-    let localMatch = JSON.parse(sessionStorage.getItem('games')).filter(storedGame => (storedGame.id === game.id));
+    const isLocalEmpty = !sessionStorage.getItem('games')
+    let localMatch = !isLocalEmpty ? JSON.parse(sessionStorage.getItem('games')).filter(storedGame => (storedGame.id === game.id)) : [];
     const storedGame = localMatch.length > 0 ? localMatch[0] : {};
     
     return (
@@ -38,7 +39,10 @@ const SearchedGame = ({gameItem, addGameHandler}) => {
                     </Row>
                 </Col>
                 <Col sm={2} className='buttonAddGameWrapper'>
-                    {JSON.parse(sessionStorage.getItem('games')).filter(storedGame => (storedGame.id === game.id)).length === 0 
+                    {isLocalEmpty ? <button className='buttonAddGame' onClick={() =>handleShowModal(game.id)}>
+                        + Add to list
+                    </button>
+                    : JSON.parse(sessionStorage.getItem('games')).filter(storedGame => (storedGame.id === game.id)).length === 0 
                     ? <button className='buttonAddGame' onClick={() =>handleShowModal(game.id)}>
                         + Add to list
                     </button>

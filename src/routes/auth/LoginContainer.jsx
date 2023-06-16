@@ -1,13 +1,27 @@
 import React from 'react';
 import { useState } from 'react';
-import { Form, Row, FloatingLabel, Button } from 'react-bootstrap';
+import { Form, Row, FloatingLabel, Button, InputGroup } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
+import { BiShow, BiHide } from 'react-icons/bi';
 import { getAuth, getRedirectResult, GoogleAuthProvider, signInWithEmailAndPassword, signInWithRedirect } from 'firebase/auth';
 import { AuthProvider, useFirebaseApp} from 'reactfire';
 import { useEffect } from 'react';
 
 const { version } = require('../../../package.json');
+
+//Populate the error array based on RegEx for each input field
+const validate = (email) => {
+    let errorArray = {}
+
+    let emailRegEx = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+
+    if(!emailRegEx.test(email) && email !== '') {
+        errorArray.email = "Please provide a valid email"
+    }
+
+    return errorArray
+}
 
 const LoginContainer = () => {
 
@@ -17,6 +31,7 @@ const LoginContainer = () => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
 
     const [errors, setErrors] = useState({});
 
@@ -24,15 +39,15 @@ const LoginContainer = () => {
     const emailAndPasswordHandler = async(e) => {
         e.preventDefault();
 
-        if (errors === {}) {
+        if (Object.keys(errors).length === 0) {
             await signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
-                sessionStorage.setItem('games', []);
                 navigate('/', {replace: true})
                 //Temp Fix to "Insufficent Permissions Reactfire bug, issue #228 on Github @FirebaseExtended/reactfire"
                 window.location.reload();
               })
               .catch((error) => {
                 //Manage invalid credentials
+                setErrors({password: 'Incorrect password'})
               });
         }
     }
@@ -43,7 +58,6 @@ const LoginContainer = () => {
             const provider = new GoogleAuthProvider();
             await signInWithRedirect(auth, provider).then(
                 getRedirectResult(auth).then(() => {
-                    sessionStorage.setItem('games', []);
                     navigate('/', {replace: true});
                 })
             )  
@@ -52,29 +66,17 @@ const LoginContainer = () => {
         }
     }
     
-    //Populate the error array based on RegEx for each input field
-    const validate = () => {
-        let errorArray = {}
-
-        let emailRegEx = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
-
-        if(!emailRegEx.test(email)) {
-            errorArray.email = "Email is invalid"
-        }
-
-        return errorArray
-    }
 
     //Delayed call to validate() on input change
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
-            const err = validate();
+            const err = validate(email);
             setErrors(err)
         }, 1000)
 
         return () => clearTimeout(delayDebounceFn)
         
-    }, [email]);
+    }, [email, password]);
 
     return (
         <AuthProvider sdk={auth}>
@@ -105,19 +107,24 @@ const LoginContainer = () => {
                         className='formLabel'
                         >   
                             <Form.Control required type='text' className="inputText" placeholder='Email' value={email} onChange={e => setEmail(e.target.value)} isInvalid={!!errors.email}/>
-                            <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
+                            <Form.Control.Feedback type="invalid" tooltip>{errors.email}</Form.Control.Feedback>
                         </FloatingLabel>
                     </Form.Group>
 
                     <Form.Group className='mb-3'>
-                        <FloatingLabel
-                        controlId='passwordLabel'
-                        label='Password'
-                        className='formLabel'
-                        >   
-                            <Form.Control required autoComplete="on" type='password' className="inputText" placeholder='Password' value={password} onChange={e => setPassword(e.target.value)} isInvalid={!!errors.password}/>
-                            <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
-                        </FloatingLabel>
+                        <InputGroup>
+                            <FloatingLabel
+                            controlId='passwordLabel'
+                            label='Password'
+                            className='formLabel'
+                            >   
+                                <Form.Control required autoComplete="on" type={showPassword ? 'text' : 'password'} className="inputText" placeholder='Password' value={password} onChange={e => setPassword(e.target.value)} isInvalid={!!errors.password}/>
+                                <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
+                            </FloatingLabel>
+                            {!errors.password ? <InputGroup.Text className="inputButton" onClick={() => setShowPassword(!showPassword)}> {showPassword ? <BiShow/> : <BiHide/>} </InputGroup.Text> : <></>}     
+                        </InputGroup>
+                            
+                        
                     </Form.Group>
                     <Button type='submit' className='authFormSubmitButton'> Login </Button>
                     <Form.Label className='authFormText'>  </Form.Label>

@@ -1,11 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Row, FloatingLabel, Button } from 'react-bootstrap';
+import { Form, Row, FloatingLabel, Button, InputGroup } from 'react-bootstrap';
 import { FcGoogle } from 'react-icons/fc'
 import { Link, useNavigate } from 'react-router-dom';
 import { getAuth, createUserWithEmailAndPassword, signInWithRedirect, GoogleAuthProvider, updateProfile } from 'firebase/auth';
 import { AuthProvider, useFirebaseApp} from 'reactfire';
+import { BiHide, BiShow } from 'react-icons/bi';
 
 const { version } = require('../../../package.json');
+
+//Populate the error array based on RegEx for each input field
+const validate = (email, password, passwordMatch) => {
+    let errorArray = {}
+
+    let emailRegEx = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+    let passRegEx = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm
+
+    if(!emailRegEx.test(email) && email !== '') {
+        errorArray.email = "Please provide a valid email"
+    }
+
+    if(!passRegEx.test(password) && password !== '') {
+        errorArray.password = "Password must be 8 characters long and contain at least a lowercase and uppercase letter and a number"
+    }
+
+    if(passwordMatch !== password && passwordMatch !== '') {
+        errorArray.match = "Passwords don't match"
+    }
+    return errorArray
+}
 
 const SignupContainer = () => {
 
@@ -14,9 +36,11 @@ const SignupContainer = () => {
     const auth = getAuth(app);
 
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('')
-    const [passwordMatch, setPasswordMatch] = useState('')
-    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('');
+    const [passwordMatch, setPasswordMatch] = useState('');
+    const [username, setUsername] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [showPasswordMatch, setShowPasswordMatch] = useState(false);
 
     const [errors, setErrors] = useState({});
 
@@ -24,7 +48,7 @@ const SignupContainer = () => {
     const emailAndPasswordHandler = async(e) => {
         e.preventDefault();
 
-        if (errors === {}) {
+        if (Object.keys(errors).length === 0) {
             await createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
                 updateProfile(auth.currentUser, {displayName : username}).then(() => {
                     sessionStorage.setItem('games', []);
@@ -53,37 +77,16 @@ const SignupContainer = () => {
         
     }
 
-    //Populate the error array based on RegEx for each input field
-    const validate = () => {
-        let errorArray = {}
-
-        let emailRegEx = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
-        let passRegEx = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm
-
-        if(!emailRegEx.test(email) && email !== '') {
-            errorArray.email = "Email is invalid"
-        }
-
-        if(!passRegEx.test(password) && password !== '') {
-            errorArray.password = "Password must be 8 characters long and contain at least a lowercase and uppercase letter and a number"
-        }
-
-        if(passwordMatch !== password && passwordMatch !== '') {
-            errorArray.match = "Passwords don't match"
-        }
-        return errorArray
-    }
-
     //Delayed call to validate() on input change
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
-            const err = validate();
+            const err = validate(email, password, passwordMatch);
             setErrors(err)
         }, 1000)
 
         return () => clearTimeout(delayDebounceFn)
         
-    }, [username, email, password, passwordMatch]);
+    }, [email, password, passwordMatch]);
 
     return (
         <AuthProvider sdk={auth}>
@@ -123,29 +126,36 @@ const SignupContainer = () => {
                         className='formLabel'
                         >   
                             <Form.Control required type='text' className="inputText" placeholder='Email' value={email} onChange={e => setEmail(e.target.value)} isInvalid={!!errors.email}/>
-                            <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
+                            <Form.Control.Feedback type="invalid" tooltip='true'>{errors.email}</Form.Control.Feedback>
                         </FloatingLabel>
                     </Form.Group>
 
                     <Form.Group className='mb-3'>
-                        <FloatingLabel
-                        controlId='passwordLabel'
-                        label='Password'
-                        className='formLabel'
-                        >   
-                            <Form.Control required autoComplete="on" type='password' className="inputText" placeholder='Password' value={password} onChange={e => setPassword(e.target.value)} isInvalid={!!errors.password}/>
-                            <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
-                        </FloatingLabel>
+                        <InputGroup>
+                            <FloatingLabel
+                            controlId='passwordLabel'
+                            label='Password'
+                            className='formLabel'
+                            >   
+                                <Form.Control required autoComplete="on" type={showPassword ? 'text' : 'password'} className="inputText" placeholder='Password' value={password} onChange={e => setPassword(e.target.value)} isInvalid={!!errors.password}/>
+                                <Form.Control.Feedback type="invalid" >{errors.password}</Form.Control.Feedback>
+                            </FloatingLabel>
+                            {!errors.password ? <InputGroup.Text className="inputButton" onClick={() => setShowPassword(!showPassword)}> {showPassword ? <BiShow/> : <BiHide/>} </InputGroup.Text> : <></>}   
+                        </InputGroup>
+                            
                     </Form.Group>
                     <Form.Group className='mb-3'>
-                        <FloatingLabel
-                        controlId='passwordMatchLabel'
-                        label='Repeat Password'
-                        className='formLabel'
-                        >   
-                            <Form.Control required autoComplete="on" type='password' className="inputText" placeholder='Repeat Password' value={passwordMatch} onChange={e => setPasswordMatch(e.target.value)} isInvalid={!!errors.match} />
-                            <Form.Control.Feedback type="invalid">{errors.match}</Form.Control.Feedback>
-                        </FloatingLabel>
+                        <InputGroup>
+                            <FloatingLabel
+                            controlId='passwordMatchLabel'
+                            label='Repeat Password'
+                            className='formLabel'
+                            >   
+                                <Form.Control required autoComplete="on" type={showPasswordMatch ? 'text' : 'password'} className="inputText" placeholder='Repeat Password' value={passwordMatch} onChange={e => setPasswordMatch(e.target.value)} isInvalid={!!errors.match} />
+                                <Form.Control.Feedback type="invalid" tooltip='true'>{errors.match}</Form.Control.Feedback>
+                            </FloatingLabel>
+                            {!errors.match ? <InputGroup.Text className="inputButton" onClick={() => setShowPasswordMatch(!setShowPasswordMatch)}> {showPasswordMatch ? <BiShow/> : <BiHide/>} </InputGroup.Text> : <></>}             
+                        </InputGroup>
                     </Form.Group>
                     <Button type='submit' className='authFormSubmitButton'> Sign Up </Button>
                     <Form.Label className='authFormText'> </Form.Label>

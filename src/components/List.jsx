@@ -11,7 +11,7 @@ import Game from './Game'
 import SortableGame from './SortableGame';
 
 const List = (props) => {
-    const {list, handleEditRemoveItem, handleSorting} = props;
+    const {list, isEmptyList, isListLoaded, handleEditRemoveItem, handleSorting} = props;
 
     function handleRemoveItem (id)  {
         var tmpList = list.filter((item => item.id !== id))
@@ -33,21 +33,24 @@ const List = (props) => {
     }
 
     const [sortingCache, setSortingCache] = useState(['order', 'default'])
+    const [isSorted, setIsSorted] = useState(false);
 
     function handleSort (sorting) {
         if(sortingCache[0] === sorting) {
             if (sortingCache[1] === 'asc') {
                 setSortingCache([sorting,'desc'])
+                setIsSorted(true);
             } else {
                 setSortingCache(['order','default'])
+                setIsSorted(false);
             }
         } else {
             setSortingCache([sorting, 'asc'])
+            setIsSorted(true);
         }
     }
     useEffect(() => {
         if(list.length > 0) {
-            console.log(sortingCache)
             handleSorting(sortingCache);
         }
     }, [sortingCache])
@@ -232,10 +235,12 @@ const List = (props) => {
                                     {listHeader}
                                     <Row className='scrollable'> 
                                         <SortableContext items={list.filter(game => game.playstatus === "finished" ).map(item => item.id)} strategy={verticalListSortingStrategy}>
-                                            {!list.length ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> : 
-                                            list.length === 0 ? "No games added yet"
-                                            : gameListFinished
+                                            {!isListLoaded ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
+                                                :isEmptyList ? <span className='emptyListMessage'>Start by adding some games</span>
+                                                    :gameListFinished.props.children.length === 0 ?  <span className='emptyListMessage'>No games to show in this category</span>
+                                                        :gameListFinished
                                             }
+                                            
                                         </SortableContext> 
                                     </Row>
                                 </Tab.Pane>
@@ -243,10 +248,11 @@ const List = (props) => {
                                     {listHeader}
                                     <Row className='scrollable'> 
                                         <SortableContext items={list.filter(game => game.playstatus === "playing" ).map(item => item.id)} strategy={verticalListSortingStrategy}>
-                                        {!list.length ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
-                                            : list.length === 0 ? "No games added yet"
-                                            : gameListPlaying
-                                        }
+                                        {!isListLoaded ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
+                                                :isEmptyList ? <span className='emptyListMessage'>Start by adding some games</span>
+                                                    :gameListPlaying.props.children.length === 0 ?  <span className='emptyListMessage'>No games to show in this category</span>
+                                                        :gameListPlaying
+                                            }
                                         </SortableContext>
                                     </Row>
                                 </Tab.Pane>
@@ -254,10 +260,11 @@ const List = (props) => {
                                     {listHeader}
                                     <Row className='scrollable'> 
                                         <SortableContext items={list.filter(game => game.playstatus === "onhold" ).map(item => item.id)} strategy={verticalListSortingStrategy}>
-                                        {!list.length ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
-                                            : list.length === 0 ? "No games added yet"
-                                            : gameListOnHold
-                                        }
+                                        {!isListLoaded ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
+                                                :isEmptyList ? <span className='emptyListMessage'>Start by adding some games</span>
+                                                    :gameListOnHold.props.children.length === 0 ?  <span className='emptyListMessage'>No games to show in this category</span>
+                                                        :gameListOnHold
+                                            }
                                         </SortableContext>
                                     </Row>
                                 </Tab.Pane>
@@ -265,10 +272,11 @@ const List = (props) => {
                                     {listHeader}
                                     <Row className='scrollable'> 
                                         <SortableContext items={list.filter(game => game.playstatus === "dropped" ).map(item => item.id)} strategy={verticalListSortingStrategy}>
-                                        {!list.length ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
-                                            : list.length === 0 ? "No games added yet"
-                                            : gameListDropped
-                                        }
+                                        {!isListLoaded ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
+                                                :isEmptyList ? <span className='emptyListMessage'>Start by adding some games</span>
+                                                    :gameListDropped.props.children.length === 0 ?  <span className='emptyListMessage'>No games to show in this category</span>
+                                                        :gameListDropped
+                                            }
                                         </SortableContext>
                                     </Row>
                                 </Tab.Pane>
@@ -276,10 +284,11 @@ const List = (props) => {
                                     {listHeader}
                                     <Row className='scrollable'> 
                                         <SortableContext items={list.filter(game => game.playstatus === "other" ).map(item => item.id)} strategy={verticalListSortingStrategy}>
-                                        {!list.length ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
-                                            : list.length === 0 ? "No games added yet"
-                                            : gameListOther
-                                        }
+                                        {!isListLoaded ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
+                                                :isEmptyList ? <span className='emptyListMessage'>Start by adding some games</span>
+                                                    :gameListOther.props.children.length === 0 ?  <span className='emptyListMessage'>No games to show in this category</span>
+                                                        :gameListOther
+                                            }
                                         </SortableContext>
                                     </Row>
                                 </Tab.Pane>
@@ -287,10 +296,11 @@ const List = (props) => {
                                     {listHeaderPlanToPlay}
                                     <Row className='scrollable'> 
                                         <SortableContext items={list.filter(game => game.playstatus === "plantoplay" ).map(item => item.id)} strategy={verticalListSortingStrategy}>
-                                        {!list.length ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
-                                            : list.length === 0 ? "No games added yet"
-                                            : gameListPlanToPlay
-                                        }
+                                        {!isListLoaded ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
+                                                :isEmptyList ? <span className='emptyListMessage'>Start by adding some games</span>
+                                                    :gameListPlanToPlay.props.children.length === 0 ?  <span className='emptyListMessage'>No games to show in this category</span>
+                                                        :gameListPlanToPlay
+                                            }
                                         </SortableContext>
                                     </Row>
                                 </Tab.Pane>

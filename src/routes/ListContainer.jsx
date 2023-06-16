@@ -23,6 +23,9 @@ const ListContainer = () => {
 
     const [list, setList] = useState([]);
 
+    const [isEmptyList, setIsEmptyList] = useState(true);
+    const [isLoaded, setIsLoaded] = useState(false);
+
     const [prevStatus, setPrevStatus] = useState('none')
 
     useEffect(() => {
@@ -34,12 +37,34 @@ const ListContainer = () => {
     }, [location.state])
 
     useEffect(() => {
-        if(prevStatus === 'loading' && status === 'success' && data !== undefined) {
-            setList(JSON.parse(data.games));
-            sessionStorage.setItem('games', data.games)
+        //Caso primer render, se invoca a useFirestoreDocDataOnce y se espera
+        if(prevStatus === 'loading' && status === 'success' ) {
+            if(!data){
+                console.log('Recuperada lista vacia')
+                setIsEmptyList(true);
+                setIsLoaded(true);
+                sessionStorage.setItem('games',[]);
+            } 
+            // Si hay datos en DB, se carga la sesion y la lista con los datos
+            else {
+                console.log('Recuperados datos de BD')
+                setIsEmptyList(false);
+                setIsLoaded(true);
+                setList(JSON.parse(data.games));
+                sessionStorage.setItem('games', data.games);
+            }
+            
         }
+        //Caso recarga de lista (atras, o vuelta de una busqueda)
         if(prevStatus === 'none' && status === 'success') {
-            setList(JSON.parse(sessionStorage.getItem('games')));
+            //Cargar desde sesion
+            if(sessionStorage.getItem('games')) {
+                console.log('Recuperados datos de sesion')
+                setList(JSON.parse(sessionStorage.getItem('games')));
+                setIsEmptyList(false);
+                setIsLoaded(true);
+            } 
+            
         }
         setPrevStatus(status);
     },[status])
@@ -112,9 +137,9 @@ const ListContainer = () => {
         <Row className={isTabletOrMobile ? 'mainContainerMobile' : 'mainContainer'}>
             {isTabletOrMobile 
             ?   <>
-                    <ListMobile list = {list} handleEditRemoveItem = {handleEditRemoveItem} />
+                    <ListMobile list = {list} isEmptyList = {isEmptyList} isListLoaded = {isLoaded} handleEditRemoveItem = {handleEditRemoveItem} />
                 </>
-            :   <List list = {list} handleEditRemoveItem = {handleEditRemoveItem} handleSorting = {handleSorting} />
+            :   <List list = {list} isEmptyList = {isEmptyList} isListLoaded = {isLoaded} handleEditRemoveItem = {handleEditRemoveItem} handleSorting = {handleSorting} />
             }
            
         </ Row>
