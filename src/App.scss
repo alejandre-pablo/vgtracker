@@ -567,7 +567,19 @@ ul {
     color: var(--darkAccent);
     font-size: 1.1rem;
     border: 1px solid var(--darkAccent);
-    border-radius: 200px;
+    border-radius: 12px;
+}
+
+.buttonEditGame {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem;
+    background: none;
+    color: var(--darkAccent);
+    font-size: 1.1rem;
+    border: 1px solid var(--darkAccent);
+    border-radius: 12px;
 }
 
 .buttonAddGameMobile {
@@ -579,12 +591,25 @@ ul {
     color: var(--darkAccent);
     font-size: 1.1rem;
     border: none;
-    border-radius: 16px;
+    border-radius: 12px;
+}
+
+.buttonEditGameMobile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem;
+    background: linear-gradient(90deg, var(--darkBase) 0%, rgba(0, 0, 0, 0) 600%);
+    color: var(--darkAccent);
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 12px;
 }
 
 .buttonAddGameDisabled {
     color: var(--darkAccent);
     border: 1px solid var(--darkAccent);
+    cursor: default !important;
 }
 
 .buttonAddGameDisabledMobile {
@@ -592,7 +617,6 @@ ul {
 }
 
 .buttonAddGame:hover:not(.buttonAddGameDisabled)  {
-    cursor: pointer;
     color: white;
     border: 1px solid white;
 }
@@ -601,6 +625,7 @@ ul {
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 0.5rem;
 }
 
 /* --------------------- ADD GAME MODAL ---------------------*/
@@ -965,20 +990,12 @@ label::after {
 
 /* --------------------- SEARCH RESULTS ---------------------*/
 .searchList {
-    width: 98%;
+    width: 99%;
     height: 90vh;
     overflow-x: hidden;
     overflow-y: auto;
-    border: 1px solid var(--darkAccent);
     background-color: var(--darkBase);
-    margin: 0 auto 0 auto;
-}
-
-.searchListMobile {
-    width: 98%;
-    height: 90vh;
-    overflow-x: hidden;
-    overflow-y: auto;
+    border-radius: 12px;
     margin: 0 auto 0 auto;
 }
 
@@ -1252,8 +1269,7 @@ input[type="text"] {
 .form-control:focus {
     border-radius: 12px;
     background-color: var(--darkFormField);
-    color: var(--darkAccent);
-    box-shadow: 0 0 0 0.15rem rgba(159, 166, 204, 0.25);;
+    color: white;
 }
 
 .form-control[readonly] {

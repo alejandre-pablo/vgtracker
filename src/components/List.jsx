@@ -19,8 +19,8 @@ const List = (props) => {
     };
 
     function handleUpdateItem (game)  {
-        var gameIndex = JSON.parse(sessionStorage.getItem('games')).findIndex((item => item.id === game.id));
-        let tmpList = JSON.parse(sessionStorage.getItem('games'))
+        var gameIndex = list.findIndex((item => item.id === game.id));
+        let tmpList = [...list];
         if(tmpList[gameIndex].playstatus !== game.playstatus) {
             tmpList.splice(gameIndex, 1)
             tmpList.push(game)

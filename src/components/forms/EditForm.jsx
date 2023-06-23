@@ -3,10 +3,14 @@ import { Rating } from 'react-simple-star-rating';
 import { Row, Col, Form, FloatingLabel, Modal } from 'react-bootstrap';
 import { useMediaQuery } from 'react-responsive';
 import { gameReducer, defaultGame }from './utils/gameFormReducer';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const EditForm = (props) => {
 
     const isTabletOrMobile = useMediaQuery({query: '(max-width: 1224px)'})
+
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const shouldShow = props.show;
     const gameId = props.gameId;
@@ -125,10 +129,16 @@ const EditForm = (props) => {
         setShow(false);
         handleClear();
         handleClose();
+        if(location.pathname !== '/list') {
+            navigate('/list')
+        }
     };
 
     return (
-        <Modal show={show} onHide={handleClose} onShow={handleShow} size="lg" fullscreen={isTabletOrMobile} className="modalForm">
+        <Modal show={show} onHide={handleClose} onShow={handleShow} siz
+        
+        
+        e="lg" fullscreen={isTabletOrMobile} className="modalForm">
         <Modal.Header closeButton>
             <Modal.Title>Edit game</Modal.Title>
         </Modal.Header>

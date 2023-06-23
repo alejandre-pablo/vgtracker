@@ -21,8 +21,12 @@ const ListMobile = (props) => {
     function handleUpdateItem (game)  {
         var gameIndex = list.findIndex((item => item.id === game.id))
         let tmpList = [...list];
-        tmpList.splice(gameIndex, 1);
-        tmpList.push(game);
+        if(tmpList[gameIndex].playstatus !== game.playstatus) {
+            tmpList.splice(gameIndex, 1)
+            tmpList.push(game)
+        } else {
+            tmpList[gameIndex] = game;
+        }
         handleEditRemoveItem(tmpList);
     }
 

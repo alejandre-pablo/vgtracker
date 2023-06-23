@@ -8,7 +8,7 @@ import SignupContainer from './routes/auth/SignupContainer';
 import ErrorContainer from './routes/auth/ErrorContainer';
 import SharedListContainer from './routes/SharedListContainer';
 import NavBar from './components/NavBar';
-import SharedNavBar from './components/SharedNavBar'
+import ListHandler from './components/ListHandler';
 import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
 import { AuthProvider, FirestoreProvider, useFirebaseApp, useSigninCheck } from 'reactfire';
 import { getAuth } from 'firebase/auth';
@@ -60,16 +60,20 @@ function App(){
                 <BrowserRouter>
                     <AuthWrapper fallback={<AuthRoute />}>
                         <NavBar />
-                        <Routes>
-                            <Route path='/' element ={<Navigate to='/list' replace={true}/>}/>
-                            <Route path ='/list' element ={<ListContainer/>}/>
-                            <Route path ='/home' element ={<ListContainer />}/>
-                            <Route path ='/stats' element ={<StatsContainer />}/>
-                            <Route path ='/user/:userId' element ={<SharedListContainer />}/>
-                            <Route path ='/search' element ={<SearchResultsContainer />}/>
-                            <Route path ='/game/:game' element ={<GameDetailContainer />}/>
-                            <Route path ='/error' element ={<ErrorContainer />}/>
-                        </Routes>
+                        <ListHandler>
+                            {(list, handleAddItem, handleEditRemoveItem, handleSorting, isEmptyList, isLoaded) => (
+                                <Routes>
+                                    <Route path='/' element ={<Navigate to='/list' replace={true}/>}/>
+                                    <Route path ='/home' element ={<ListContainer list ={list} handleEditRemoveItem={handleEditRemoveItem} handleSorting={handleSorting} isEmptyList={isEmptyList} isLoaded={isLoaded}/>}/>
+                                    <Route path ='/list' element ={<ListContainer list ={list} handleEditRemoveItem={handleEditRemoveItem} handleSorting={handleSorting} isEmptyList={isEmptyList} isLoaded={isLoaded}/>}/>
+                                    <Route path ='/stats' element ={<StatsContainer handleAddItem={handleAddItem} handleEditRemoveItem={handleEditRemoveItem} handleSorting={handleSorting}/>}/>
+                                    <Route path ='/user/:userId' element ={<SharedListContainer handleSorting={handleSorting}/>}/>
+                                    <Route path ='/search' element ={<SearchResultsContainer list ={list} handleEditRemoveItem={handleEditRemoveItem}/>}/>
+                                    <Route path ='/game/:game' element ={<GameDetailContainer/>}/>
+                                    <Route path ='/error' element ={<ErrorContainer />}/>
+                                </Routes>
+                            )}
+                        </ListHandler>
                     </ AuthWrapper>
                 </BrowserRouter>
             </FirestoreProvider>

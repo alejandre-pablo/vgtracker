@@ -2,11 +2,13 @@ import React from 'react'
 import { useEffect } from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
 import { useMediaQuery } from 'react-responsive';
+import { MdOutlineEdit } from 'react-icons/md'
 
-const SearchedGame = ({gameItem, addGameHandler}) => {
+const SearchedGame = ({gameItem, addGameHandler, editGameHandler}) => {
 
     const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' })
-    const handleShowModal = addGameHandler;
+    const handleShowAddModal = addGameHandler;
+    const handleShowEditModal = editGameHandler;
     const game = gameItem;
     const listPlatforms = game.platforms!== null ? game.platforms.map((platform) => `${platform.platform.name}`).join(" | ") : '';
     const listTags = game.tags!== null ?(game.tags.filter((tag) => tag.language === 'eng').slice(0,5).map((tag) => `${tag.name}`).join(" | ") + (game.tags.length > 5 ? ' | ...' : '')) : '';
@@ -39,16 +41,21 @@ const SearchedGame = ({gameItem, addGameHandler}) => {
                     </Row>
                 </Col>
                 <Col sm={2} className='buttonAddGameWrapper'>
-                    {isLocalEmpty ? <button className='buttonAddGame' onClick={() =>handleShowModal(game.id)}>
+                    {isLocalEmpty ? <button className='buttonAddGame' onClick={() =>handleShowAddModal(game.id)}>
                         + Add to list
                     </button>
                     : JSON.parse(sessionStorage.getItem('games')).filter(storedGame => (storedGame.id === game.id)).length === 0 
-                    ? <button className='buttonAddGame' onClick={() =>handleShowModal(game.id)}>
+                    ? <button className='buttonAddGame' onClick={() =>handleShowAddModal(game.id)}>
                         + Add to list
                     </button>
-                    : <button className='buttonAddGame buttonAddGameDisabled'>
-                        ✓ {storedGame.playstatus.charAt(0).toUpperCase() + storedGame.playstatus.slice(1)}
-                    </button>
+                    : <>
+                        <button className='buttonEditGame' onClick={() =>handleShowEditModal(game.id)}>
+                            <MdOutlineEdit />
+                        </button>
+                        <button className='buttonAddGame buttonAddGameDisabled'>
+                            ✓ {storedGame.playstatus.charAt(0).toUpperCase() + storedGame.playstatus.slice(1)}
+                        </button>
+                    </>
                     }
                     
                 </Col>
@@ -60,12 +67,17 @@ const SearchedGame = ({gameItem, addGameHandler}) => {
                 <Card.Img src={game.background_image} alt="Game background" />
                 <Card.ImgOverlay>
                     {JSON.parse(sessionStorage.getItem('games')).filter(storedGame => (storedGame.id === game.id)).length === 0 
-                        ? <button className='buttonAddGameMobile' onClick={() =>handleShowModal(game.id)}>
+                        ? <button className='buttonAddGameMobile' onClick={() =>handleShowAddModal(game.id)}>
                             + Add to list
                         </button>
-                        : <button className='buttonAddGameMobile buttonAddGameDisabledMobile'>
+                        : <div style={{display: 'flex', gap: '0.5rem'}}>  
+                            <button className='buttonAddGameMobile buttonAddGameDisabledMobile'>
                             ✓ {storedGame.playstatus.charAt(0).toUpperCase() + storedGame.playstatus.slice(1)}
-                        </button>
+                            </button>
+                            <button className='buttonEditGameMobile' onClick={() =>handleShowEditModal(game.id)}>
+                                <MdOutlineEdit />
+                            </button>
+                        </div>
                     }
                 </Card.ImgOverlay>
                 <Card.ImgOverlay className= {'searchCardInfo'}>

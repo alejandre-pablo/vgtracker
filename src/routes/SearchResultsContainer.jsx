@@ -4,8 +4,9 @@ import SearchedGame from '../components/SearchedGame';
 import AddForm from '../components/forms/AddForm';
 import { Row, Spinner } from 'react-bootstrap';
 import { useMediaQuery } from 'react-responsive';
+import EditForm from '../components/forms/EditForm';
 
-const SearchResultsContainer = (props) => {
+const SearchResultsContainer = ({list, handleEditRemoveItem}) => {
 
     const k = 'd068d12dda5d4c8283eaa6167fe26f79';
     const isTabletOrMobile = useMediaQuery({query: '(max-width: 1224px)'})
@@ -18,7 +19,8 @@ const SearchResultsContainer = (props) => {
     const [currQuery, setCurrQuery] = useState('');
     
     const [gameId, setGameId] = useState(-1);
-    const [showModal, setShowModal] = useState(false);
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
 
     const [searchResults, setSearchResults] = useState({
         count: null,
@@ -30,10 +32,19 @@ const SearchResultsContainer = (props) => {
 
     const handleAddGame = (id) => {
         setGameId(id);
-        setShowModal(true);
+        setShowAddModal(true);
     }
-    const handleCloseModal = () => {
-        setShowModal(false);
+
+    const handleEditGame = (id) => {
+        setGameId(id);
+        setShowEditModal(true);
+    }
+    const handleCloseAddModal = () => {
+        setShowAddModal(false);
+    } 
+
+    const handleCloseEditModal = () => {
+        setShowEditModal(false);
     } 
     
     const handleScroll = (e) => {
@@ -49,6 +60,18 @@ const SearchResultsContainer = (props) => {
         }
     }
 
+    function handleUpdateItem (game)  {
+        var gameIndex = list.findIndex((item => item.id === game.id))
+        let tmpList = [...list];
+        if(tmpList[gameIndex].playstatus !== game.playstatus) {
+            tmpList.splice(gameIndex, 1)
+            tmpList.push(game)
+        } else {
+            tmpList[gameIndex] = game;
+        }
+        handleEditRemoveItem(tmpList);
+    }
+
     const listEmpty =
         <div className='emptySearchList'> 
             <div> No games, big sad :(</div>
@@ -57,19 +80,19 @@ const SearchResultsContainer = (props) => {
 
     const listResults =
         isTabletOrMobile ?
-        <ul onScroll={handleScroll} ref={listInnerRef} className='searchListMobile' >
+        <ul onScroll={handleScroll} ref={listInnerRef} className='searchList' >
             { searchResults.count === null ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}} />
             : searchResults.count === 0 ? listEmpty
             : searchResults.results.map((result) => 
-                <SearchedGame key={result.id} gameItem ={result} addGameHandler = {handleAddGame}/>
+                <SearchedGame key={result.id} gameItem ={result} addGameHandler = {handleAddGame} editGameHandler = {handleEditGame}/>
             )}
         </ul>
-        :<ul onScroll={handleScroll} ref={listInnerRef} className='searchListMobile'>
+        :<ul onScroll={handleScroll} ref={listInnerRef} className='searchList'>
             { searchResults.count === null ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}} />
             : searchResults.count === 0 ? listEmpty
             : searchResults.results.map((result, index) => 
             <div className={index % 2 === 0 ? 'highlight' : ''}>
-                <SearchedGame  key={result.id} gameItem ={result} addGameHandler = {handleAddGame}/>
+                <SearchedGame  key={result.id} gameItem ={result} addGameHandler = {handleAddGame} editGameHandler = {handleEditGame}/>
             </div>
             )}
         </ul> 
@@ -126,7 +149,8 @@ const SearchResultsContainer = (props) => {
                     : listResults
                 }
             </Row>
-            <AddForm show ={showModal} handleCloseModal = {handleCloseModal} gameId = {gameId}/>
+            <AddForm show ={showAddModal} handleCloseModal = {handleCloseAddModal} gameId = {gameId}/>
+            <EditForm show={showEditModal} handleCloseModal = {handleCloseEditModal} gameId = {gameId} updateItemHandler = {handleUpdateItem}/>
         </>
         
     )
