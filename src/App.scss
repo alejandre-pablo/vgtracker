@@ -377,12 +377,19 @@ ul {
     outline: none;
     border: none;
     background: none;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     color: var(--darkAccent);
     display: none;
 }
 
 .gameSortIndex{
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 1.1rem;
+    color: var(--darkAccent);
+}
+
+.gameSortIndexSorted{
     display: inline-block;
     vertical-align: middle;
     font-size: 1.1rem;
@@ -721,8 +728,6 @@ label::after {
 }
 
 .ratingsSubLabel {
-    display: flex;
-    justify-content: center;
     margin-bottom: 0 !important;
 }
 .ratingsRow  {

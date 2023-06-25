@@ -111,7 +111,6 @@ const ListMobile = (props) => {
                     ref={(slider2) => setNav2(slider2)} 
                     slidesToShow={1} 
                     arrows={false} 
-                    style={{height: '100%'}}
                     swipe={false}>
                     <Row className='scrollableMobile d-flex justify-content-center' >
                         {!isListLoaded ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 

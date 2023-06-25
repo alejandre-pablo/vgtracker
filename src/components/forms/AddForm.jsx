@@ -121,13 +121,9 @@ const AddForm = (props) => {
     }
 
     function handlePlaytime (value)  {
-        let regex = /(\d)*([,]?)?([0-9]{1})?/g;
-        if(value.match(regex) === null) {
+        let regex = new RegExp(/^-?\d*[,]?\d{0,2}$/);
+        if(regex.test(value)) {
             handleEdit({playtime: value, playtimeCache: value})
-        } else {
-            if (value.match(regex).length <= 2) {
-                handleEdit({playtime: value, playtimeCache: value})
-            }
         }
     }
 
@@ -322,7 +318,7 @@ const AddForm = (props) => {
                         : <Row className='ratingsRow'>
                             <Col>
                                 <Row>
-                                    <Form.Label className='ratingsSubLabel' style={{opacity: game.playstatus === 'plantoplay' ? '0.50' : '1'}}> Gameplay </Form.Label>
+                                    <Form.Label className='ratingsSubLabel' style={{display: 'flex', justifyContent: 'center', opacity: game.playstatus === 'plantoplay' ? '0.50' : '1'}}> Gameplay </Form.Label>
                                 </Row>
                                 <Row>
                                     <Rating 
@@ -338,7 +334,7 @@ const AddForm = (props) => {
                             </Col>
                             <Col>
                                 <Row>
-                                    <Form.Label className='ratingsSubLabel' style={{opacity: game.playstatus === 'plantoplay' ? '0.50' : '1'}}> Story </Form.Label>
+                                    <Form.Label className='ratingsSubLabel' style={{display: 'flex', justifyContent: 'center', opacity: game.playstatus === 'plantoplay' ? '0.50' : '1'}}> Story </Form.Label>
                                 </Row>
                                 <Row>
                                     <Rating 
@@ -354,7 +350,7 @@ const AddForm = (props) => {
                             </Col>
                             <Col>
                                 <Row>
-                                    <Form.Label className='ratingsSubLabel' style={{opacity: game.playstatus === 'plantoplay' ? '0.50' : '1'}}> Art & Music </Form.Label>
+                                    <Form.Label className='ratingsSubLabel' style={{display: 'flex', justifyContent: 'center', opacity: game.playstatus === 'plantoplay' ? '0.50' : '1'}}> Art & Music </Form.Label>
                                 </Row>
                                 <Row>
                                     <Rating 
