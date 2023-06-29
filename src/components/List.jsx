@@ -153,8 +153,7 @@ const List = (props) => {
             {sortingCache[0] !== 'title' ? <></>
             : sortingCache[1] === 'asc' ? <AiFillCaretUp/>
                 :<AiFillCaretDown/>
-            }
-            
+            }   
         </div>
         <div className='columnTitle' style={{width:'10vw', cursor: 'default'}} onClick={() => handleSort('platform')}> 
             PLATFORM
@@ -191,8 +190,8 @@ const List = (props) => {
     <Row className='listHeader'>
         <div className='columnTitle' style={{width:'6vw'}}> # </div>
         <div className='columnTitle' style={{width:'9vw'}}></div>
-        <div className='columnTitle' style={{width:'30vw'}}>TITLE</div>
-        <div className='columnTitle' style={{width:'33vw'}}></div>
+        <div className='columnTitle' style={{width:'22vw'}}>TITLE</div>
+        <div className='columnTitle' style={{width:'37vw'}}></div>
     </Row>
 
     return (

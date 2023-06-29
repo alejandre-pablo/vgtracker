@@ -355,9 +355,6 @@ ul {
     display: inline-block;
 }
 
-.hoverShown {
-    display: none !important;
-}
 .gameWrapper:hover .hoverShown{
     display: flex !important;
 }
@@ -707,12 +704,16 @@ label::after {
 .formGroupBordered {
     padding: 0.5rem;
     margin: 0.5rem;
-    padding-bottom: 0;
     margin-bottom: 0;
     background-color: var(--darkBase);
-    /* border: 1px solid var(--darkAccent); */
     border-radius: 12px;
-    /* box-shadow: 5px 5px 3px #15181a; */
+}
+
+.formGroupBorderedFullHeight {
+    padding: 0.5rem;
+    margin: 0.5rem;
+    background-color: var(--darkBase);
+    border-radius: 12px;
 }
 
 .formHeader {
@@ -772,6 +773,53 @@ label::after {
     padding-left: 1rem;
     padding-right: 1rem;
 
+}
+
+/* --------------------- EDIT PROFILE FORM ---------------------*/
+
+.containerProfilePic {
+    position: relative;  
+    width:100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    padding: 0;
+}
+
+.containerProfilePic img {
+  display:block;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.containerProfilePic div {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  opacity:0;
+  background-color: #0000006b;
+  border-radius: 50%;
+  border: none;
+  color: white;
+  font-size: 4rem;
+}
+
+.containerProfilePic:hover div {  
+    opacity: 1;
+}
+
+.btnEditPicture {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+}
+
+.btnEditPictureFake {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* --------------------- FIRST ROW ---------------------*/
@@ -915,7 +963,7 @@ label::after {
 }
 
 .profileDropdown {
-    width: 20vw;
+    width: 15vw;
 }
 
 .profileDropdown a {

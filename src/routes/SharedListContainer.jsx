@@ -8,7 +8,7 @@ import { useAuth, useFirebaseApp, useFirestore, useFirestoreDocDataOnce } from '
 
 import ListMobile from '../components/ListMobile';
 import SharedList from '../components/SharedList';
-const UserListContainer = () => {
+const UserListContainer = (props) => {
  
     const isTabletOrMobile = useMediaQuery({query: '(max-width: 1224px)'})
 
@@ -42,7 +42,7 @@ const UserListContainer = () => {
             ?   <>
                     <ListMobile list = {list} />
                 </>
-            :   <SharedList list = {list} />
+            :   <SharedList list = {props.list} handleSorting = {props.handleSorting} userId = {userId}/>
             } 
         </ Row>
     )

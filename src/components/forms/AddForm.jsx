@@ -185,7 +185,7 @@ const AddForm = (props) => {
                 <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/>
             </div>
             <Form style={{filter: fetched === true ? 'none' : 'blur(4px)'}}>
-                <Row className='formGroupBordered'>
+                <Row className='formGroupBordered' style={{paddingBottom: '0'}}>
                 <Form.Label className='formHeader'> Game Details </Form.Label>
                 <Form.Group className='mb-3'>
                     <FloatingLabel
@@ -208,7 +208,7 @@ const AddForm = (props) => {
                     </FloatingLabel>
                 </Form.Group>
                 </Row>
-                <Row className='formGroupBordered'>
+                <Row className='formGroupBordered' style={{paddingBottom: '0'}}>
                 <Form.Label className='formHeader'> Play Details </Form.Label>
 
                 <Form.Group className='mb-3'>

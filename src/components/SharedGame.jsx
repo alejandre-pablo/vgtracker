@@ -1,0 +1,99 @@
+import React, { forwardRef } from 'react'
+import { Rating } from 'react-simple-star-rating'
+import { MdClose } from 'react-icons/md';
+import { AiOutlineEdit } from 'react-icons/ai'
+import { Row, Card } from 'react-bootstrap';
+import { useMediaQuery } from 'react-responsive';
+import { useState } from 'react';
+import { RiArrowDropUpLine, RiArrowDropDownLine } from 'react-icons/ri'
+
+const Game = forwardRef((props, ref) => {
+
+    const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' })
+
+    const {game, onClickEditItem, onClickRemoveItem} = props;
+
+    const [isCollapsed, setCollapsed] = useState(true);
+
+    function handleAccordion() {
+        isCollapsed ? setCollapsed(false) : setCollapsed(true);
+    }
+    return (
+        isTabletOrMobile 
+        ?
+        <div ref={ref} className='gameMobile'>
+            <Card className='gameCard'>
+                <Card.Img src={game.image} alt="Game background" />
+                <Card.ImgOverlay className= {isCollapsed ? 'gameCardInfoCollapsed' : 'gameCardInfo'}>
+                    <Card.Title> 
+                        <div>{game.title}</div> 
+                        <button className='collapseInfoButton' onClick={handleAccordion}> 
+                            {isCollapsed ? <RiArrowDropUpLine/> : <RiArrowDropDownLine/>}
+                        </button>
+                    </Card.Title>
+                    <Card.Body >
+                        <div> 
+                            <Rating 
+                                readonly={true} 
+                                size={20} 
+                                allowFraction
+                                initialValue={game.rating.reduce((a, b) => a + b, 0) / game.rating.length} 
+                                fillColor ={(game.rating.reduce((a, b) => a + b, 0) / game.rating.length) === 5 ? '#FFBC0D' : '#fff'} 
+                                emptyColor={'#121318'}/>
+                        </div>
+                        <div> 
+                            Played on {game.platform} 
+                        </div>
+                        <div> 
+                            {game.playtime} hours 
+                        </div>
+                        <div>
+                            <button className="textButtonMobile" onClick={(e) => { onClickEditItem(game.id) }} title="Edit entry">Edit</button>
+                            <span>| </span>
+                            <button className="textButtonMobile" onClick={(e) => { onClickRemoveItem(game.id) }} title="Delete entry" >Remove</button>
+                        </div>
+                    </Card.Body>
+                </Card.ImgOverlay>
+            </Card>
+        </div>
+        : <div ref={ref} className="game">
+            {game.playstatus !== 'plantoplay' 
+                ? <Row>
+                    <div className='gameSortIndex' style={{width: '6vw', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>{props.index}</div>
+                    <div className="gameImageWrapper" style={{width:'9vw'}} >
+                        <img className='gameListImage' src={game.image} alt=''/>
+                    </div>
+                    <div className='gameInfoUncentered' style={{width:'22vw'}}> 
+                        <div className='gameTitle'>{game.title}</div> 
+                    </div>
+                    <div className='gameInfo' style={{width:'10vw'}}> {game.platform} </div>
+                    <div className='gameInfo' style={{width:'10vw'}}> {game.playtime} h </div>
+                    <div className='gameInfo' style={{width:'10vw'}}> {game.playdate} </div>
+                    <div className='gameInfo' style={{width:'15vw'}}>
+                        <span className='gameRating' >
+                            <Rating 
+                                readonly={true} 
+                                size={20} 
+                                allowFraction
+                                initialValue={game.rating.reduce((a, b) => a + b, 0) / game.rating.length} 
+                                fillColor ={(game.rating.reduce((a, b) => a + b, 0) / game.rating.length) === 5 ? '#FFBC0D' : '#fff'} 
+                                emptyColor={'#121318'}/>
+                        </span>
+                    </div>
+                </Row>    
+                :<Row>
+                    <div className='gameSortIndex' style={{width: '6vw', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>{props.index}</div>
+                    <div className="gameImageWrapper" style={{width:'9vw'}} >
+                        <img className='gameListImage' src={game.image} alt=''/>
+                    </div>
+                    <div className='gameInfoUncentered' style={{width:'30vw'}}> 
+                        <div className='gameTitle'>{game.title}</div> 
+                    </div>
+                    <div className='gameInfo hoverShown' style={{width:'30vw'}}> {game.detail} </div>
+                </Row>
+            }
+        </div>
+    )
+});
+
+export default Game

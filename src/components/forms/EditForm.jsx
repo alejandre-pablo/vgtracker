@@ -137,7 +137,7 @@ const EditForm = (props) => {
         </Modal.Header>
         <Modal.Body>
             <Form>
-                <Row className='formGroupBordered'>
+                <Row className='formGroupBordered' style={{paddingBottom: '0'}}>
                 <Form.Label className='formHeader'> Game Details </Form.Label>
                 <Form.Group className='mb-3'>
                     <FloatingLabel
@@ -161,7 +161,7 @@ const EditForm = (props) => {
                     </FloatingLabel>
                 </Form.Group>
                 </Row>
-                <Row className='formGroupBordered'>
+                <Row className='formGroupBordered' style={{paddingBottom: '0'}}>
                 <Form.Label className='formHeader'> Play Details </Form.Label>
 
                 <Form.Group className='mb-3'>

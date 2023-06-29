@@ -2,16 +2,17 @@ import React from 'react'
 import { Row, Col, Offcanvas, Dropdown, Toast, Navbar} from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import Search from './Search'
-import { useFirebaseApp} from 'reactfire';
+import { useFirebaseApp, useUser} from 'reactfire';
 import { getAuth, signOut } from 'firebase/auth';
 import { FaHome} from 'react-icons/fa'
-import { BiLogOut, BiEdit, BiShareAlt } from 'react-icons/bi'
+import { BiLogOut } from 'react-icons/bi'
 import { CgProfile } from 'react-icons/cg'
 import { IoIosStats } from 'react-icons/io'
 import { GoThreeBars } from 'react-icons/go'
 import { useMediaQuery } from 'react-responsive';
 import { useState } from 'react';
 import EditProfileForm from './forms/EditProfileForm';
+import { useEffect } from 'react';
 
 const { version } = require('../../package.json');
 
@@ -22,8 +23,7 @@ const NavBar = () => {
     const app = useFirebaseApp();
     const auth = getAuth(app);
     const navigate = useNavigate();
-    const user = auth.currentUser;
-
+    const {data: user} = useUser();
     const [showSidebar, setShowSidebar] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [showToast, setShowToast] = useState(false);
@@ -33,7 +33,6 @@ const NavBar = () => {
     const handleShowSidebar = () => setShowSidebar(true);
 
     function handleEditProfile() {
-        console.log('aaa')
         setShowModal(true);
     }
     
@@ -73,9 +72,9 @@ const NavBar = () => {
                             <Search />
                         </li>
                         <li> 
-                            <Dropdown>
+                            <Dropdown >
                                 <Dropdown.Toggle className='profileDropdownButton navItem' variant='dark'>
-                                    <img src={user.photoURL ? user.photoURL : window.location.origin +'/img/profile.svg.png'} referrerPolicy="no-referrer"  alt='Profile Pic'/>
+                                    <img src={user.photoURL ? user.photoURL : window.location.origin +'/img/profile.svg.png'} referrerPolicy="no-referrer"  alt='Profile Pic' style={{objectFit: 'cover'}}/>
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu className='profileDropdown'>
@@ -102,7 +101,7 @@ const NavBar = () => {
                                             </Col>
                                         </Row> */}
                                         <button className ='profileDropdownLink' style={{ borderBottom: '2px solid var(--darkBgAccent)'}}>
-                                            <BiEdit/> <span onClick={handleEditProfile}>Edit Profile</span>
+                                            <span onClick={handleEditProfile}>Edit Profile</span>
                                         </button>    
                                     </Dropdown.Item>
                                     <Dropdown.Item>
@@ -113,7 +112,7 @@ const NavBar = () => {
                                                 navigator.clipboard.writeText(window.location.protocol + '//' + window.location.host + '/user/' + auth.currentUser.uid);
                                                 setShowToast(true)
                                             }}>
-                                            <BiShareAlt/> <span>Share Your Tracker</span>
+                                            <span>Share Your Tracker</span>
                                         </button>    
                                     </Dropdown.Item>
                                     <Dropdown.Item>
@@ -122,7 +121,7 @@ const NavBar = () => {
                                                 navigate('/', {replace: true});
                                             });
                                         }}>
-                                            <BiLogOut/> <span>Logout</span>
+                                            <span>Logout</span>
                                         </button>    
                                     </Dropdown.Item>
                                 </Dropdown.Menu>
