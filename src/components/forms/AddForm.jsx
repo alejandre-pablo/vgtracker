@@ -50,6 +50,7 @@ const AddForm = (props) => {
     function handleShow() {
         if(gameId !== game.id){
             setFetched(false);
+            handleClear();
             handleOpen(gameId);
         }
     }
@@ -168,10 +169,8 @@ const AddForm = (props) => {
         let existingGames = sessionStorage.getItem('games') === '' ? null : JSON.parse(sessionStorage.getItem('games'));
         if(existingGames === null || existingGames.filter(res => (res.id === game.id)).length === 0 ) {
             navigate('/list', {state: {addedGame: handleSubmit()}})
-            handleClear();
         } else {
             setShow(false);
-            handleClear();
         }
     };
 

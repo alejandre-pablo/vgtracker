@@ -1001,6 +1001,10 @@ label::after {
     color: white;
 }
 
+.authLink {
+    text-decoration: none;
+}
+
 .toast {
     display: flex;
     justify-content: center;
@@ -1291,6 +1295,15 @@ label::after {
 .topPositionIcon {
     width: 1.5rem;
     height: 1.5rem;
+}
+
+/* --------------------- SHARED LIST ---------------------*/
+
+.sharedProfileCard {
+    background-color: var(--darkBase);
+    border-radius: 12px;
+    margin-right: 0.5rem;
+    margin-bottom: -3rem;
 }
 
 /* --------------------- OVERRIDES ---------------------*/

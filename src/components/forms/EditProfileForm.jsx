@@ -47,10 +47,6 @@ const EditProfileForm = (props) => {
         props.handleCloseModal();   
     }
 
-    function handleShow() {
-        //data load handler
-    }
-
     function handleFormSubmit() {
         
         if(imageCache) {
@@ -59,8 +55,9 @@ const EditProfileForm = (props) => {
                 getDownloadURL(imageRef).then((imageURL) => {
                     handleChange('picture', imageURL);
                     updateProfile(user, {photoURL: imageURL})
-                    .then(function() { console.log(user) })
-                    .catch(function(error) { console.log(error) });
+                    .catch(function(error) { 
+                        console.log(error) 
+                    });
                 })
             })
         }
@@ -70,13 +67,12 @@ const EditProfileForm = (props) => {
 
     useEffect(() => {
         if(status === 'success' && Object.keys(profileData).length === 0) {
-            console.log('from db')
             setProfileData({username: profile.username, name: profile.name, surname: profile.surname, picture: user.photoURL})
         }
     }, [status])
 
     return (
-        <Modal show={show} onHide={handleClose} onShow={handleShow} size="lg" fullscreen={isTabletOrMobile} className="modalForm">
+        <Modal show={show} onHide={handleClose} size="lg" fullscreen={isTabletOrMobile} className="modalForm">
             <Modal.Header closeButton>
                 <Modal.Title>Profile Details</Modal.Title>
             </Modal.Header>

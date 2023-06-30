@@ -28,6 +28,7 @@ function App(){
           <Routes>
             <Route path="/login" exact={true} element={<LoginContainer />}/>
             <Route path="/signup" exact={true} element={<SignupContainer />}/>
+            <Route path ='/user/:userId' element ={<><NavBar /><SharedListContainer/></>}/>
             <Route path="*" exact={true} element={<LoginContainer />}/>
           </Routes>
         );
@@ -70,7 +71,6 @@ function App(){
                                         <Route path ='/home' element ={<ListContainer list ={list} handleEditRemoveItem={handleEditRemoveItem} handleSorting={handleSorting} isEmptyList={isEmptyList} isLoaded={isLoaded}/>}/>
                                         <Route path ='/list' element ={<ListContainer list ={list} handleEditRemoveItem={handleEditRemoveItem} handleSorting={handleSorting} isEmptyList={isEmptyList} isLoaded={isLoaded}/>}/>
                                         <Route path ='/stats' element ={<StatsContainer handleAddItem={handleAddItem} handleEditRemoveItem={handleEditRemoveItem} handleSorting={handleSorting}/>}/>
-                                        <Route path ='/user/:userId' element ={<SharedListContainer list ={list} handleSorting={handleSorting}/>}/>
                                         <Route path ='/search' element ={<SearchResultsContainer list ={list} handleEditRemoveItem={handleEditRemoveItem}/>}/>
                                         <Route path ='/game/:game' element ={<GameDetailContainer/>}/>
                                         <Route path ='/error' element ={<ErrorContainer />}/>

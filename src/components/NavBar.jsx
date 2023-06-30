@@ -40,7 +40,7 @@ const NavBar = () => {
         !isTabletOrMobile
         ? 
         <>
-        <EditProfileForm show ={showModal} handleCloseModal = {handleCloseModal}/>
+        {user? <EditProfileForm show ={showModal} handleCloseModal = {handleCloseModal}/> : <></>}
         <Row className='topMenu'>
             <Col>
                 <Link to={'/'}>
@@ -59,84 +59,97 @@ const NavBar = () => {
                 <nav>
                     <ul className='navbar'>
                         <li>
-                            <Link className='navItem' to={'/'}>
-                                <strong>HOME</strong>
-                            </Link>
+                            {user?
+                                <Link className='navItem' to={'/'}>
+                                    <strong>HOME</strong>
+                                </Link>
+                            :<></>}
                         </li>
                         <li>
-                            <Link className='navItem' to={'/stats'}>
-                                <strong>STATS</strong>
-                            </Link>
+                            {user?
+                                <Link className='navItem' to={'/stats'}>
+                                    <strong>STATS</strong>
+                                </Link>
+                            :<></>}
                         </li>
                         <li style={{width: '18vw'}}>
-                            <Search />
+                            {user?
+                                <Search />
+                            :<></>}
                         </li>
                         <li> 
-                            <Dropdown >
-                                <Dropdown.Toggle className='profileDropdownButton navItem' variant='dark'>
-                                    <img src={user.photoURL ? user.photoURL : window.location.origin +'/img/profile.svg.png'} referrerPolicy="no-referrer"  alt='Profile Pic' style={{objectFit: 'cover'}}/>
-                                </Dropdown.Toggle>
+                            {user? 
+                                <Dropdown >
+                                    <Dropdown.Toggle className='profileDropdownButton navItem' variant='dark'>
+                                        <img src={user.photoURL ? user.photoURL : window.location.origin +'/img/profile.svg.png'} referrerPolicy="no-referrer"  alt='Profile Pic' style={{objectFit: 'cover'}}/>
+                                    </Dropdown.Toggle>
 
-                                <Dropdown.Menu className='profileDropdown'>
-                                    <Dropdown.Item>
-                                        {/* <Row>
-                                            <Col md='4'>
-                                                <img 
-                                                    src={user.photoURL ? user.photoURL : window.location.origin +'/img/profile.svg.png'} 
-                                                    style={{width: '3.5rem', height: '3.5rem', marginRight: '0.5rem'}} 
-                                                    referrerPolicy="no-referrer" 
-                                                    alt='Profile Pic'
-                                                />
-                                            </Col>
-                                            <Col md='8'>
-                                                <Row>
-                                                    <div style={{fontSize: '1.4rem'}}>
-                                                        {user.displayName}
-                                                    </div>
-                                                    
-                                                </Row>
-                                                <Row>
-                                                    {user.email}
-                                                </Row>
-                                            </Col>
-                                        </Row> */}
-                                        <button className ='profileDropdownLink' style={{ borderBottom: '2px solid var(--darkBgAccent)'}}>
-                                            <span onClick={handleEditProfile}>Edit Profile</span>
-                                        </button>    
-                                    </Dropdown.Item>
-                                    <Dropdown.Item>
-                                        <button 
-                                            className ='profileDropdownLink' 
-                                            style={{ borderBottom: '2px solid var(--darkBgAccent)'}} 
-                                            onClick={() => {
-                                                navigator.clipboard.writeText(window.location.protocol + '//' + window.location.host + '/user/' + auth.currentUser.uid);
-                                                setShowToast(true)
+                                    <Dropdown.Menu className='profileDropdown'>
+                                        <Dropdown.Item>
+                                            {/* <Row>
+                                                <Col md='4'>
+                                                    <img 
+                                                        src={user.photoURL ? user.photoURL : window.location.origin +'/img/profile.svg.png'} 
+                                                        style={{width: '3.5rem', height: '3.5rem', marginRight: '0.5rem'}} 
+                                                        referrerPolicy="no-referrer" 
+                                                        alt='Profile Pic'
+                                                    />
+                                                </Col>
+                                                <Col md='8'>
+                                                    <Row>
+                                                        <div style={{fontSize: '1.4rem'}}>
+                                                            {user.displayName}
+                                                        </div>
+                                                        
+                                                    </Row>
+                                                    <Row>
+                                                        {user.email}
+                                                    </Row>
+                                                </Col>
+                                            </Row> */}
+                                            <button className ='profileDropdownLink' style={{ borderBottom: '2px solid var(--darkBgAccent)'}}>
+                                                <span onClick={handleEditProfile}>Edit Profile</span>
+                                            </button>    
+                                        </Dropdown.Item>
+                                        <Dropdown.Item>
+                                            <button 
+                                                className ='profileDropdownLink' 
+                                                style={{ borderBottom: '2px solid var(--darkBgAccent)'}} 
+                                                onClick={() => {
+                                                    navigator.clipboard.writeText(window.location.protocol + '//' + window.location.host + '/user/' + auth.currentUser.uid);
+                                                    setShowToast(true)
+                                                }}>
+                                                <span>Share Your Tracker</span>
+                                            </button>    
+                                        </Dropdown.Item>
+                                        <Dropdown.Item>
+                                            <button className ='profileDropdownLink' onClick={async () => {
+                                                signOut(auth).then(() => {
+                                                    navigate('/', {replace: true});
+                                                });
                                             }}>
-                                            <span>Share Your Tracker</span>
-                                        </button>    
-                                    </Dropdown.Item>
-                                    <Dropdown.Item>
-                                        <button className ='profileDropdownLink' onClick={async () => {
-                                            signOut(auth).then(() => {
-                                                navigate('/', {replace: true});
-                                            });
-                                        }}>
-                                            <span>Logout</span>
-                                        </button>    
-                                    </Dropdown.Item>
-                                </Dropdown.Menu>
-                            </Dropdown>
-                            
-                            
-                        </li>
-                        
+                                                <span>Logout</span>
+                                            </button>    
+                                        </Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            : <div style={{marginTop: '0.3rem', marginRight: '2rem'}}>
+                                <Link  to={'/login'} className='authLink'>
+                                    <strong>Log In</strong>
+                                </Link>
+                                <span> / </span>
+                                <Link to={'/signup'} className='authLink'>
+                                    <strong>Sign Up</strong>
+                                </Link>
+                            </div>}    
+                        </li>   
                     </ul>
                 </nav>
             </Col>
         </Row>
         </>
         :<>
-            <EditProfileForm show ={showModal} handleCloseModal = {handleCloseModal}/>
+            {user? <EditProfileForm show ={showModal} handleCloseModal = {handleCloseModal}/> : <></>}
             {/* <Row className='topMenuMobile'>
                 <Col md={1}>
                     <button className="buttonEdit" onClick={handleShowSidebar} title="Show sidebar"><GoThreeBars/></button>

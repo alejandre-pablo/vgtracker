@@ -1,14 +1,14 @@
-import { doc, setDoc } from 'firebase/firestore';
+import { doc} from 'firebase/firestore';
 import React, {useEffect, useState} from 'react'
 import { Row } from 'react-bootstrap';
 import { useMediaQuery } from 'react-responsive';
-import { useLocation, useParams, useSearchParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { useAuth, useFirebaseApp, useFirestore, useFirestoreDocDataOnce } from 'reactfire';
 
 
 import ListMobile from '../components/ListMobile';
 import SharedList from '../components/SharedList';
-const UserListContainer = (props) => {
+const UserListContainer = () => {
  
     const isTabletOrMobile = useMediaQuery({query: '(max-width: 1224px)'})
 
@@ -24,16 +24,10 @@ const UserListContainer = (props) => {
 
     const [list, setList] = useState([]);
 
-    const [prevStatus, setPrevStatus] = useState('none')
-
     useEffect(() => {
-        if(prevStatus === 'loading' && status === 'success' && data !== undefined) {
+        if(status === 'success' && data !== undefined) {
             setList(JSON.parse(data.games));
         }
-        if(prevStatus === 'none' && status === 'success') {
-            setList(JSON.parse(sessionStorage.getItem('games')));
-        }
-        setPrevStatus(status);
     },[status])
 
     return (
@@ -42,7 +36,7 @@ const UserListContainer = (props) => {
             ?   <>
                     <ListMobile list = {list} />
                 </>
-            :   <SharedList list = {props.list} handleSorting = {props.handleSorting} userId = {userId}/>
+            :   <SharedList list = {list}  userId = {userId}/>
             } 
         </ Row>
     )

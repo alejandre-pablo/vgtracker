@@ -32,14 +32,12 @@ const ListHandler = ({children}) => {
         //Caso primer render, se invoca a useFirestoreDocDataOnce y se espera
         if(prevStatus === 'loading' && status === 'success' ) {
             if(!data){
-                console.log('Recuperada lista vacia')
                 setIsEmptyList(true);
                 setIsLoaded(true);
                 sessionStorage.setItem('games',[]);
             } 
             // Si hay datos en DB, se carga la sesion y la lista con los datos
             else {
-                console.log('Recuperados datos de BD')
                 setIsEmptyList(false);
                 setIsLoaded(true);
                 setList(JSON.parse(data.games));
@@ -51,7 +49,6 @@ const ListHandler = ({children}) => {
         if(prevStatus === 'none' && status === 'success') {
             //Cargar desde sesion
             if(sessionStorage.getItem('games')) {
-                console.log('Recuperados datos de sesion')
                 setList(JSON.parse(sessionStorage.getItem('games')));
                 setIsEmptyList(false);
                 setIsLoaded(true);

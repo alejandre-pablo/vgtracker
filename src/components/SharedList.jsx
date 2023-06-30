@@ -2,34 +2,58 @@ import React, { useEffect, useState} from 'react'
 import { Tab, Nav, Col, Row, Spinner  } from 'react-bootstrap';
 import SharedGame from './SharedGame'
 import { AiFillCaretDown, AiFillCaretUp } from 'react-icons/ai';
+import { getDownloadURL, ref } from 'firebase/storage';
+import { useFirestore, useFirestoreDocDataOnce, useStorage } from 'reactfire';
+import { doc } from 'firebase/firestore';
 
 
 const SharedList = (props) => {
 
-    const {list, handleSorting} = props;
+    const {list, userId} = props;
 
-    const [sortingCache, setSortingCache] = useState(['order', 'default'])
+    const storage = useStorage();
+    const firestore = useFirestore();
+
+    const [sortingCache, setSortingCache] = useState(['order', 'default']);
     const [isSorted, setIsSorted] = useState(false);
+
+    const profileDataRef = doc(firestore, 'profiles', userId);
+    const {status, data: profile} = useFirestoreDocDataOnce(profileDataRef);
+    const [profilePictureURL, setProfilePictureUrl] = useState('');
 
     function handleSort (sorting) {
         if(sortingCache[0] === sorting) {
             if (sortingCache[1] === 'asc') {
-                setSortingCache([sorting,'desc'])
+                setSortingCache([sorting,'desc']);
                 setIsSorted(true);
             } else {
-                setSortingCache(['order','default'])
+                setSortingCache(['order','default']);
                 setIsSorted(false);
             }
         } else {
-            setSortingCache([sorting, 'asc'])
+            setSortingCache([sorting, 'asc']);
             setIsSorted(true);
         }
     }
+
     useEffect(() => {
+        // Fetch the profile picture URL from Firebase Storage
+        const imageRef =ref(storage, `images/${userId}`)
+        getDownloadURL(imageRef)
+        .then(url => {
+            // Set the profile picture URL in the state
+            setProfilePictureUrl(url);
+        })
+        .catch(error => {
+            console.error('Error fetching profile picture:', error);
+        });
+    }, []);
+
+    /* useEffect(() => {
         if(list.length > 0) {
-            props.handleSorting(sortingCache)
+            handleSorting(sortingCache);
         }
-    }, [sortingCache])
+    }, [sortingCache]) */
 
     const gameListFinished = 
         <ul>
@@ -140,9 +164,14 @@ const SharedList = (props) => {
         <>
         <Tab.Container id="tabs" defaultActiveKey="Finished" className='gamesList'>
             <Row>
-                <Col className='sideBarColumn'>
+                <Col md={2} className='sideBarColumn'>
                     <div className='sharedProfileCard'>
-
+                        <img 
+                        src={profilePictureURL ? profilePictureURL : window.location.origin +'/img/profile.svg.png'} 
+                        referrerPolicy="no-referrer"  
+                        alt='Profile Pic' 
+                        style={{objectFit: 'cover',width: '100%', minHeight: '100%', borderRadius: '50%' }}/>
+                        <strong>{profile.username}</strong>
                     </div>
                     <Nav variant="pills" className="flex-column tabSelectors">
                         <Nav.Item className='tabFinished'>
