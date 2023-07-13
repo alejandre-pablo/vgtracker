@@ -67,7 +67,7 @@ const LoginContainer = () => {
     }
     
 
-    //Delayed call to validate() on input change
+    //Delayed call to validate() on input change, waits for user to stop typing for 1 second
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
             const err = validate(email);
@@ -107,7 +107,7 @@ const LoginContainer = () => {
                         className='formLabel'
                         >   
                             <Form.Control required type='text' className="inputText" placeholder='Email' value={email} onChange={e => setEmail(e.target.value)} isInvalid={!!errors.email}/>
-                            <Form.Control.Feedback type="invalid" tooltip>{errors.email}</Form.Control.Feedback>
+                            <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
                         </FloatingLabel>
                     </Form.Group>
 

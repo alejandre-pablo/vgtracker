@@ -62,7 +62,7 @@ const EditProfileForm = (props) => {
             })
         }
         setDoc(profileDataRef, profileData);
-        handleClose()
+        handleClose();
     }
 
     useEffect(() => {

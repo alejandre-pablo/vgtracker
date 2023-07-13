@@ -84,7 +84,7 @@ const SearchResultsContainer = ({list, handleEditRemoveItem}) => {
             { searchResults.count === null ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}} />
             : searchResults.count === 0 ? listEmpty
             : searchResults.results.map((result) => 
-                <SearchedGame key={result.id} gameItem ={result} addGameHandler = {handleAddGame} editGameHandler = {handleEditGame}/>
+                <SearchedGame k={result.id} gameItem ={result} addGameHandler = {handleAddGame} editGameHandler = {handleEditGame}/>
             )}
         </ul>
         :<ul onScroll={handleScroll} ref={listInnerRef} className='searchList'>
@@ -92,7 +92,7 @@ const SearchResultsContainer = ({list, handleEditRemoveItem}) => {
             : searchResults.count === 0 ? listEmpty
             : searchResults.results.map((result, index) => 
             <div className={index % 2 === 0 ? 'highlight' : ''}>
-                <SearchedGame  key={result.id} gameItem ={result} addGameHandler = {handleAddGame} editGameHandler = {handleEditGame}/>
+                <SearchedGame  k={result.id} gameItem ={result} addGameHandler = {handleAddGame} editGameHandler = {handleEditGame}/>
             </div>
             )}
         </ul> 

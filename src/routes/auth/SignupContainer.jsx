@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Form, Row, FloatingLabel, Button, InputGroup } from 'react-bootstrap';
 import { FcGoogle } from 'react-icons/fc'
 import { Link, useNavigate } from 'react-router-dom';
-import { getAuth, createUserWithEmailAndPassword, signInWithRedirect, GoogleAuthProvider, updateProfile } from 'firebase/auth';
-import { AuthProvider, useFirebaseApp} from 'reactfire';
+import { getAuth, createUserWithEmailAndPassword, signInWithRedirect, GoogleAuthProvider, updateProfile, getRedirectResult, signInWithPopup } from 'firebase/auth';
+import { AuthProvider, useFirebaseApp, useFirestore, useStorage} from 'reactfire';
 import { BiHide, BiShow } from 'react-icons/bi';
+import { doc, setDoc } from 'firebase/firestore';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 const { version } = require('../../../package.json');
 
@@ -33,7 +35,9 @@ const SignupContainer = () => {
 
     const navigate = useNavigate();
     const app = useFirebaseApp();
+    const firestore = useFirestore();
     const auth = getAuth(app);
+    const storage = useStorage();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -49,9 +53,13 @@ const SignupContainer = () => {
         e.preventDefault();
 
         if (Object.keys(errors).length === 0) {
-            await createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
+            await createUserWithEmailAndPassword(auth, email, password).then(() => {
+                //Update current user with input from form
                 updateProfile(auth.currentUser, {displayName : username}).then(() => {
+                    //Create empty list on session
                     sessionStorage.setItem('games', []);
+                    //Create user profile using the data from the provider
+                    setDoc(doc(firestore, 'profiles', auth.currentUser.uid), {username: username, name: '', surname: '', picture: ''});
                     navigate('/', {replace: true});
                 })
                 .catch((error) => {
@@ -68,16 +76,38 @@ const SignupContainer = () => {
     const googleSignupHandler = async() => {
         try {
             const provider = new GoogleAuthProvider();
-            await signInWithRedirect(auth, provider).then( () => {
+            await signInWithPopup(auth, provider).then( () => {
+                //Create empty list on session
                 sessionStorage.setItem('games', []);
-                navigate('/', {replace: true})});
+                //Get the current user
+                const user = auth.currentUser;
+                //Create a ref to the storage location for the user profile picture
+                const imageRef = ref(storage, `images/${user.uid}`);
+                //Store the blob for the Google provided photo.
+                fetch(user.photoURL)
+                .then(response => response.blob())
+                .then(blob => { 
+                    uploadBytes(imageRef, blob).then(() => {
+                        getDownloadURL(imageRef).then((imageURL) => {
+                            updateProfile(user, {photoURL: imageURL})
+                            .catch(function(error) { 
+                                console.log(error) 
+                        });
+                    })
+                })
+                    
+                 })
+                //Create user profile using the data from the provider
+                setDoc(doc(firestore, 'profiles', user.uid), {username: user.displayName, name: '', surname: '', picture: user.photoURL});
+                navigate('/', {replace: true})
+            });
         } catch (error) {
             console.log(error)
         }
         
     }
 
-    //Delayed call to validate() on input change
+    //Delay call to validate() on input change, waits for user to stop typing for 1 second
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
             const err = validate(email, password, passwordMatch);
@@ -126,7 +156,7 @@ const SignupContainer = () => {
                         className='formLabel'
                         >   
                             <Form.Control required type='text' className="inputText" placeholder='Email' value={email} onChange={e => setEmail(e.target.value)} isInvalid={!!errors.email}/>
-                            <Form.Control.Feedback type="invalid" tooltip='true'>{errors.email}</Form.Control.Feedback>
+                            <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
                         </FloatingLabel>
                     </Form.Group>
 
@@ -152,7 +182,7 @@ const SignupContainer = () => {
                             className='formLabel'
                             >   
                                 <Form.Control required autoComplete="on" type={showPasswordMatch ? 'text' : 'password'} className="inputText" placeholder='Repeat Password' value={passwordMatch} onChange={e => setPasswordMatch(e.target.value)} isInvalid={!!errors.match} />
-                                <Form.Control.Feedback type="invalid" tooltip='true'>{errors.match}</Form.Control.Feedback>
+                                <Form.Control.Feedback type="invalid" >{errors.match}</Form.Control.Feedback>
                             </FloatingLabel>
                             {!errors.match ? <InputGroup.Text className="inputButton" onClick={() => setShowPasswordMatch(!setShowPasswordMatch)}> {showPasswordMatch ? <BiShow/> : <BiHide/>} </InputGroup.Text> : <></>}             
                         </InputGroup>

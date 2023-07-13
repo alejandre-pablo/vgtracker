@@ -37,17 +37,21 @@ const SharedList = (props) => {
     }
 
     useEffect(() => {
-        // Fetch the profile picture URL from Firebase Storage
-        const imageRef =ref(storage, `images/${userId}`)
-        getDownloadURL(imageRef)
-        .then(url => {
-            // Set the profile picture URL in the state
-            setProfilePictureUrl(url);
-        })
-        .catch(error => {
-            console.error('Error fetching profile picture:', error);
-        });
-    }, []);
+        //Check if the user has a profile picture
+        if(status === 'success' && profile.picture !== ''){
+            // Fetch the profile picture URL from Firebase Storage
+            const imageRef =ref(storage, `images/${userId}`)
+            getDownloadURL(imageRef)
+            .then(url => {
+                // Set the profile picture URL in the state
+                setProfilePictureUrl(url);
+            })
+            .catch(error => {
+                console.error('Error fetching profile picture:', error);
+            });
+        }
+        
+    }, [status]);
 
     /* useEffect(() => {
         if(list.length > 0) {
@@ -171,7 +175,7 @@ const SharedList = (props) => {
                         referrerPolicy="no-referrer"  
                         alt='Profile Pic' 
                         style={{objectFit: 'cover',width: '100%', minHeight: '100%', borderRadius: '50%' }}/>
-                        <strong>{profile.username}</strong>
+                        <strong>{profile ? profile.username : ''}</strong>
                     </div>
                     <Nav variant="pills" className="flex-column tabSelectors">
                         <Nav.Item className='tabFinished'>

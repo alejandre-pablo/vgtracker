@@ -73,6 +73,7 @@ function App(){
                                         <Route path ='/stats' element ={<StatsContainer handleAddItem={handleAddItem} handleEditRemoveItem={handleEditRemoveItem} handleSorting={handleSorting}/>}/>
                                         <Route path ='/search' element ={<SearchResultsContainer list ={list} handleEditRemoveItem={handleEditRemoveItem}/>}/>
                                         <Route path ='/game/:game' element ={<GameDetailContainer/>}/>
+                                        <Route path ='/user/:userId' element ={<><NavBar /><SharedListContainer/></>}/>
                                         <Route path ='/error' element ={<ErrorContainer />}/>
                                     </Routes>
                                 )}
