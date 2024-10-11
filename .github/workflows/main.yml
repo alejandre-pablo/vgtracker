@@ -33,9 +33,8 @@ jobs:
           name: build
           path: build
       - name: Deploy to Firebase
-        uses: FirebaseExtended/action-hosting-deploy@v0
+        uses: w9jds/firebase-action@master
         with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_VGTRACKER_C0402 }}
-          projectId: vgtracker-c0402
-        
+          args: deploy --only hosting:vgtracker
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
