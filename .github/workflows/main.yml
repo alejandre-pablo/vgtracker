@@ -5,15 +5,14 @@ on:
       - master
 
 jobs:
-  deploy:
-    name: Deploy
+  build_and_deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Clean Install & Build
       - uses: actions/checkout@v4
       - run: npm ci && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_VGTRACKER_C0402 }}
+          channelId: live
           projectId: vgtracker-c0402
