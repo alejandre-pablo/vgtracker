@@ -25,16 +25,11 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@master
-      - name: Download Artifact
-        uses: actions/download-artifact@master
+      - name: Clean Install & Build
+      - uses: actions/checkout@v4
+      - run: npm ci && npm run build
+      - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          name: build
-          path: build
-      - name: Deploy to Firebase
-        uses: w9jds/firebase-action@master
-        with:
-          args: deploy --only hosting:vgtracker
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_VGTRACKER_C0402 }}
+          projectId: vgtracker-c0402
