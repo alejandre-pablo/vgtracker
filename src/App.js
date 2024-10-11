@@ -65,13 +65,13 @@ function App(){
                         <AuthWrapper fallback={<AuthRoute />}>
                             <NavBar />
                             <ListHandler>
-                                {(list, handleAddItem, handleEditRemoveItem, handleSorting, isEmptyList, isLoaded) => (
+                                {(list, isEmptyList, isLoaded, handleEditItem, handleRemoveItem, handleSorting, handleOrderList) => (
                                     <Routes>
                                         <Route path='/' element ={<Navigate to='/list' replace={true}/>}/>
-                                        <Route path ='/home' element ={<ListContainer list ={list} handleEditRemoveItem={handleEditRemoveItem} handleSorting={handleSorting} isEmptyList={isEmptyList} isLoaded={isLoaded}/>}/>
-                                        <Route path ='/list' element ={<ListContainer list ={list} handleEditRemoveItem={handleEditRemoveItem} handleSorting={handleSorting} isEmptyList={isEmptyList} isLoaded={isLoaded}/>}/>
-                                        <Route path ='/stats' element ={<StatsContainer handleAddItem={handleAddItem} handleEditRemoveItem={handleEditRemoveItem} handleSorting={handleSorting}/>}/>
-                                        <Route path ='/search' element ={<SearchResultsContainer list ={list} handleEditRemoveItem={handleEditRemoveItem}/>}/>
+                                        <Route path ='/home' element ={<ListContainer list ={list} handleEditItem={handleEditItem} handleRemoveItem={handleRemoveItem} handleSorting={handleSorting} handleOrderList={handleOrderList} isEmptyList={isEmptyList} isLoaded={isLoaded}/>}/>
+                                        <Route path ='/list' element ={<ListContainer list ={list} handleEditItem={handleEditItem} handleRemoveItem={handleRemoveItem} handleSorting={handleSorting} handleOrderList={handleOrderList} isEmptyList={isEmptyList} isLoaded={isLoaded}/>}/>
+                                        <Route path ='/stats' element ={<StatsContainer />}/>
+                                        <Route path ='/search' element ={<SearchResultsContainer list ={list} handleEditItem={handleEditItem}/>}/>
                                         <Route path ='/game/:game' element ={<GameDetailContainer/>}/>
                                         <Route path ='/user/:userId' element ={<><NavBar /><SharedListContainer/></>}/>
                                         <Route path ='/error' element ={<ErrorContainer />}/>

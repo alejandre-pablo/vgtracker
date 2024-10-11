@@ -8,7 +8,7 @@ import { FaHome} from 'react-icons/fa'
 import { BiLogOut } from 'react-icons/bi'
 import { CgProfile } from 'react-icons/cg'
 import { IoIosStats } from 'react-icons/io'
-import { GoThreeBars } from 'react-icons/go'
+import { RxHamburgerMenu } from 'react-icons/rx'
 import { useMediaQuery } from 'react-responsive';
 import { useState } from 'react';
 import EditProfileForm from './forms/EditProfileForm';
@@ -165,7 +165,7 @@ const NavBar = () => {
             </Row> */}
             <Navbar className='topMenuMobile' display='flex'>
                 <Col md='3' style={{position: 'relative'}}>
-                    <button className="buttonEdit" onClick={handleShowSidebar} title="Show sidebar" style={{position: 'absolute', top: "50%", transform: "translateY(-50%)"}}><GoThreeBars/></button>
+                    <button className="buttonEdit" onClick={handleShowSidebar} title="Show sidebar" style={{position: 'absolute', top: "50%", transform: "translateY(-50%)"}}><RxHamburgerMenu/></button>
                 </Col>
                 <Col md='3'>
                     <Navbar.Brand href="/" style={{height:'100%', padding:'0' }}>

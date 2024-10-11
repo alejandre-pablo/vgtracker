@@ -8,27 +8,10 @@ import EditForm from './forms/EditForm';
 import Game from './Game'
 
 const ListMobile = (props) => {
-    const {list, isEmptyList, isListLoaded, handleEditRemoveItem} = props;
+    const {list, isEmptyList, isListLoaded, handleEditItem, handleRemoveItem} = props;
 
     const [nav1, setNav1] = useState();
     const [nav2, setNav2] = useState();
-
-    function handleRemoveItem (id)  {
-        var tmpList = list.filter((item => item.id !== id))
-        handleEditRemoveItem(tmpList);
-    };
-
-    function handleUpdateItem (game)  {
-        var gameIndex = list.findIndex((item => item.id === game.id))
-        let tmpList = [...list];
-        if(tmpList[gameIndex].playstatus !== game.playstatus) {
-            tmpList.splice(gameIndex, 1)
-            tmpList.push(game)
-        } else {
-            tmpList[gameIndex] = game;
-        }
-        handleEditRemoveItem(tmpList);
-    }
 
     const [gameId, setGameId] = useState(-1);
     const [showModal, setShowModal] = useState(false);
@@ -84,7 +67,7 @@ const ListMobile = (props) => {
 
     return (
         <>
-            <EditForm show ={showModal} handleCloseModal = {handleCloseModal} gameId = {gameId} updateItemHandler = {handleUpdateItem}/>
+            <EditForm show ={showModal} handleCloseModal = {handleCloseModal} gameId = {gameId} updateItemHandler = {handleEditItem}/>
             <Col className='listColumn'>
                 <Slider asNavFor={nav2} ref={(slider1) => setNav1(slider1)} className='mobileTabTitleWrapper'>
                     <Row className='mobileTabTitle'> 

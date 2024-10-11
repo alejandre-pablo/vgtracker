@@ -6,7 +6,7 @@ import { Row, Spinner } from 'react-bootstrap';
 import { useMediaQuery } from 'react-responsive';
 import EditForm from '../components/forms/EditForm';
 
-const SearchResultsContainer = ({list, handleEditRemoveItem}) => {
+const SearchResultsContainer = ({list, handleEditItem}) => {
 
     const k = 'd068d12dda5d4c8283eaa6167fe26f79';
     const isTabletOrMobile = useMediaQuery({query: '(max-width: 1224px)'})
@@ -60,18 +60,6 @@ const SearchResultsContainer = ({list, handleEditRemoveItem}) => {
         }
     }
 
-    function handleUpdateItem (game)  {
-        var gameIndex = list.findIndex((item => item.id === game.id))
-        let tmpList = [...list];
-        if(tmpList[gameIndex].playstatus !== game.playstatus) {
-            tmpList.splice(gameIndex, 1)
-            tmpList.push(game)
-        } else {
-            tmpList[gameIndex] = game;
-        }
-        handleEditRemoveItem(tmpList);
-    }
-
     const listEmpty =
         <div className='emptySearchList'> 
             <div> No games, big sad :(</div>
@@ -84,7 +72,7 @@ const SearchResultsContainer = ({list, handleEditRemoveItem}) => {
             { searchResults.count === null ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}} />
             : searchResults.count === 0 ? listEmpty
             : searchResults.results.map((result) => 
-                <SearchedGame k={result.id} gameItem ={result} addGameHandler = {handleAddGame} editGameHandler = {handleEditGame}/>
+                <SearchedGame key={result.id} gameItem ={result} addGameHandler = {handleAddGame} editGameHandler = {handleEditGame}/>
             )}
         </ul>
         :<ul onScroll={handleScroll} ref={listInnerRef} className='searchList'>
@@ -92,7 +80,7 @@ const SearchResultsContainer = ({list, handleEditRemoveItem}) => {
             : searchResults.count === 0 ? listEmpty
             : searchResults.results.map((result, index) => 
             <div className={index % 2 === 0 ? 'highlight' : ''}>
-                <SearchedGame  k={result.id} gameItem ={result} addGameHandler = {handleAddGame} editGameHandler = {handleEditGame}/>
+                <SearchedGame  key={result.id} gameItem ={result} addGameHandler = {handleAddGame} editGameHandler = {handleEditGame}/>
             </div>
             )}
         </ul> 
@@ -150,7 +138,7 @@ const SearchResultsContainer = ({list, handleEditRemoveItem}) => {
                 }
             </Row>
             <AddForm show ={showAddModal} handleCloseModal = {handleCloseAddModal} gameId = {gameId}/>
-            <EditForm show={showEditModal} handleCloseModal = {handleCloseEditModal} gameId = {gameId} updateItemHandler = {handleUpdateItem}/>
+            <EditForm show={showEditModal} handleCloseModal = {handleCloseEditModal} gameId = {gameId} updateItemHandler = {handleEditItem}/>
         </>
         
     )

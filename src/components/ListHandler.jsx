@@ -18,11 +18,12 @@ const ListHandler = ({children}) => {
     const [isEmptyList, setIsEmptyList] = useState(true);
     const [isLoaded, setIsLoaded] = useState(false);
 
-    const [prevStatus, setPrevStatus] = useState('none')
-
+    const [prevStatus, setPrevStatus] = useState('none');
+    const [sortingCache, setSortingCache] = useState(['order', 'default'])
+    
     useEffect(() => {
         if(location.state !== null && status === 'success') {
-            let addedGame = location.state.addedGame
+            let addedGame = location.state.addedGame;
             window.history.replaceState({}, document.title)
             handleAddItem(addedGame);
         }
@@ -58,33 +59,53 @@ const ListHandler = ({children}) => {
         setPrevStatus(status);
     },[status])
 
+
     const safeWrite = newList => {
-        setList(newList);
-        sessionStorage.setItem('games', JSON.stringify(newList))
-        setDoc(userDataRef, {games: JSON.stringify(newList)})
+        sessionStorage.setItem('games', JSON.stringify(newList));
+        setDoc(userDataRef, {games: JSON.stringify(newList)});
+        handleSorting(sortingCache);
     }
 
-    const handleAddItem = addedGame => {
-        location.state = null
-        var tmpList = [];
+    function fetchList() {
         if (sessionStorage.getItem('games') !== '') {
-            tmpList = JSON.parse(sessionStorage.getItem('games'));
+            return JSON.parse(sessionStorage.getItem('games'));
         }
-        safeWrite([...tmpList, addedGame]);
+        return null;
     }
 
-    const handleEditRemoveItem = newList => {
-        safeWrite(newList);
+    const handleAddItem = game => {
+        var tmpList = fetchList();
+        safeWrite([...tmpList, game]);
     }
 
-    const handleSorting = (sorting) => {
-        var tmpList = [];
-        if(sorting[0] === 'order') {
-            tmpList = JSON.parse(sessionStorage.getItem('games'));
+    const handleEditItem = game => {
+        var tmpList = fetchList();
+        var gameIndex = tmpList.findIndex((item => item.id === game.id))
+        if(tmpList[gameIndex].playstatus !== game.playstatus) {
+            tmpList.splice(gameIndex, 1)
+            tmpList.push(game)
         } else {
-            tmpList = [...list.sort(sortByProperty(sorting[0], sorting[1]))];
+            tmpList[gameIndex] = game;
         }
-        setList(tmpList)    
+        safeWrite(tmpList);
+    }
+
+    const handleRemoveItem = gameId => {
+        var tmpList = fetchList().filter((item => item.id !== gameId))
+        safeWrite(tmpList);
+    }
+
+    const handleSorting = sorting => {
+        var tmpList = fetchList();
+        if(sorting[0] !== 'order') {
+            tmpList.sort(sortByProperty(sorting[0], sorting[1]));
+        }
+        setList(tmpList);
+        setSortingCache(sorting);
+    }
+
+    const handleOrderList = newList => {
+        safeWrite(newList);
     }
 
     function sortByProperty(property, way) {
@@ -101,21 +122,30 @@ const ListHandler = ({children}) => {
                 }
             case 'playtime':
                 return function (a,b) {
-                    var normalizedA = parseInt(a[property].replace(',', '.').replace(':', '.'))
-                    var normalizedB = parseInt(b[property].replace(',', '.').replace(':', '.'))
+                    var normalizedA = parseFloat(a[property].replace(',', '.').replace(':', '.'))
+                    var normalizedB = parseFloat(b[property].replace(',', '.').replace(':', '.'))
                     var result = (normalizedA < normalizedB) ? -1 : (normalizedA > normalizedB) ? 1 : 0;
+                    if(result === 0 && (a[property] !== '' && b[property] !== '')) {
+                        return 1 * sortOrder;
+                    }
                     return result * sortOrder;
                 }
             case 'rating':
                 return function (a,b) {
-                    var normalizedA = parseInt(a[property].reduce((partialSum, a) => partialSum + a, 0));
-                    var normalizedB = parseInt(b[property].reduce((partialSum, a) => partialSum + a, 0));
+                    var normalizedA = parseFloat(a[property].reduce((partialSum, a) => partialSum + a, 0));
+                    var normalizedB = parseFloat(b[property].reduce((partialSum, a) => partialSum + a, 0));
                     var result = (normalizedA < normalizedB) ? -1 : (normalizedA > normalizedB) ? 1 : 0;
+                    if(result === 0 && (a[property] !== '' && b[property] !== '')) {
+                        return 1 * sortOrder;
+                    }
                     return result * sortOrder;
                 }
             default:
                 return function (a,b) {
                     var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+                    if(result === 0 && (a[property] !== '' && b[property] !== '')) {
+                        return 1 * sortOrder;
+                    }
                     return result * sortOrder;
                 }
         }
@@ -123,7 +153,7 @@ const ListHandler = ({children}) => {
     }
 
     return (
-        <>{children(list, handleAddItem, handleEditRemoveItem, handleSorting, isEmptyList, isLoaded)}</>
+        <>{children(list, isEmptyList, isLoaded, handleEditItem, handleRemoveItem, handleSorting, handleOrderList)}</>
     )
 }
 

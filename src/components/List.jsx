@@ -11,29 +11,16 @@ import Game from './Game'
 import SortableGame from './SortableGame';
 
 const List = (props) => {
-    const {list, isEmptyList, isListLoaded, handleEditRemoveItem, handleSorting} = props;
-
-    function handleRemoveItem (id)  {
-        var tmpList = list.filter((item => item.id !== id))
-        handleEditRemoveItem(tmpList);
-    };
-
-    function handleUpdateItem (game)  {
-        var gameIndex = list.findIndex((item => item.id === game.id));
-        let tmpList = [...list];
-        if(tmpList[gameIndex].playstatus !== game.playstatus) {
-            tmpList.splice(gameIndex, 1)
-            tmpList.push(game)
-        } else {
-            tmpList[gameIndex] = game;
-        }
-        
-        handleEditRemoveItem(tmpList);
-        handleSorting(sortingCache);
-    }
+    const {list, isEmptyList, isListLoaded, handleEditItem, handleRemoveItem, handleSorting, handleOrderList} = props;
 
     const [sortingCache, setSortingCache] = useState(['order', 'default'])
     const [isSorted, setIsSorted] = useState(false);
+
+    const [gameId, setGameId] = useState(-1);
+    const [showModal, setShowModal] = useState(false);
+
+    const [activeId, setActiveId] = useState(null);
+    const [dragGame, setDragGame] = useState({});
 
     function handleSort (sorting) {
         if(sortingCache[0] === sorting) {
@@ -49,14 +36,13 @@ const List = (props) => {
             setIsSorted(true);
         }
     }
+
     useEffect(() => {
         if(list.length > 0) {
             handleSorting(sortingCache);
         }
     }, [sortingCache])
 
-    const [gameId, setGameId] = useState(-1);
-    const [showModal, setShowModal] = useState(false);
     function handleEditGame(id) {
         setGameId(id);
         setShowModal(true);
@@ -71,9 +57,6 @@ const List = (props) => {
             coordinateGetter: sortableKeyboardCoordinates,
           })
     )
-
-    const [activeId, setActiveId] = useState(null);
-    const [dragGame, setDragGame] = useState({});
     
     function handleDragStart(event) {
         setDragGame(list.find(game => game.id === event.active.id))
@@ -81,12 +64,14 @@ const List = (props) => {
     }
     
     function handleDragEnd(event) {
-        const { active, over } = event;
-        if (active.id !== over.id) {
-                const oldIndex = list.findIndex(item => item.id === active.id);
-                const newIndex = list.findIndex(item => item.id === over.id);
-                const tmpList =  arrayMove(list, oldIndex, newIndex);
-                handleEditRemoveItem(tmpList);
+        if(!isSorted) {
+            const { active, over } = event;
+            if (active.id !== over.id) {
+                    const oldIndex = list.findIndex(item => item.id === active.id);
+                    const newIndex = list.findIndex(item => item.id === over.id);
+                    const tmpList =  arrayMove(list, oldIndex, newIndex);
+                    handleOrderList(tmpList);
+            };
         };
     }
  
@@ -196,7 +181,7 @@ const List = (props) => {
 
     return (
         <>
-        <EditForm show ={showModal} handleCloseModal = {handleCloseModal} gameId = {gameId} updateItemHandler = {handleUpdateItem}/>
+        <EditForm show ={showModal} handleCloseModal = {handleCloseModal} gameId = {gameId} updateItemHandler = {handleEditItem}/>
             <Tab.Container id="tabs" defaultActiveKey="Finished" className='gamesList'>
                 <Row>
                     <Col className='sideBarColumn'>
