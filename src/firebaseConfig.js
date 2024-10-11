@@ -2,7 +2,7 @@
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
     apiKey: "AIzaSyA4HIPDzbeE40koF7LPov4Mor8TvqWSgLk",
-    authDomain: "vgtracker-c0402.firebaseapp.com",
+    authDomain: "vgtracker.firebaseapp.com",
     projectId: "vgtracker-c0402",
     storageBucket: "vgtracker-c0402.appspot.com",
     messagingSenderId: "934479085578",

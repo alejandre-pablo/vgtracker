@@ -23,11 +23,24 @@ const LoginContainer = () => {
     const navigate = useNavigate();
     const app = useFirebaseApp();
     const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [errors, setErrors] = useState({});
+
+    getRedirectResult(auth)
+        .then((result) => {
+            console.log(result)
+            if (result?.user) {
+                // Successfully signed in with Google
+                navigate('/', { replace: true });
+            }
+        })
+        .catch((error) => {
+            console.error("Google Sign-in Error:", error);
+        });
 
     const emailAndPasswordHandler = async (e) => {
         e.preventDefault();
@@ -45,23 +58,8 @@ const LoginContainer = () => {
     };
 
     const googleLoginHandler = async () => {
-        const provider = new GoogleAuthProvider();
         await signInWithRedirect(auth, provider);
     };
-
-    // This useEffect runs once, after the component mounts or reloads
-    useEffect(() => {
-        getRedirectResult(auth)
-            .then((result) => {
-                if (result?.user) {
-                    // Successfully signed in with Google
-                    navigate('/', { replace: true });
-                }
-            })
-            .catch((error) => {
-                console.error("Google Sign-in Error:", error);
-            });
-    }, [auth, navigate]);
 
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
