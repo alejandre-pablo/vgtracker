@@ -2,8 +2,8 @@ import { doc} from 'firebase/firestore';
 import React, {useEffect, useState} from 'react'
 import { Row } from 'react-bootstrap';
 import { useMediaQuery } from 'react-responsive';
-import { useLocation, useParams } from 'react-router-dom';
-import { useAuth, useFirebaseApp, useFirestore, useFirestoreDocDataOnce } from 'reactfire';
+import { useParams } from 'react-router-dom';
+import { useFirestore, useFirestoreDocDataOnce } from 'reactfire';
 
 
 import ListMobile from '../components/ListMobile';
@@ -14,9 +14,6 @@ const UserListContainer = () => {
 
     const {userId} = useParams();
 
-    const location = useLocation();
-    const firebaseApp = useFirebaseApp();
-    const auth = useAuth(firebaseApp);
     const firestore = useFirestore();
     const userDataRef = doc(firestore, 'lists', userId);
 

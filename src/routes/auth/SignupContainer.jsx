@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Form, Row, FloatingLabel, Button, InputGroup } from 'react-bootstrap';
 import { FcGoogle } from 'react-icons/fc'
 import { Link, useNavigate } from 'react-router-dom';
-import { getAuth, createUserWithEmailAndPassword, signInWithRedirect, GoogleAuthProvider, updateProfile, getRedirectResult, signInWithPopup } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, updateProfile, signInWithPopup } from 'firebase/auth';
 import { AuthProvider, useFirebaseApp, useFirestore, useStorage} from 'reactfire';
 import { BiHide, BiShow } from 'react-icons/bi';
 import { doc, setDoc } from 'firebase/firestore';

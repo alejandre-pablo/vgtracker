@@ -14,7 +14,7 @@ const ListContainer = (props) => {
         <Row className={isTabletOrMobile ? 'mainContainerMobile' : 'mainContainer'}>
             {isTabletOrMobile 
             ? <ListMobile list = {props.list} isEmptyList = {props.isEmptyList} isListLoaded = {props.isLoaded}  handleEditItem = {props.handleEditItem} handleRemoveItem = {props.handleRemoveItem}/>
-            : <List list = {props.list} isEmptyList = {props.isEmptyList} isListLoaded = {props.isLoaded} handleEditItem = {props.handleEditItem} handleRemoveItem = {props.handleRemoveItem} handleSorting = {props.handleSorting} handleOrderList = {props.handleOrderList}/>
+            : <List list = {props.list} isEmptyList = {props.isEmptyList} isListLoaded = {props.isLoaded} handleEditItem = {props.handleEditItem} handleRemoveItem = {props.handleRemoveItem} handleOrderList = {props.handleOrderList}/>
             }  
         </ Row>
     )

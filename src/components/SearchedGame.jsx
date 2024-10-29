@@ -1,5 +1,4 @@
 import React from 'react'
-import { useEffect } from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
 import { useMediaQuery } from 'react-responsive';
 import { MdOutlineEdit } from 'react-icons/md'

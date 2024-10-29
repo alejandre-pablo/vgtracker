@@ -12,7 +12,6 @@ import { RxHamburgerMenu } from 'react-icons/rx'
 import { useMediaQuery } from 'react-responsive';
 import { useState } from 'react';
 import EditProfileForm from './forms/EditProfileForm';
-import { useEffect } from 'react';
 
 const { version } = require('../../package.json');
 

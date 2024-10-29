@@ -15,6 +15,7 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { useEffect } from 'react';
 import { getStorage } from 'firebase/storage';
+import { SearchProvider } from './components/contexts/SearchContext';
 
 function App(){
 
@@ -63,21 +64,23 @@ function App(){
                 <StorageProvider sdk={storage}>
                     <BrowserRouter>
                         <AuthWrapper fallback={<AuthRoute />}>
-                            <NavBar />
-                            <ListHandler>
-                                {(list, isEmptyList, isLoaded, handleEditItem, handleRemoveItem, handleSorting, handleOrderList) => (
-                                    <Routes>
-                                        <Route path='/' element ={<Navigate to='/list' replace={true}/>}/>
-                                        <Route path ='/home' element ={<ListContainer list ={list} handleEditItem={handleEditItem} handleRemoveItem={handleRemoveItem} handleSorting={handleSorting} handleOrderList={handleOrderList} isEmptyList={isEmptyList} isLoaded={isLoaded}/>}/>
-                                        <Route path ='/list' element ={<ListContainer list ={list} handleEditItem={handleEditItem} handleRemoveItem={handleRemoveItem} handleSorting={handleSorting} handleOrderList={handleOrderList} isEmptyList={isEmptyList} isLoaded={isLoaded}/>}/>
-                                        <Route path ='/stats' element ={<StatsContainer />}/>
-                                        <Route path ='/search' element ={<SearchResultsContainer list ={list} handleEditItem={handleEditItem}/>}/>
-                                        <Route path ='/game/:game' element ={<GameDetailContainer/>}/>
-                                        <Route path ='/user/:userId' element ={<><NavBar /><SharedListContainer/></>}/>
-                                        <Route path ='/error' element ={<ErrorContainer />}/>
-                                    </Routes>
-                                )}
-                            </ListHandler>
+                            <SearchProvider>
+                                <NavBar />
+                                <ListHandler>
+                                    {(list, isEmptyList, isLoaded, handleEditItem, handleRemoveItem, handleSorting, handleOrderList) => (
+                                        <Routes>
+                                            <Route path='/' element ={<Navigate to='/list' replace={true}/>}/>
+                                            <Route path ='/home' element ={<ListContainer list ={list} handleEditItem={handleEditItem} handleRemoveItem={handleRemoveItem} handleSorting={handleSorting} handleOrderList={handleOrderList} isEmptyList={isEmptyList} isLoaded={isLoaded}/>}/>
+                                            <Route path ='/list' element ={<ListContainer list ={list} handleEditItem={handleEditItem} handleRemoveItem={handleRemoveItem} handleSorting={handleSorting} handleOrderList={handleOrderList} isEmptyList={isEmptyList} isLoaded={isLoaded}/>}/>
+                                            <Route path ='/stats' element ={<StatsContainer />}/>
+                                            <Route path ='/search' element ={<SearchResultsContainer list ={list} handleEditItem={handleEditItem}/>}/>
+                                            <Route path ='/game/:game' element ={<GameDetailContainer/>}/>
+                                            <Route path ='/user/:userId' element ={<><NavBar /><SharedListContainer/></>}/>
+                                            <Route path ='/error' element ={<ErrorContainer />}/>
+                                        </Routes>
+                                    )}
+                                </ListHandler>
+                            </SearchProvider>
                         </ AuthWrapper>
                     </BrowserRouter>
                 </StorageProvider>  

@@ -19,7 +19,6 @@ const ListHandler = ({children}) => {
     const [isLoaded, setIsLoaded] = useState(false);
 
     const [prevStatus, setPrevStatus] = useState('none');
-    const [sortingCache, setSortingCache] = useState(['order', 'default'])
     
     useEffect(() => {
         if(location.state !== null && status === 'success') {
@@ -54,7 +53,6 @@ const ListHandler = ({children}) => {
                 setIsEmptyList(false);
                 setIsLoaded(true);
             } 
-            
         }
         setPrevStatus(status);
     },[status])
@@ -63,7 +61,6 @@ const ListHandler = ({children}) => {
     const safeWrite = newList => {
         sessionStorage.setItem('games', JSON.stringify(newList));
         setDoc(userDataRef, {games: JSON.stringify(newList)});
-        handleSorting(sortingCache);
     }
 
     function fetchList() {
@@ -95,65 +92,12 @@ const ListHandler = ({children}) => {
         safeWrite(tmpList);
     }
 
-    const handleSorting = sorting => {
-        var tmpList = fetchList();
-        if(sorting[0] !== 'order') {
-            tmpList.sort(sortByProperty(sorting[0], sorting[1]));
-        }
-        setList(tmpList);
-        setSortingCache(sorting);
-    }
-
     const handleOrderList = newList => {
         safeWrite(newList);
     }
 
-    function sortByProperty(property, way) {
-        var sortOrder = 1;
-        if(way === "desc") {
-            sortOrder = -1;
-        }
-        
-        switch (property) {
-            case 'title':
-            case 'platform':
-                return function (a,b) {
-                    return (a[property].localeCompare(b[property])) * sortOrder;
-                }
-            case 'playtime':
-                return function (a,b) {
-                    var normalizedA = parseFloat(a[property].replace(',', '.').replace(':', '.'))
-                    var normalizedB = parseFloat(b[property].replace(',', '.').replace(':', '.'))
-                    var result = (normalizedA < normalizedB) ? -1 : (normalizedA > normalizedB) ? 1 : 0;
-                    if(result === 0 && (a[property] !== '' && b[property] !== '')) {
-                        return 1 * sortOrder;
-                    }
-                    return result * sortOrder;
-                }
-            case 'rating':
-                return function (a,b) {
-                    var normalizedA = parseFloat(a[property].reduce((partialSum, a) => partialSum + a, 0));
-                    var normalizedB = parseFloat(b[property].reduce((partialSum, a) => partialSum + a, 0));
-                    var result = (normalizedA < normalizedB) ? -1 : (normalizedA > normalizedB) ? 1 : 0;
-                    if(result === 0 && (a[property] !== '' && b[property] !== '')) {
-                        return 1 * sortOrder;
-                    }
-                    return result * sortOrder;
-                }
-            default:
-                return function (a,b) {
-                    var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
-                    if(result === 0 && (a[property] !== '' && b[property] !== '')) {
-                        return 1 * sortOrder;
-                    }
-                    return result * sortOrder;
-                }
-        }
-        
-    }
-
     return (
-        <>{children(list, isEmptyList, isLoaded, handleEditItem, handleRemoveItem, handleSorting, handleOrderList)}</>
+        <>{children(list, isEmptyList, isLoaded, handleEditItem, handleRemoveItem, handleOrderList)}</>
     )
 }
 

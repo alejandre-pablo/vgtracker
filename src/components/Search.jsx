@@ -1,21 +1,19 @@
-import React, {useState} from 'react'
+import React from 'react'
 import {createSearchParams, useNavigate } from 'react-router-dom';
 import { FaSearch } from 'react-icons/fa'
 import { Button, Form } from 'react-bootstrap';
+import { useSearch } from './contexts/SearchContext';
 
 const Search = () => {
 
-    const [searchString, setSearchString] = useState('');
+    const {searchString, setSearchString} = useSearch();
     
     const navigate = useNavigate();
-    const handleChange = (e) => {
-        setSearchString(e.target.value);
-    }
+
     const onSubmit = (e) => {
         e.preventDefault();
         let normalizedString = searchString.toLowerCase();
         if(searchString !== '') {
-
             navigate({
                 pathname: "/search",
                 search: createSearchParams({
@@ -23,6 +21,7 @@ const Search = () => {
                 }).toString()
             });
         }
+        setSearchString('');
     }
     return (
         <Form className="d-flex searchBar" onSubmit={onSubmit}>
@@ -33,7 +32,7 @@ const Search = () => {
                     className='searchBarField'
                     aria-label="Search"
                     value={searchString}
-                    onChange={handleChange}
+                    onChange={(e) => setSearchString(e.target.value)}
                 />
                 <Button type='submit' className='searchBarButton'> <FaSearch/></Button> 
             </div>
