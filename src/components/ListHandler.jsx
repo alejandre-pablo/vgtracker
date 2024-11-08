@@ -1,7 +1,7 @@
 import { doc, setDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom';
-import { useAuth, useFirebaseApp, useFirestore, useFirestoreDocDataOnce } from 'reactfire';
+import { useAuth, useFirebaseApp, useFirestore, useFirestoreDocData } from 'reactfire';
 
 const ListHandler = ({children}) => {
 
@@ -11,14 +11,12 @@ const ListHandler = ({children}) => {
     const firestore = useFirestore();
     const userDataRef = doc(firestore, 'lists', auth.currentUser.uid);
 
-    const {status, data } = useFirestoreDocDataOnce(userDataRef);
+    const {status, data } = useFirestoreDocData(userDataRef);
 
     const [list, setList] = useState([]);
 
     const [isEmptyList, setIsEmptyList] = useState(true);
     const [isLoaded, setIsLoaded] = useState(false);
-
-    const [prevStatus, setPrevStatus] = useState('none');
     
     useEffect(() => {
         if(location.state !== null && status === 'success') {
@@ -29,33 +27,21 @@ const ListHandler = ({children}) => {
     }, [location.state])
 
     useEffect(() => {
-        //Caso primer render, se invoca a useFirestoreDocDataOnce y se espera
-        if(prevStatus === 'loading' && status === 'success' ) {
-            if(!data){
+        // Update list and session storage when Firestore data changes
+        if (status === 'success') {
+            if (!data || !data.games) {
                 setIsEmptyList(true);
-                setIsLoaded(true);
-                sessionStorage.setItem('games',[]);
-            } 
-            // Si hay datos en DB, se carga la sesion y la lista con los datos
-            else {
-                setIsEmptyList(false);
-                setIsLoaded(true);
-                setList(JSON.parse(data.games));
+                setList([]);
+                sessionStorage.setItem('games', JSON.stringify([]));
+            } else {
+                const gamesList = JSON.parse(data.games);
+                setList(gamesList);
+                setIsEmptyList(gamesList.length === 0);
                 sessionStorage.setItem('games', data.games);
             }
-            
+            setIsLoaded(true);
         }
-        //Caso recarga de lista (atras, o vuelta de una busqueda)
-        if(prevStatus === 'none' && status === 'success') {
-            //Cargar desde sesion
-            if(sessionStorage.getItem('games')) {
-                setList(JSON.parse(sessionStorage.getItem('games')));
-                setIsEmptyList(false);
-                setIsLoaded(true);
-            } 
-        }
-        setPrevStatus(status);
-    },[status])
+    }, [status, data]);
 
 
     const safeWrite = newList => {

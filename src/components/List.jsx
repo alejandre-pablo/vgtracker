@@ -94,7 +94,6 @@ const List = (props) => {
 
     useEffect(() => {
         //Perform sort & filter checks after setting
-        console.log('list modified');
         setMutableList(list);
     }, [list])
     
@@ -143,6 +142,8 @@ const List = (props) => {
                     const newIndex = list.findIndex(item => item.id === over.id);
                     const tmpList =  arrayMove(list, oldIndex, newIndex);
                     handleOrderList(tmpList);
+                    //This line prevents UI misvehavior while data is saved
+                    setMutableList(tmpList);
             };
         };
     }

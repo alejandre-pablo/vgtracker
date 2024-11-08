@@ -67,11 +67,11 @@ function App(){
                             <SearchProvider>
                                 <NavBar />
                                 <ListHandler>
-                                    {(list, isEmptyList, isLoaded, handleEditItem, handleRemoveItem, handleSorting, handleOrderList) => (
+                                    {(list, isEmptyList, isLoaded, handleEditItem, handleRemoveItem, handleOrderList) => (
                                         <Routes>
                                             <Route path='/' element ={<Navigate to='/list' replace={true}/>}/>
-                                            <Route path ='/home' element ={<ListContainer list ={list} handleEditItem={handleEditItem} handleRemoveItem={handleRemoveItem} handleSorting={handleSorting} handleOrderList={handleOrderList} isEmptyList={isEmptyList} isLoaded={isLoaded}/>}/>
-                                            <Route path ='/list' element ={<ListContainer list ={list} handleEditItem={handleEditItem} handleRemoveItem={handleRemoveItem} handleSorting={handleSorting} handleOrderList={handleOrderList} isEmptyList={isEmptyList} isLoaded={isLoaded}/>}/>
+                                            <Route path ='/home' element ={<ListContainer list ={list} handleEditItem={handleEditItem} handleRemoveItem={handleRemoveItem} handleOrderList={handleOrderList} isEmptyList={isEmptyList} isLoaded={isLoaded}/>}/>
+                                            <Route path ='/list' element ={<ListContainer list ={list} handleEditItem={handleEditItem} handleRemoveItem={handleRemoveItem} handleOrderList={handleOrderList} isEmptyList={isEmptyList} isLoaded={isLoaded}/>}/>
                                             <Route path ='/stats' element ={<StatsContainer />}/>
                                             <Route path ='/search' element ={<SearchResultsContainer list ={list} handleEditItem={handleEditItem}/>}/>
                                             <Route path ='/game/:game' element ={<GameDetailContainer/>}/>
