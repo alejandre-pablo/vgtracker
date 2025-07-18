@@ -4,7 +4,7 @@ export const defaultGame = {
     title: '',
     developer: [],
     publisher: [],
-    platform: '',
+    platform: {id: '', name: ''},
     genres: [],
     playtime: '',
     playtimeCache: '',
@@ -13,8 +13,7 @@ export const defaultGame = {
     playdate: '',
     playdateCache: '',
     playstatus:'',
-    image: '',
-    customImage: '',
+    imageId: '',
     detail: ''
 }
 
@@ -25,7 +24,6 @@ export function gameReducer (game, action) {
                 ...game,
                 ...action.fields
             }
-            
         }
         case 'cleared': {
             return defaultGame;

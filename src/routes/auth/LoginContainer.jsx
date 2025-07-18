@@ -32,7 +32,6 @@ const LoginContainer = () => {
 
     getRedirectResult(auth)
         .then((result) => {
-            console.log(result)
             if (result?.user) {
                 // Successfully signed in with Google
                 navigate('/', { replace: true });
@@ -75,7 +74,7 @@ const LoginContainer = () => {
             <div className='appTitleWrapper'>
                 <h1 className='appTitle'>VGTracker</h1>
                 <div className='appTitleSubheader'>
-                    v{version} Powered by <a href='https://rawg.io/'>RAWG.io</a>
+                    v{version} Powered by <a href='https://www.igdb.com/'>IGDB</a>
                 </div>
             </div>
             <div className='authForm'>

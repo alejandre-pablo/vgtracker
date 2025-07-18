@@ -23,11 +23,11 @@ const SortableGame = (props) => {
       
     return (
         <Row ref={setNodeRef} {...attributes} style={style} className='gameWrapper'>
-            <div style={{width: '6vw', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+            <div className='gameSortWrapper' style={{width: '3.5vw'}}>
             <span className={props.isFiltered ? 'gameSortIndexSorted' : 'gameSortIndex'}>{props.index}</span>
             {props.isFiltered ? <></> : <button ref={setActivatorNodeRef} {...listeners} className='gameSortHandle'><TiArrowUnsorted/></button>}
             </div>
-            <div style={{width: '93%'}}>
+            <div style={{width: '96%'}}>
                 <Game ref={setNodeRef} onClickRemoveItem = {props.onClickRemoveItem} onClickEditItem = {props.onClickEditItem} game = {props.game}/> 
             </div>    
         </Row>

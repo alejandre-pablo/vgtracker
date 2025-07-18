@@ -1,42 +1,36 @@
-import { useState, React, useEffect, useRef } from 'react'
-import {useSearchParams } from 'react-router-dom'
+import { useState, React, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import SearchedGame from '../components/SearchedGame';
 import AddForm from '../components/forms/AddForm';
 import { Row, Spinner } from 'react-bootstrap';
 import { useMediaQuery } from 'react-responsive';
 import EditForm from '../components/forms/EditForm';
+import { SEARCH_FUNCTIONS_URL } from '../constants/urls';
 
 const SearchResultsContainer = ({list, handleEditItem}) => {
 
-    const k = 'd068d12dda5d4c8283eaa6167fe26f79';
     const isTabletOrMobile = useMediaQuery({query: '(max-width: 1224px)'})
 
-    const listInnerRef = useRef();
-
     const [searchParams, setSearchParams] = useSearchParams();
-    const [isLoading, setIsLoading] = useState(false);
 
     const [currQuery, setCurrQuery] = useState('');
     
-    const [gameId, setGameId] = useState(-1);
+    const [gameData, setGameData] = useState({});
     const [showAddModal, setShowAddModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
 
     const [searchResults, setSearchResults] = useState({
         count: null,
-        next: null,
-        previous: null,
         results: [],
-        user_platforms: false
     });
 
     const handleAddGame = (id) => {
-        setGameId(id);
+        setGameData(searchResults.results.find(game => game.id === id));
         setShowAddModal(true);
     }
 
     const handleEditGame = (id) => {
-        setGameId(id);
+        setGameData(searchResults.results.find(game => game.id === id));
         setShowEditModal(true);
     }
     const handleCloseAddModal = () => {
@@ -46,19 +40,6 @@ const SearchResultsContainer = ({list, handleEditItem}) => {
     const handleCloseEditModal = () => {
         setShowEditModal(false);
     } 
-    
-    const handleScroll = (e) => {
-        if(searchResults.next !== null && !isLoading) {
-            if (listInnerRef.current) {
-                const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
-                if (scrollTop + clientHeight >= (scrollHeight-99)) {
-                    setIsLoading(true);
-                    gameSearch(currQuery, true);
-                    setIsLoading(false);
-                }
-              }
-        }
-    }
 
     const listEmpty =
         <div className='emptySearchList'> 
@@ -67,52 +48,55 @@ const SearchResultsContainer = ({list, handleEditItem}) => {
         </div>
 
     const listResults =
-        isTabletOrMobile ?
-        <ul onScroll={handleScroll} ref={listInnerRef} className='searchList' >
+    isTabletOrMobile ? (
+        <ul className='searchList'>
             { searchResults.count === null ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}} />
             : searchResults.count === 0 ? listEmpty
             : searchResults.results.map((result) => 
-                <SearchedGame key={result.id} gameItem ={result} addGameHandler = {handleAddGame} editGameHandler = {handleEditGame}/>
+                <SearchedGame key={result.id} gameItem={result} addGameHandler={handleAddGame} editGameHandler={handleEditGame}/>
             )}
         </ul>
-        :<ul onScroll={handleScroll} ref={listInnerRef} className='searchList'>
+    ) : (
+        <ul className='searchList'>
             { searchResults.count === null ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}} />
             : searchResults.count === 0 ? listEmpty
             : searchResults.results.map((result, index) => 
-            <div className={index % 2 === 0 ? 'highlight' : ''}>
-                <SearchedGame  key={result.id} gameItem ={result} addGameHandler = {handleAddGame} editGameHandler = {handleEditGame}/>
-            </div>
+                <div key={result.id} className={index % 2 === 0 ? 'highlight' : ''}>
+                    <SearchedGame key={result.id} gameItem={result} addGameHandler={handleAddGame} editGameHandler={handleEditGame}/>
+                </div>
             )}
-        </ul> 
+        </ul>
+    )
 
-    function gameSearch (searchQuery, nextPage=false, newSearch=false) {
-        let url = '';
-        if(nextPage) {
-            url = searchResults.next
-        } else {
-            url = `https://api.rawg.io/api/games?search=${searchQuery}&key=${k}&search_precise=true&page=1`
-        }
-        fetch(url).then( res => res.json()).then((resData) => {
-            if(newSearch) {
-                setSearchResults({
-                    count: resData.count,
-                    previous: resData.previous,
-                    next: resData.next,
-                    results: resData.results,
-                    user_platforms: resData.user_platforms
-                })
-            }
-             else {
-                setSearchResults({
-                    count: resData.count,
-                    previous: resData.previous,
-                    next: resData.next,
-                    results: searchResults.results.concat(resData.results),
-                    user_platforms: resData.user_platforms
-                })
-            }
+    async function gameSearch(searchQuery, newSearch = false) {
+        try {
+            const res = await fetch(SEARCH_FUNCTIONS_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ searchQuery: searchQuery }),
+            });
+    
+            const data = await res.json();
+            const results = data.map(game => ({
+                id: game.id,
+                name: game.name,
+                imageId: game.cover ? game.cover.image_id : '',
+                platforms: game.platforms || [],
+                developer: game.involved_companies?.filter(c => c.developer).map(c => c.company),
+                publisher: game.involved_companies?.filter(c => c.publisher).map(c => c.company),
+                genres: game.genres || [],
+                rating: game.total_rating || 0
+            }));
+            setSearchResults({
+                count: results.length,
+                results,
+            });
             setCurrQuery(searchQuery);
-        });
+        } catch (err) {
+            console.error('Error fetching IGDB data:', err);
+        }
     }
 
     useEffect(() => {
@@ -122,13 +106,6 @@ const SearchResultsContainer = ({list, handleEditItem}) => {
         }
     }, [searchParams])
 
-    useEffect(() => {
-        window.addEventListener('scroll', handleScroll);
-        return () => {
-            window.removeEventListener('scroll', handleScroll)
-        }
-    }, [])
-
     return (
         <>
             <Row className='resultsContainer'>
@@ -137,8 +114,8 @@ const SearchResultsContainer = ({list, handleEditItem}) => {
                     : listResults
                 }
             </Row>
-            <AddForm show ={showAddModal} handleCloseModal = {handleCloseAddModal} gameId = {gameId}/>
-            <EditForm show={showEditModal} handleCloseModal = {handleCloseEditModal} gameId = {gameId} updateItemHandler = {handleEditItem}/>
+            <AddForm show ={showAddModal} handleCloseModal = {handleCloseAddModal} gameData = {gameData}/>
+            <EditForm show={showEditModal} handleCloseModal = {handleCloseEditModal} gameData = {gameData} updateItemHandler = {handleEditItem}/>
         </>
         
     )

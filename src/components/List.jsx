@@ -22,7 +22,7 @@ const List = (props) => {
     const [sortingCache, setSortingCache] = useState(['order', 'default'])
     const [isSorted, setIsSorted] = useState(false);
 
-    const [gameId, setGameId] = useState(-1);
+    const [gameData, setGameData] = useState({});
     const [showModal, setShowModal] = useState(false);
 
     const [activeId, setActiveId] = useState(null);
@@ -114,7 +114,7 @@ const List = (props) => {
     }, [searchString]);
 
     function handleShowEditModal(id) {
-        setGameId(id);
+        setGameData(list.find(game => game.id === id));
         setShowModal(true);
     }
     function handleCloseModal() {
@@ -204,7 +204,7 @@ const List = (props) => {
 
     const listHeader = 
     <Row className='listHeader'>
-        <div className='columnTitle' style={{width:'6vw'}}> # </div>
+        <div className='columnTitle gameSortWrapper' style={{width:'3.5vw'}}> <span className='gameSortIndex'>#</span> </div>
         <div className='columnTitle' style={{width:'9vw'}}></div>
         <div className='columnTitle' style={{width:'22vw', cursor: 'default'}} onClick={() => handleSort('title')}> 
             TITLE 
@@ -246,7 +246,7 @@ const List = (props) => {
 
     const listHeaderPlanToPlay = 
     <Row className='listHeader'>
-        <div className='columnTitle' style={{width:'6vw'}}> # </div>
+        <div className='columnTitle gameSortWrapper' style={{width:'3.5vw'}}> <span className='gameSortIndex'>#</span> </div>
         <div className='columnTitle' style={{width:'9vw'}}></div>
         <div className='columnTitle' style={{width:'22vw'}}>TITLE</div>
         <div className='columnTitle' style={{width:'37vw'}}></div>
@@ -254,7 +254,7 @@ const List = (props) => {
 
     return (
         <>
-        <EditForm show ={showModal} handleCloseModal = {handleCloseModal} gameId = {gameId} updateItemHandler = {handleEditItem}/>
+        <EditForm show ={showModal} handleCloseModal = {handleCloseModal} gameData = {gameData} updateItemHandler = {handleEditItem}/>
             <Tab.Container id="tabs" defaultActiveKey="Finished" className='gamesList'>
                 <Row>
                     <Col className='sideBarColumn'>

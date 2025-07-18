@@ -4,6 +4,7 @@ import { Row, Col, Form, FloatingLabel, Modal } from 'react-bootstrap';
 import { useMediaQuery } from 'react-responsive';
 import { gameReducer, defaultGame }from './utils/gameFormReducer';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { IMAGES_SERVER_URL } from '../../constants/urls';
 
 const EditForm = (props) => {
 
@@ -13,7 +14,7 @@ const EditForm = (props) => {
     const location = useLocation();
 
     const shouldShow = props.show;
-    const gameId = props.gameId;
+    const gameData = props.gameData;
     const updateItem = props.updateItemHandler;
 
     const [game, dispatch] = useReducer(gameReducer, defaultGame);
@@ -33,8 +34,8 @@ const EditForm = (props) => {
     }
     
     function handleShow() {
-        if(gameId !== game.id){
-            handleOpen(gameId);
+        if(gameData.id !== game.id){
+            handleOpen(gameData);
         }
     }
 
@@ -63,15 +64,15 @@ const EditForm = (props) => {
             rating: game.rating,
             playdate: game.playdate,
             playstatus: game.playstatus,
-            image: game.customImage !== '' ? game.customImage : game.image,
+            imageId: game.imageId,
             detail: game.detail,
         }
     }
 
-    function handleOpen(gameId) {
-        if(gameId.id !== -1) {
+    function handleOpen(gameData) {
+        if(gameData.id !== -1) {
             let existingGames = JSON.parse(sessionStorage.getItem('games'));
-            let gameOpened = existingGames.filter(res => (res.id === gameId))[0]
+            let gameOpened = existingGames.filter(res => (res.id === gameData.id))[0]
             dispatch({
                 type: 'edited',
                 fields: {...gameOpened,
@@ -133,33 +134,36 @@ const EditForm = (props) => {
     return (
         <Modal show={show} onHide={handleClose} onShow={handleShow} size="lg" fullscreen={isTabletOrMobile} className="modalForm">
         <Modal.Header closeButton>
-            <Modal.Title>Edit game</Modal.Title>
+            <Modal.Title style={{color: 'white'}}>Edit Game</Modal.Title>
         </Modal.Header>
         <Modal.Body>
             <Form>
-                <Row className='formGroupBordered' style={{paddingBottom: '0'}}>
-                <Form.Label className='formHeader'> Game Details </Form.Label>
-                <Form.Group className='mb-3'>
-                    <FloatingLabel
-                    controlId='gameTitleLabel'
-                    label='Game Title'
-                    className='formLabel'
-                    style={{opacity: '0.5'}}
-                    >   
-                        <Form.Control type='text' className="inputText" placeholder='Title' value={game.title} disabled/>
-                    </FloatingLabel>
-                </Form.Group>
-
-                <Form.Group className='mb-3'>
-                    <FloatingLabel
-                    controlId='platformLabel'
-                    label='Platform'
-                    className='formLabel'
-                    style={{opacity: '0.5'}}
-                    >   
-                        <Form.Control type='text' className="inputText" placeholder='Platform' value={game.platform} disabled/>
-                    </FloatingLabel>
-                </Form.Group>
+                <Row className='gameDetailsWrapper'>
+                    <Col md='3' className='formImageWrapper'>
+                        <img className='formImage' src={IMAGES_SERVER_URL.T_720P + game.imageId + '.jpg'} alt='Game Cover'/>
+                    </Col>
+                    <Col md='9' className='formGroupGameDetails'>    
+                        <Form.Label className='formHeader'> Game Details </Form.Label>
+                        <Form.Group className='mb-3'>
+                            <FloatingLabel
+                            controlId='gameTitleLabel'
+                            label='Game Title'
+                            className='formLabel'
+                            >   
+                                <Form.Control type='text' className="inputText" placeholder='Title' value={game.title} onChange={e => handleEdit({title: e.target.value})}/>
+                            </FloatingLabel>
+                        </Form.Group>
+                        <Form.Group className='mb-3'>
+                            <FloatingLabel
+                            controlId='platformLabel'
+                            label='Platform'
+                            className='formLabel'
+                            style={{opacity: '0.6'}}
+                            >   
+                                <Form.Control type='text' className="inputText" placeholder= '' value={game.platform.name} disabled />
+                            </FloatingLabel>
+                        </Form.Group>
+                    </Col>
                 </Row>
                 <Row className='formGroupBordered' style={{paddingBottom: '0'}}>
                 <Form.Label className='formHeader'> Play Details </Form.Label>
@@ -331,16 +335,6 @@ const EditForm = (props) => {
                     className='formLabel'
                     >   
                         <Form.Control type='text' className="inputText" placeholder='Detail' value={game.detail} onChange={e => handleEdit({detail:e.target.value})} />
-                    </FloatingLabel>
-                </Form.Group>
-
-                <Form.Group className='mb-3' >
-                    <FloatingLabel 
-                    controlId='customImageLabel'
-                    label='Custom Image URL'
-                    className='formLabel'
-                    >   
-                        <Form.Control type='text' className="inputText" placeholder= 'URL' value={game.customImage} onChange={e => {handleEdit({customImage: e.target.value})}} />
                     </FloatingLabel>
                 </Form.Group>
                 </Row>

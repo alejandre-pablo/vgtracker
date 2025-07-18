@@ -125,7 +125,7 @@ const SignupContainer = () => {
                     VGTracker 
                 </h1>
                 <div className='appTitleSubheader'>
-                    v{version} Powered by <a href='https://rawg.io/'>RAWG.io</a>
+                    v{version} Powered by <a href='https://www.igdb.com/'>IGDB</a>
                 </div>
             </div>
             <div className= 'authForm'>

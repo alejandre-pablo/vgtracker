@@ -6,6 +6,8 @@ import { Row, Card } from 'react-bootstrap';
 import { useMediaQuery } from 'react-responsive';
 import { useState } from 'react';
 import { RiArrowDropUpLine, RiArrowDropDownLine } from 'react-icons/ri'
+import { IMAGES_SERVER_URL } from '../constants/urls';
+import { platformNameMap } from '../constants/platforms';
 
 const Game = forwardRef((props, ref) => {
 
@@ -15,6 +17,10 @@ const Game = forwardRef((props, ref) => {
 
     const [isCollapsed, setCollapsed] = useState(true);
 
+    function getCleanPlatformName(name) {
+        return platformNameMap[name] || name;
+    }
+
     function handleAccordion() {
         isCollapsed ? setCollapsed(false) : setCollapsed(true);
     }
@@ -23,7 +29,7 @@ const Game = forwardRef((props, ref) => {
         ?
         <div ref={ref} className='gameMobile'>
             <Card className='gameCard'>
-                <Card.Img src={game.image} alt="Game background" />
+                <Card.Img src={IMAGES_SERVER_URL.T_720P + game.imageId + '.jpg'} alt="Game background" />
                 <Card.ImgOverlay className= {isCollapsed ? 'gameCardInfoCollapsed' : 'gameCardInfo'}>
                     <Card.Title> 
                         <div>{game.title}</div> 
@@ -42,7 +48,7 @@ const Game = forwardRef((props, ref) => {
                                 emptyColor={'#121318'}/>
                         </div>
                         <div> 
-                            Played on {game.platform} 
+                            Played on {getCleanPlatformName(game.platform.name)} 
                         </div>
                         <div> 
                             {game.playtime} hours 
@@ -61,12 +67,12 @@ const Game = forwardRef((props, ref) => {
                 ? <Row>
                     <div className='gameSortIndex' style={{width: '6vw', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>{props.index}</div>
                     <div className="gameImageWrapper" style={{width:'9vw'}} >
-                        <img className='gameListImage' src={game.image} alt=''/>
+                        <img className='gameListImage' src={IMAGES_SERVER_URL.T_THUMB + game.imageId + '.jpg'} alt=''/>
                     </div>
                     <div className='gameInfoUncentered' style={{width:'22vw'}}> 
                         <div className='gameTitle'>{game.title}</div> 
                     </div>
-                    <div className='gameInfo' style={{width:'10vw'}}> {game.platform} </div>
+                    <div className='gameInfo' style={{width:'10vw'}}> {getCleanPlatformName(game.platform.name)} </div>
                     <div className='gameInfo' style={{width:'10vw'}}> {game.playtime} h </div>
                     <div className='gameInfo' style={{width:'10vw'}}> {game.playdate} </div>
                     <div className='gameInfo' style={{width:'15vw'}}>
@@ -84,7 +90,7 @@ const Game = forwardRef((props, ref) => {
                 :<Row>
                     <div className='gameSortIndex' style={{width: '6vw', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>{props.index}</div>
                     <div className="gameImageWrapper" style={{width:'9vw'}} >
-                        <img className='gameListImage' src={game.image} alt=''/>
+                        <img className='gameListImage' src={IMAGES_SERVER_URL.T_THUMB + game.imageId + '.jpg'} alt=''/>
                     </div>
                     <div className='gameInfoUncentered' style={{width:'30vw'}}> 
                         <div className='gameTitle'>{game.title}</div> 

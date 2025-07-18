@@ -123,7 +123,7 @@ const StatsContainer = () => {
         [genres]);
 
     const devs =  useMemo(() => Object.values( 
-        list.filter(game => game.playstatus !== 'plantoplay')
+        list.filter(game => (game.developer && game.playstatus !== 'plantoplay' ))
         .reduce((devs, item) => {
         item.developer.forEach(dev => {
             devs[dev.id] = devs[dev.id] || {"id": dev.id, "name": dev.name, "count": 0};
@@ -186,7 +186,7 @@ const StatsContainer = () => {
         [devs]);
 
     const pubs =  useMemo(() =>Object.values( 
-        list.filter(game => game.playstatus !== 'plantoplay')
+        list.filter(game => (game.publisher && game.playstatus !== 'plantoplay'))
         .reduce((pubs, item) => {
         item.publisher.forEach(pub => {
             pubs[pub.id] = pubs[pub.id] || {"id": pub.id, "name": pub.name, "count": 0};

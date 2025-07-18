@@ -13,10 +13,11 @@ const ListMobile = (props) => {
     const [nav1, setNav1] = useState();
     const [nav2, setNav2] = useState();
 
-    const [gameId, setGameId] = useState(-1);
+    const [gameData, setGameData] = useState({});
     const [showModal, setShowModal] = useState(false);
-    function handleEditGame(id) {
-        setGameId(id);
+    
+    function handleShowEditModal(id) {
+        setGameData(list.find(game => game.id === id));
         setShowModal(true);
     }
     function handleCloseModal() {
@@ -26,48 +27,48 @@ const ListMobile = (props) => {
     const gameListFinished = 
         <ul>
             {list.filter(game => game.playstatus === "finished" ).map ((game, index) => (
-                <Game key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>))
+                <Game key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleShowEditModal} game ={game}/>))
             }
         </ul>   
 
     const gameListPlaying = 
         <ul>
             {list.filter(game => game.playstatus === "playing" ).map ((game, index) => (
-                <Game key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>))
+                <Game key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleShowEditModal} game ={game}/>))
             }
         </ul>  
 
     const gameListOnHold = 
         <ul>
             {list.filter(game => game.playstatus === "onhold" ).map ((game, index) => (
-                <Game key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>))
+                <Game key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleShowEditModal} game ={game}/>))
             }
         </ul>  
 
     const gameListDropped = 
         <ul>
             {list.filter(game => game.playstatus === "dropped" ).map ((game, index) => (
-                <Game key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>))
+                <Game key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleShowEditModal} game ={game}/>))
             }
         </ul>  
 
     const gameListOther = 
         <ul>
             {list.filter(game => game.playstatus === "other" ).map ((game, index) => (
-                <Game key = {game.id} id={game.id}  onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>))
+                <Game key = {game.id} id={game.id}  onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleShowEditModal} game ={game}/>))
             }
         </ul>  
 
     const gameListPlanToPlay = 
         <ul>
             {list.filter(game => game.playstatus === "plantoplay" ).map ((game, index) => (
-                <Game key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleEditGame} game ={game}/>))
+                <Game key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleShowEditModal} game ={game}/>))
             }
         </ul> 
 
     return (
         <>
-            <EditForm show ={showModal} handleCloseModal = {handleCloseModal} gameId = {gameId} updateItemHandler = {handleEditItem}/>
+            <EditForm show ={showModal} handleCloseModal = {handleCloseModal} gameData = {gameData} updateItemHandler = {handleEditItem}/>
             <Col className='listColumn'>
                 <Slider asNavFor={nav2} ref={(slider1) => setNav1(slider1)} className='mobileTabTitleWrapper'>
                     <Row className='mobileTabTitle'> 

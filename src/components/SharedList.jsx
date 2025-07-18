@@ -115,7 +115,7 @@ const SharedList = (props) => {
 
     const listHeader = 
     <Row className='listHeader'>
-        <div className='columnTitle' style={{width:'6vw'}}> # </div>
+        <div className='columnTitle gameSortWrapper' style={{width:'3.5vw'}}> <span className='gameSortIndex'>#</span> </div>
         <div className='columnTitle' style={{width:'9vw'}}></div>
         <div className='columnTitle' style={{width:'22vw', cursor: 'default'}} onClick={() => handleSort('title')}> 
             TITLE 
@@ -158,7 +158,7 @@ const SharedList = (props) => {
 
     const listHeaderPlanToPlay = 
     <Row className='listHeader'>
-        <div className='columnTitle' style={{width:'6vw'}}> # </div>
+        <div className='columnTitle gameSortWrapper' style={{width:'3.5vw'}}> <span className='gameSortIndex'>#</span> </div>
         <div className='columnTitle' style={{width:'9vw'}}></div>
         <div className='columnTitle' style={{width:'22vw'}}>TITLE</div>
         <div className='columnTitle' style={{width:'37vw'}}></div>
