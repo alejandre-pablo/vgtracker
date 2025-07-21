@@ -53,11 +53,14 @@ const SharedList = (props) => {
         
     }, [status]);
 
-    /* useEffect(() => {
-        if(list.length > 0) {
-            handleSorting(sortingCache);
-        }
-    }, [sortingCache]) */
+    const gameListAll = 
+        <ul>
+            {list.map ((game, index) => (
+                <li key = {game.id} className={index % 2 === 0 ? 'highlight' : ''}>
+                    <SharedGame key = {game.id} id={game.id} game ={game} index ={index + 1}/>
+                </li>))
+            }
+        </ul> 
 
     const gameListFinished = 
         <ul>
@@ -111,11 +114,11 @@ const SharedList = (props) => {
                     <SharedGame key = {game.id} id={game.id} game ={game} index ={index + 1}/>
                 </li>))
             }
-        </ul> 
+        </ul>
 
     const listHeader = 
     <Row className='listHeader'>
-        <div className='columnTitle gameSortWrapper' style={{width:'3.5vw'}}> <span className='gameSortIndex'>#</span> </div>
+        <div className='columnTitle gameSortWrapper'> <span className='gameSortIndex'>#</span> </div>
         <div className='columnTitle' style={{width:'9vw'}}></div>
         <div className='columnTitle' style={{width:'22vw', cursor: 'default'}} onClick={() => handleSort('title')}> 
             TITLE 
@@ -139,14 +142,14 @@ const SharedList = (props) => {
                 :<AiFillCaretDown/>
             }
             </div>
-        <div className='columnTitle' style={{width:'10vw', cursor: 'default'}} onClick={() => handleSort('playdate')}>
+        <div className='columnTitle' style={{width:'8vw', cursor: 'default'}} onClick={() => handleSort('playdate')}>
             DATE
             {sortingCache[0] !== 'playdate' ? <></>
             : sortingCache[1] === 'asc' ? <AiFillCaretUp/>
                 :<AiFillCaretDown/>
             }
             </div>
-        <div className='columnTitle' style={{width:'15vw', cursor: 'default'}} onClick={() => handleSort('rating')}>
+        <div className='columnTitle' style={{width:'12vw', cursor: 'default'}} onClick={() => handleSort('rating')}>
             RATING
             {sortingCache[0] !== 'rating' ? <></>
             : sortingCache[1] === 'asc' ? <AiFillCaretUp/>
@@ -158,7 +161,7 @@ const SharedList = (props) => {
 
     const listHeaderPlanToPlay = 
     <Row className='listHeader'>
-        <div className='columnTitle gameSortWrapper' style={{width:'3.5vw'}}> <span className='gameSortIndex'>#</span> </div>
+        <div className='columnTitle gameSortWrapper'> <span className='gameSortIndex'>#</span> </div>
         <div className='columnTitle' style={{width:'9vw'}}></div>
         <div className='columnTitle' style={{width:'22vw'}}>TITLE</div>
         <div className='columnTitle' style={{width:'37vw'}}></div>
@@ -178,6 +181,9 @@ const SharedList = (props) => {
                         <strong>{profile ? profile.username : ''}</strong>
                     </div>
                     <Nav variant="pills" className="flex-column tabSelectors">
+                        <Nav.Item className='tabAll'>
+                            <Nav.Link eventKey="All">ALL GAMES</Nav.Link>
+                        </Nav.Item>
                         <Nav.Item className='tabFinished'>
                             <Nav.Link eventKey="Finished">COMPLETED</Nav.Link>
                         </Nav.Item>
@@ -200,6 +206,15 @@ const SharedList = (props) => {
                 </Col>
                 <Col className='listColumn'>
                     <Tab.Content>
+                        <Tab.Pane eventKey="All" >
+                            {listHeader}
+                            <Row className='scrollable'> 
+                                    {!list.length ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> : 
+                                    list.length === 0 ? "No games added yet"
+                                    : gameListAll
+                                    }
+                            </Row>
+                        </Tab.Pane>
                         <Tab.Pane eventKey="Finished" >
                             {listHeader}
                             <Row className='scrollable'> 

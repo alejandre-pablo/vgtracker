@@ -106,14 +106,13 @@ const NavBar = () => {
                                                     </Row>
                                                 </Col>
                                             </Row> */}
-                                            <button className ='profileDropdownLink' style={{ borderBottom: '2px solid var(--darkBgAccent)'}}>
+                                            <button className ='profileDropdownLink' >
                                                 <span onClick={handleEditProfile}>Edit Profile</span>
                                             </button>    
                                         </Dropdown.Item>
                                         <Dropdown.Item>
                                             <button 
                                                 className ='profileDropdownLink' 
-                                                style={{ borderBottom: '2px solid var(--darkBgAccent)'}} 
                                                 onClick={() => {
                                                     navigator.clipboard.writeText(window.location.protocol + '//' + window.location.host + '/user/' + auth.currentUser.uid);
                                                     setShowToast(true)

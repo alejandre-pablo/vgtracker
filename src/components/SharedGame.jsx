@@ -74,8 +74,8 @@ const Game = forwardRef((props, ref) => {
                     </div>
                     <div className='gameInfo' style={{width:'10vw'}}> {getCleanPlatformName(game.platform.name)} </div>
                     <div className='gameInfo' style={{width:'10vw'}}> {game.playtime} h </div>
-                    <div className='gameInfo' style={{width:'10vw'}}> {game.playdate} </div>
-                    <div className='gameInfo' style={{width:'15vw'}}>
+                    <div className='gameInfo' style={{width:'8vw'}}> {game.playdate} </div>
+                    <div className='gameInfo' style={{width:'12vw'}}>
                         <span className='gameRating' >
                             <Rating 
                                 readonly={true} 

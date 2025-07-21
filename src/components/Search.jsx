@@ -34,9 +34,8 @@ const Search = () => {
                     value={searchString}
                     onChange={(e) => setSearchString(e.target.value)}
                 />
-                <Button type='submit' className='searchBarButton'> <FaSearch/></Button> 
+                <Button type='submit' className='faIconButton'> <FaSearch/></Button> 
             </div>
-            
         </Form>
     )
 }

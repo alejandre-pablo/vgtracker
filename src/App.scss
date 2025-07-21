@@ -120,6 +120,14 @@ ul {
     height: 100%;
 }
 
+.faIconButton, .faIconButton:hover, .faIconButton:focus, .faIconButton:active{
+    background: none !important;
+    border: none !important;
+    background-color:transparent !important;
+    color: var(--darkAccent) !important;
+    border-radius: 0.5rem !important;
+}
+
 /* --------------------- AUTH FORMS --------------------- */
 
 .authForm {
@@ -325,6 +333,10 @@ ul {
     align-items: center;
 }
 
+.game {
+    flex: 1;
+}
+
 .gamesForm {
     font-size: 1rem;
     max-width: 1400px;
@@ -340,24 +352,6 @@ ul {
 .game > .row {
     padding-top: 0.3rem;
     padding-bottom: 0.3rem;
-}
-
-
-.gameWrapper:hover {
-    background-color: var(--darkBgHover);
-    border-radius: 12px;
-}
-
-.gameWrapper:hover .gameSortIndex{
-    display: none;
-}
-
-.gameWrapper:hover .gameSortHandle{
-    display: inline-block;
-}
-
-.gameWrapper:hover .hoverShown{
-    display: flex !important;
 }
 
 .highlight {
@@ -376,19 +370,16 @@ ul {
     position: relative;
     justify-content: flex-end;
     align-items: center;
+    width: 3.5vw;
 }
 
-.gameSortHandle{
-    position: absolute;
-    top: 50%;
-    left: 100%;
-    transform: translate(-50%, -50%);
-    outline: none;
-    border: none;
-    background: none;
-    font-size: 1.4rem;
-    color: var(--darkAccent);
-    display: none;
+.gameWrapper:hover {
+    background-color: var(--darkBgHover);
+    border-radius: 12px;
+}
+
+.gameWrapper:hover .hoverShown{
+    visibility: visible !important;
 }
 
 .gameSortIndex{
@@ -398,14 +389,7 @@ ul {
     transform: translate(-50%, -50%);
     display: inline-block;
     vertical-align: middle;
-    font-size: 1.1rem;
-    color: var(--darkAccent);
-}
-
-.gameSortIndexSorted{
-    display: inline-block;
-    vertical-align: middle;
-    font-size: 1.1rem;
+    font-weight: bold;
     color: var(--darkAccent);
 }
 
@@ -540,8 +524,9 @@ ul {
 /* --------------------- BUTTONS --------------------- */
 
 .rightButton {
+    display: inline-flex;
     flex: 1;
-    display: none !important;
+    visibility: hidden !important;
     justify-content: space-evenly;
     align-items: center;
 }
@@ -899,9 +884,17 @@ label::after {
 }
 /* --------------------- SIDE NAVBAR ---------------------*/
 
+.searchInput {
+    margin: 1rem;
+    font-size: 1rem;
+    border-radius: 0 !important;
+    border-bottom: 1px solid var(--darkAccent) !important;
+  }
+
 .sideBarColumn {
     height: 100%;
-    max-width: 10%;
+    width: 10%;
+    max-width: 200px;
     padding: 0;
 }
 .tabSelectors {
@@ -912,9 +905,10 @@ label::after {
 }
 
 .nav-link {
-    font-size: 1.1rem;
+    padding-left: 2rem;
+    font-weight: bold;
     color: var(--darkAccent);
-    text-align: center;
+    text-align: start;
     cursor: pointer;
 }
 
@@ -1039,17 +1033,6 @@ label::after {
     height: 100%;
     border-radius: 200px;
 }
-.profileDropdownLink {
-    background: transparent;
-    border: none;
-    width: 100%;
-    padding: 0.5rem 0 0.5rem 1rem;
-    text-align: left;
-}
-
-.profileDropdownLink span, .profileDropdownLink svg{
-    color: white;
-}
 
 .authLink {
     text-decoration: none;
@@ -1070,14 +1053,6 @@ label::after {
     background-color: var(--darkAccentTranslucid);
 }
 /* --------------------- SEARCH BAR ---------------------*/
-
-.searchBarButton, .searchBarButton:hover, .searchBarButton:focus{
-    background: none;
-    border: none;
-    background-color:var(--darkFormField);
-    color: var(--darkAccent);
-    border-radius: 0.5rem;
-}
 
 .searchBarField, searchBar:focus {
     background: none;
@@ -1252,15 +1227,29 @@ label::after {
 }
 
 .dropdown-menu {
+    padding: 0.5rem;
     margin-right: -1rem;
     background-color: var(--darkBase);
-/*     border: 2px solid var(--darkAccent); */
     border-radius: 12px;
 }
 
+.dropdown-item, .dropdown-item *{
+    color: white;
+    background: transparent;
+    border: none;
+    width: 100%;
+    padding: 0.5rem 0 0.5rem 0.5rem;
+    text-align: left;
+}
+
 .dropdown-item:hover {
+    color: var(--darkAccent);
     background-color: var(--darkBase);
 }
+
+.dropdown-menu .dropdown-item:not(:last-child) {
+    border-bottom: 2px solid var(--darkBgAccent);
+  }
 
 
 .statsMainRow .dropdown-menu {
@@ -1296,6 +1285,10 @@ label::after {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.statDivRow .animated-container {
+    color: white;
 }
 
 .statsRanking > .row  {

@@ -3,18 +3,21 @@ import { restrictToVerticalAxis, restrictToWindowEdges } from '@dnd-kit/modifier
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import React, { useState } from 'react'
 import { useEffect } from 'react';
-import { Tab, Nav, Col, Row, Spinner } from 'react-bootstrap';
+import { useSearch } from './contexts/SearchContext';
+import { Tab, Nav, Col, Row, Spinner, Dropdown } from 'react-bootstrap';
 import { AiFillCaretDown, AiFillCaretUp } from 'react-icons/ai'
+import { TbCalendarUp, TbCalendarDown, TbClockUp, TbClockDown } from 'react-icons/tb'
+import { FaSortAlphaDown, FaSortAlphaUp, FaSortAmountDown, FaStar, FaUndo } from 'react-icons/fa';
 import EditForm from './forms/EditForm';
-
 import Game from './Game'
 import SortableGame from './SortableGame';
-import { useSearch } from './contexts/SearchContext';
+
 
 const List = (props) => {
     const {list, isEmptyList, isListLoaded, handleEditItem, handleRemoveItem, handleOrderList} = props;
 
     const [mutableList, setMutableList] = useState(list);
+    const [activeTab, setActiveTab] = useState("Finished");
 
     const {searchString} = useSearch();
     const [isFilteredSearch, setIsFilteredSearch] = useState(false);
@@ -27,6 +30,49 @@ const List = (props) => {
 
     const [activeId, setActiveId] = useState(null);
     const [dragGame, setDragGame] = useState({});
+
+    const sortIcons = {
+        'title-asc': <FaSortAlphaDown />,
+        'title-desc': <FaSortAlphaUp />,
+        'rating-asc': <FaStar />,
+        'rating-desc': <FaStar />,
+        'playtime-asc': <TbClockUp />,
+        'playtime-desc': <TbClockDown />,
+        'playdate-asc': <TbCalendarUp />,
+        'playdate-desc': <TbCalendarDown />,
+        'order-default': <FaSortAmountDown />
+    };
+
+    useEffect(() => {
+        const updatedList = getFilteredSortedList();
+        setMutableList(updatedList);
+    }, [list, searchString, sortingCache, activeTab]);
+
+    function getFilteredSortedList() {
+        let updatedList = [...list];
+      
+        const activeCategory = listCategories.find(cat => cat.key === activeTab);
+        if (activeCategory) {
+          updatedList = updatedList.filter(activeCategory.filter);
+        }
+      
+        const hasSearch = searchString.trim() !== "";
+        if (hasSearch) {
+          const normalizedSearch = searchString.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+          updatedList = updatedList.filter(game =>
+            game.title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(normalizedSearch)
+          );
+          setIsFilteredSearch(true);
+        } else {
+          setIsFilteredSearch(false);
+        }
+      
+        if (sortingCache[1] !== 'default') {
+          updatedList.sort(sortByProperty(sortingCache[0], sortingCache[1]));
+        }
+      
+        return updatedList;
+    }
 
     function handleSort (sorting) {
         if(sortingCache[0] === sorting) {
@@ -43,16 +89,11 @@ const List = (props) => {
         }
     }
 
-    useEffect(() => {
-        setMutableList(currList => currList.sort(sortByProperty(sortingCache[0], sortingCache[1])))
-    }, [sortingCache])
-
     function sortByProperty(property, way) {
         var sortOrder = 1;
         if(way === "desc") {
             sortOrder = -1;
         }
-        
         switch (property) {
             case 'title':
             case 'platform':
@@ -67,7 +108,6 @@ const List = (props) => {
                     if(result === 0 && (a[property] !== '' && b[property] !== '')) {
                         return 1 * sortOrder;
                     }
-                    console.log(result);
                     return result * sortOrder;
                 }
             case 'rating':
@@ -82,36 +122,10 @@ const List = (props) => {
                 }
             default:
                 return function (a,b) {
-                    var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
-                    if(result === 0 && (a[property] !== '' && b[property] !== '')) {
-                        return 1 * sortOrder;
-                    }
-                    return result * sortOrder;
+                    return 1;
                 }
         }
-        
     }
-
-    useEffect(() => {
-        //Perform sort & filter checks after setting
-        setMutableList(list);
-    }, [list])
-    
-
-    useEffect(() => {
-        // Filter the list by checking if the title of each game contains the search string
-        setMutableList(
-            list.filter(game => 
-                game.title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(searchString.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))
-            )
-        )
-        //Flag if list is filtered
-        if (searchString.trim() !== "") {
-            setIsFilteredSearch(true);
-        } else {
-            setIsFilteredSearch(false);
-        }  
-    }, [searchString]);
 
     function handleShowEditModal(id) {
         setGameData(list.find(game => game.id === id));
@@ -122,7 +136,11 @@ const List = (props) => {
     }
 
     const sensors = useSensors(
-        useSensor(PointerSensor),
+        useSensor(PointerSensor, {
+            activationConstraint: {
+                distance: 5,
+            }
+        }),
         useSensor(KeyboardSensor, {
             coordinateGetter: sortableKeyboardCoordinates,
           })
@@ -134,240 +152,200 @@ const List = (props) => {
     }
     
     function handleDragEnd(event) {
-        //This means list is the same as in the stored version and not mutated index-wise
         if(!isSorted && !isFilteredSearch) {
             const { active, over } = event;
-            if (active.id !== over.id) {
-                    const oldIndex = list.findIndex(item => item.id === active.id);
-                    const newIndex = list.findIndex(item => item.id === over.id);
-                    const tmpList =  arrayMove(list, oldIndex, newIndex);
-                    handleOrderList(tmpList);
-                    //This line prevents UI misvehavior while data is saved
-                    setMutableList(tmpList);
+            if ((active && over) && (active.id !== over.id)) {
+                //Filter logic beforehand so that waiting for the rerender doesn't cause UI lag
+                const oldIndexMutated = mutableList.findIndex(item => item.id === active.id);
+                const newIndexMutated = mutableList.findIndex(item => item.id === over.id);
+                setMutableList(arrayMove(mutableList, oldIndexMutated, newIndexMutated));
+
+                const oldIndex = list.findIndex(item => item.id === active.id);
+                const newIndex = list.findIndex(item => item.id === over.id);
+                const tmpList =  arrayMove(list, oldIndex, newIndex);
+                handleOrderList(tmpList);
             };
         };
     }
- 
-    const gameListFinished = 
-        <ul>
-            {mutableList.filter(game => game.playstatus === "finished" ).map ((game, index) => (
-                <li key = {game.id} className={index % 2 === 0 ? 'highlight' : ''}>
-                    <SortableGame key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleShowEditModal} game ={game} index ={index + 1} isFiltered={isSorted || isFilteredSearch}/>
-                </li>))
-            }
-        </ul>   
 
-    const gameListPlaying = 
-        <ul>
-            {mutableList.filter(game => game.playstatus === "playing" ).map ((game, index) => (
-                <li key = {game.id} className={index % 2 === 0 ? 'highlight' : ''}>
-                    <SortableGame key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleShowEditModal} game ={game} index ={index + 1} isFiltered={isSorted || isFilteredSearch}/>
-                </li>))
-            }
-        </ul>  
+    function handleChangeIndex(id, newIndex) {
+        const targetIndexMutated = newIndex - 1;
+        //Filter logic beforehand so that waiting for the rerender doesn't cause UI lag
+        const oldIndexMutated = list.findIndex(item => item.id === id);
+        const correctedNewIndexMutated = list.findIndex(item => item.id ===  mutableList[targetIndexMutated].id);
+        setMutableList(arrayMove(mutableList, oldIndexMutated, correctedNewIndexMutated));
 
-    const gameListOnHold = 
-        <ul>
-            {mutableList.filter(game => game.playstatus === "onhold" ).map ((game, index) => (
-                <li key = {game.id} className={index % 2 === 0 ? 'highlight' : ''}>
-                    <SortableGame key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleShowEditModal} game ={game} index ={index + 1} isFiltered={isSorted || isFilteredSearch}/>
-                </li>))
-            }
-        </ul>  
-
-    const gameListDropped = 
-        <ul>
-            {mutableList.filter(game => game.playstatus === "dropped" ).map ((game, index) => (
-                <li key = {game.id} className={index % 2 === 0 ? 'highlight' : ''}>
-                    <SortableGame key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleShowEditModal} game ={game} index ={index + 1} isFiltered={isSorted || isFilteredSearch}/>
-                </li>))
-            }
-        </ul>  
-
-    const gameListOther = 
-        <ul>
-            {mutableList.filter(game => game.playstatus === "other" ).map ((game, index) => (
-                <li key = {game.id} className={index % 2 === 0 ? 'highlight' : ''}>
-                    <SortableGame key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleShowEditModal} game ={game} index ={index + 1} isFiltered={isSorted || isFilteredSearch}/>
-                </li>))
-            }
-        </ul>  
-
-    const gameListPlanToPlay = 
-        <ul>
-            {mutableList.filter(game => game.playstatus === "plantoplay" ).map ((game, index) => (
-                <li key = {game.id} className={index % 2 === 0 ? 'highlight' : ''}>
-                    <SortableGame key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleShowEditModal} game ={game} index ={index + 1} isFiltered={isSorted || isFilteredSearch}/>
-                </li>))
-            }
-        </ul> 
+        const oldIndex = list.findIndex(item => item.id === id);
+        const correctedNewIndex = list.findIndex(item => item.id ===  mutableList[targetIndexMutated].id);
+        const newList = arrayMove(list, oldIndex, correctedNewIndex);
+        handleOrderList(newList);
+    }
 
     const listHeader = 
     <Row className='listHeader'>
-        <div className='columnTitle gameSortWrapper' style={{width:'3.5vw'}}> <span className='gameSortIndex'>#</span> </div>
+        <div className='columnTitle gameSortWrapper'> <span className='gameSortIndex'>#</span> </div>
         <div className='columnTitle' style={{width:'9vw'}}></div>
-        <div className='columnTitle' style={{width:'22vw', cursor: 'default'}} onClick={() => handleSort('title')}> 
+        <div className='columnTitle' style={{width:'22vw', cursor: 'pointer'}} onClick={() => handleSort('title')}> 
             TITLE 
             {sortingCache[0] !== 'title' ? <></>
             : sortingCache[1] === 'asc' ? <AiFillCaretUp/>
                 :<AiFillCaretDown/>
             }   
         </div>
-        <div className='columnTitle' style={{width:'10vw', cursor: 'default'}} onClick={() => handleSort('platform')}> 
+        <div className='columnTitle' style={{width:'10vw', cursor: 'pointer'}} onClick={() => handleSort('platform')}> 
             PLATFORM
             {sortingCache[0] !== 'platform' ? <></>
             : sortingCache[1] === 'asc' ? <AiFillCaretUp/>
                 :<AiFillCaretDown/>
             }
         </div>
-        <div className='columnTitle' style={{width:'10vw', cursor: 'default'}} onClick={() => handleSort('playtime')}> 
+        <div className='columnTitle' style={{width:'10vw', cursor: 'pointer'}} onClick={() => handleSort('playtime')}> 
             PLAYTIME
             {sortingCache[0] !== 'playtime' ? <></>
             : sortingCache[1] === 'asc' ? <AiFillCaretUp/>
                 :<AiFillCaretDown/>
             }
             </div>
-        <div className='columnTitle' style={{width:'10vw', cursor: 'default'}} onClick={() => handleSort('playdate')}>
+        <div className='columnTitle' style={{width:'8vw', cursor: 'pointer'}} onClick={() => handleSort('playdate')}>
             DATE
             {sortingCache[0] !== 'playdate' ? <></>
             : sortingCache[1] === 'asc' ? <AiFillCaretUp/>
                 :<AiFillCaretDown/>
             }
             </div>
-        <div className='columnTitle' style={{width:'15vw', cursor: 'default'}} onClick={() => handleSort('rating')}>
+        <div className='columnTitle' style={{width:'12vw', cursor: 'pointer'}} onClick={() => handleSort('rating')}>
             RATING
             {sortingCache[0] !== 'rating' ? <></>
             : sortingCache[1] === 'asc' ? <AiFillCaretUp/>
                 :<AiFillCaretDown/>
             }
             </div>
-        <div className='columnTitle' style={{width:'6vw'}}></div>
+        <div className='columnTitle' style={{flex:'1'}}>
+            <Dropdown>
+                <Dropdown.Toggle className="faIconButton" id="sortingDropdown">
+                    {sortIcons[`${sortingCache[0]}-${sortingCache[1]}`] || <FaSortAlphaDown />}
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu>
+                    <Dropdown.Item className='sortDropdownItem' onClick={() => setSortingCache(['title', 'asc'])}>Title A-Z</Dropdown.Item>
+                    <Dropdown.Item className='sortDropdownItem' onClick={() => setSortingCache(['title', 'desc'])}>Title Z-A</Dropdown.Item>
+                    <Dropdown.Item className='sortDropdownItem' onClick={() => setSortingCache(['rating', 'desc'])}>Top Rated</Dropdown.Item>
+                    <Dropdown.Item className='sortDropdownItem' onClick={() => setSortingCache(['playtime', 'desc'])}>Longest Played</Dropdown.Item>
+                    <Dropdown.Item className='sortDropdownItem' onClick={() => setSortingCache(['order', 'default'])}>Default Order</Dropdown.Item>
+                </Dropdown.Menu>
+            </Dropdown>
+        </div>
     </Row>
 
     const listHeaderPlanToPlay = 
     <Row className='listHeader'>
-        <div className='columnTitle gameSortWrapper' style={{width:'3.5vw'}}> <span className='gameSortIndex'>#</span> </div>
+        <div className='columnTitle gameSortWrapper'> <span className='gameSortIndex'>#</span> </div>
         <div className='columnTitle' style={{width:'9vw'}}></div>
         <div className='columnTitle' style={{width:'22vw'}}>TITLE</div>
         <div className='columnTitle' style={{width:'37vw'}}></div>
     </Row>
 
+    const listCategories = [
+        { key: "All", label: "ALL GAMES", filter: () => true, header: listHeader },
+        { key: "Finished", label: "COMPLETED", filter: game => game.playstatus === "finished", header: listHeader },
+        { key: "Playing", label: "PLAYING", filter: game => game.playstatus === "playing", header: listHeader },
+        { key: "OnHold", label: "ON HOLD", filter: game => game.playstatus === "onhold", header: listHeader },
+        { key: "Dropped", label: "DROPPED", filter: game => game.playstatus === "dropped", header: listHeader },
+        { key: "Other", label: "OTHER", filter: game => game.playstatus === "other", header: listHeader },
+        { key: "PlanToPlay", label: "PLAN TO PLAY", filter: game => game.playstatus === "plantoplay", header: listHeaderPlanToPlay },
+    ];
+
+    const listCategoriesWithCounts = listCategories.map(cat => {
+        const count = mutableList.filter(cat.filter).length;
+        return {
+            ...cat,
+            label: isFilteredSearch ? `${cat.label} (${count})` : cat.label
+        };
+    });
+
+    const generateGameList = (games) => (
+        <ul>
+            {games.map((game, index) => (
+                <li key={game.id} className={index % 2 === 0 ? 'highlight' : ''}>
+                <SortableGame
+                    key={game.id}
+                    id={game.id}
+                    onClickRemoveItem={handleRemoveItem}
+                    onClickEditItem={handleShowEditModal}
+                    onChangeIndex={handleChangeIndex}
+                    game={game}
+                    index={index + 1}
+                    isFiltered={isSorted || isFilteredSearch}
+                />
+            </li>
+            ))}
+        </ul>
+      );
+
     return (
         <>
         <EditForm show ={showModal} handleCloseModal = {handleCloseModal} gameData = {gameData} updateItemHandler = {handleEditItem}/>
-            <Tab.Container id="tabs" defaultActiveKey="Finished" className='gamesList'>
-                <Row>
-                    <Col className='sideBarColumn'>
-                        <Nav variant="pills" className="flex-column tabSelectors">
-                            <Nav.Item className='tabFinished'>
-                                <Nav.Link eventKey="Finished">COMPLETED</Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item className='tabPlaying'>
-                                <Nav.Link eventKey="Playing">PLAYING</Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item className='tabOnHold'>
-                                <Nav.Link eventKey="OnHold">ON HOLD</Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item className='tabDropped'>
-                                <Nav.Link eventKey="Dropped">DROPPED</Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item className='tabOthers'>
-                                <Nav.Link eventKey="Other">OTHER</Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item className='tabPlanToPlay'>
-                                <Nav.Link eventKey="PlanToPlay">PLAN TO PLAY</Nav.Link>
-                            </Nav.Item>
-                        </Nav>
-                    </Col>
-                    <Col className='listColumn'>
-                        <DndContext 
-                            sensors={sensors} 
-                            collisionDetection={closestCenter} 
-                            onDragStart={handleDragStart} 
-                            onDragEnd={handleDragEnd}
-                            modifiers={[restrictToVerticalAxis]}
-                        >
-                            <Tab.Content>
-                                <Tab.Pane eventKey="Finished" >
-                                    {listHeader}
-                                    <Row className='scrollable'> 
-                                        <SortableContext items={mutableList.filter(game => game.playstatus === "finished" ).map(item => item.id)} strategy={verticalListSortingStrategy}>
-                                            {!isListLoaded ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
-                                                :isEmptyList ? <span className='emptyListMessage'>Start by adding some games</span>
-                                                    :gameListFinished.props.children.length === 0 ?  <span className='emptyListMessage'>No games to show in this category</span>
-                                                        :gameListFinished
-                                            }
-                                            
-                                        </SortableContext> 
-                                    </Row>
-                                </Tab.Pane>
-                                <Tab.Pane eventKey="Playing" >
-                                    {listHeader}
-                                    <Row className='scrollable'> 
-                                        <SortableContext items={mutableList.filter(game => game.playstatus === "playing" ).map(item => item.id)} strategy={verticalListSortingStrategy}>
-                                        {!isListLoaded ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
-                                                :isEmptyList ? <span className='emptyListMessage'>Start by adding some games</span>
-                                                    :gameListPlaying.props.children.length === 0 ?  <span className='emptyListMessage'>No games to show in this category</span>
-                                                        :gameListPlaying
-                                            }
-                                        </SortableContext>
-                                    </Row>
-                                </Tab.Pane>
-                                <Tab.Pane eventKey="OnHold" >
-                                    {listHeader}
-                                    <Row className='scrollable'> 
-                                        <SortableContext items={mutableList.filter(game => game.playstatus === "onhold" ).map(item => item.id)} strategy={verticalListSortingStrategy}>
-                                        {!isListLoaded ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
-                                                :isEmptyList ? <span className='emptyListMessage'>Start by adding some games</span>
-                                                    :gameListOnHold.props.children.length === 0 ?  <span className='emptyListMessage'>No games to show in this category</span>
-                                                        :gameListOnHold
-                                            }
-                                        </SortableContext>
-                                    </Row>
-                                </Tab.Pane>
-                                <Tab.Pane eventKey="Dropped" >
-                                    {listHeader}
-                                    <Row className='scrollable'> 
-                                        <SortableContext items={mutableList.filter(game => game.playstatus === "dropped" ).map(item => item.id)} strategy={verticalListSortingStrategy}>
-                                        {!isListLoaded ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
-                                                :isEmptyList ? <span className='emptyListMessage'>Start by adding some games</span>
-                                                    :gameListDropped.props.children.length === 0 ?  <span className='emptyListMessage'>No games to show in this category</span>
-                                                        :gameListDropped
-                                            }
-                                        </SortableContext>
-                                    </Row>
-                                </Tab.Pane>
-                                <Tab.Pane eventKey="Other" >
-                                    {listHeader}
-                                    <Row className='scrollable'> 
-                                        <SortableContext items={mutableList.filter(game => game.playstatus === "other" ).map(item => item.id)} strategy={verticalListSortingStrategy}>
-                                        {!isListLoaded ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
-                                                :isEmptyList ? <span className='emptyListMessage'>Start by adding some games</span>
-                                                    :gameListOther.props.children.length === 0 ?  <span className='emptyListMessage'>No games to show in this category</span>
-                                                        :gameListOther
-                                            }
-                                        </SortableContext>
-                                    </Row>
-                                </Tab.Pane>
-                                <Tab.Pane eventKey="PlanToPlay" >
-                                    {listHeaderPlanToPlay}
-                                    <Row className='scrollable'> 
-                                        <SortableContext items={mutableList.filter(game => game.playstatus === "plantoplay" ).map(item => item.id)} strategy={verticalListSortingStrategy}>
-                                        {!isListLoaded ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
-                                                :isEmptyList ? <span className='emptyListMessage'>Start by adding some games</span>
-                                                    :gameListPlanToPlay.props.children.length === 0 ?  <span className='emptyListMessage'>No games to show in this category</span>
-                                                        :gameListPlanToPlay
-                                            }
-                                        </SortableContext>
-                                    </Row>
-                                </Tab.Pane>
-                            </Tab.Content>
-                            <DragOverlay wrapperElement="ul" modifiers={[restrictToWindowEdges]} dropAnimation={null}>
-                                {activeId ? <Game id={activeId} game={dragGame} onClickEditItem={handleShowEditModal} onClickRemoveItem={handleRemoveItem} /> : null}
-                            </DragOverlay>
-                        </DndContext>
-                    </Col>
-                </Row>
+        <Tab.Container id="tabs" className='gamesList' defaultActiveKey="Finished" activeKey={activeTab} onSelect={(key) => setActiveTab(key)}>
+            <Row>
+                <Col className='sideBarColumn'>
+                <Nav variant="pills" className="flex-column tabSelectors">
+                    {listCategoriesWithCounts.map(cat => (
+                        <Nav.Item key={cat.key} className={`tab${cat.key}`}>
+                        <Nav.Link eventKey={cat.key}>{cat.label}</Nav.Link>
+                        </Nav.Item>
+                    ))}
+                </Nav>
+                </Col>
+                <Col className='listColumn'>
+                <DndContext
+                    sensors={sensors}
+                    collisionDetection={closestCenter}
+                    onDragStart={handleDragStart}
+                    onDragEnd={handleDragEnd}
+                    modifiers={[restrictToVerticalAxis]}
+                >
+                    <Tab.Content>
+                    {listCategoriesWithCounts.map(cat => {
+                        const filteredList = mutableList.filter(cat.filter);
+                        const gameList = generateGameList(filteredList);
+
+                        return (
+                        <Tab.Pane eventKey={cat.key} key={cat.key}>
+                            {cat.header}
+                            <Row className='scrollable'>
+                            <SortableContext
+                                items={filteredList.map(game => game.id)}
+                                strategy={verticalListSortingStrategy}
+                            >
+                                {!isListLoaded ? (
+                                <Spinner animation='grow' variant='light' style={{ marginTop: '50%', margin: 'auto' }} />
+                                ) : isEmptyList ? (
+                                <span className='emptyListMessage'>Start by adding some games</span>
+                                ) : gameList.props.children.length === 0 ? (
+                                <span className='emptyListMessage'>No games to show in this category</span>
+                                ) : (
+                                gameList
+                                )}
+                            </SortableContext>
+                            </Row>
+                        </Tab.Pane>
+                        );
+                    })}
+                    </Tab.Content>
+
+                    <DragOverlay wrapperElement="ul" modifiers={[restrictToWindowEdges]} dropAnimation={null}>
+                    {activeId ? (
+                        <Game
+                        id={activeId}
+                        game={dragGame}
+                        onClickEditItem={handleShowEditModal}
+                        onClickRemoveItem={handleRemoveItem}
+                        />
+                    ) : null}
+                    </DragOverlay>
+                </DndContext>
+                </Col>
+            </Row>
             </Tab.Container>
         </>
     )

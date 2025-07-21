@@ -23,6 +23,13 @@ const ListMobile = (props) => {
     function handleCloseModal() {
         setShowModal(false);
     }
+
+    const gameListAll = 
+        <ul>
+            {list.map ((game, index) => (
+                <Game key = {game.id} id={game.id} onClickRemoveItem ={handleRemoveItem} onClickEditItem = {handleShowEditModal} game ={game}/>))
+            }
+        </ul>
     
     const gameListFinished = 
         <ul>
@@ -72,6 +79,9 @@ const ListMobile = (props) => {
             <Col className='listColumn'>
                 <Slider asNavFor={nav2} ref={(slider1) => setNav1(slider1)} className='mobileTabTitleWrapper'>
                     <Row className='mobileTabTitle'> 
+                        <div style={{background: '#cccccccc'}}>ALL GAMES</div>
+                    </Row>
+                    <Row className='mobileTabTitle'> 
                         <div style={{background: '#66cc66bb'}}>COMPLETED</div>
                     </Row>
                     <Row className='mobileTabTitle'> 
@@ -96,6 +106,14 @@ const ListMobile = (props) => {
                     slidesToShow={1} 
                     arrows={false} 
                     swipe={false}>
+                        <Row className='scrollableMobile d-flex justify-content-center' >
+                        {!isListLoaded ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
+                            :isEmptyList ? <span className='emptyListMessage'>Start by adding some games</span>
+                                :gameListAll.props.children.length === 0 ?  <span className='emptyListMessage'>No games to show in this category</span>
+                                    :gameListAll
+                        }
+
+                    </Row>
                     <Row className='scrollableMobile d-flex justify-content-center' >
                         {!isListLoaded ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
                             :isEmptyList ? <span className='emptyListMessage'>Start by adding some games</span>
