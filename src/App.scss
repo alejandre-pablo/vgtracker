@@ -128,6 +128,13 @@ ul {
     border-radius: 0.5rem !important;
 }
 
+
+.inputClearButton {
+    background: none !important;
+    border: none !important;
+    background-color:transparent !important;
+    color: var(--darkBgAccent) !important;
+}
 /* --------------------- AUTH FORMS --------------------- */
 
 .authForm {
@@ -1304,10 +1311,21 @@ label::after {
 /* --------------------- SHARED LIST ---------------------*/
 
 .sharedProfileCard {
-    background-color: var(--darkBase);
-    border-radius: 12px;
-    margin-right: 0.5rem;
-    margin-bottom: -3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1rem 0.5rem -3rem 0;
+    
+}
+
+.sharedProfilePicture {
+    object-fit: cover;
+    width: 80%,;
+    min-height: 100%;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    margin-top: 1rem;
+    border: 5px solid var(--darkAccent);
 }
 
 /* --------------------- OVERRIDES ---------------------*/

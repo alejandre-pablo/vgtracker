@@ -7,5 +7,6 @@ export const platformNameMap = {
     "PlayStation 4": "PS4",
     "PlayStation 5": "PS5",
     "Nintendo Entertainment System": "NES",
+    "Game Boy Advance": "GBA",
     "Super Nintendo Entertainment System": "SNES"
   };

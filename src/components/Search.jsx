@@ -1,7 +1,7 @@
 import React from 'react'
 import {createSearchParams, useNavigate } from 'react-router-dom';
-import { FaSearch } from 'react-icons/fa'
-import { Button, Form } from 'react-bootstrap';
+import { FaSearch, FaTimes } from 'react-icons/fa'
+import { Button, Form, InputGroup } from 'react-bootstrap';
 import { useSearch } from './contexts/SearchContext';
 
 const Search = () => {
@@ -25,7 +25,7 @@ const Search = () => {
     }
     return (
         <Form className="d-flex searchBar" onSubmit={onSubmit}>
-            <div className="input-group">
+            <InputGroup>
                 <Form.Control
                     type='text'
                     placeholder='Search'
@@ -34,8 +34,13 @@ const Search = () => {
                     value={searchString}
                     onChange={(e) => setSearchString(e.target.value)}
                 />
+                {searchString && (
+                    <Button className='inputClearButton' onClick={() => setSearchString('')}>
+                        <FaTimes />
+                    </Button>
+                )}
                 <Button type='submit' className='faIconButton'> <FaSearch/></Button> 
-            </div>
+            </InputGroup>
         </Form>
     )
 }

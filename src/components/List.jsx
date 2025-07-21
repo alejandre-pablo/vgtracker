@@ -53,25 +53,29 @@ const List = (props) => {
       
         const activeCategory = listCategories.find(cat => cat.key === activeTab);
         if (activeCategory) {
-          updatedList = updatedList.filter(activeCategory.filter);
+            updatedList = updatedList.filter(activeCategory.filter);
         }
       
         const hasSearch = searchString.trim() !== "";
         if (hasSearch) {
-          const normalizedSearch = searchString.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-          updatedList = updatedList.filter(game =>
-            game.title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(normalizedSearch)
-          );
-          setIsFilteredSearch(true);
+            updatedList = filterBySearchString(updatedList);
+            setIsFilteredSearch(true);
         } else {
-          setIsFilteredSearch(false);
+            setIsFilteredSearch(false);
         }
       
         if (sortingCache[1] !== 'default') {
-          updatedList.sort(sortByProperty(sortingCache[0], sortingCache[1]));
+            updatedList.sort(sortByProperty(sortingCache[0], sortingCache[1]));
         }
       
         return updatedList;
+    }
+
+    function filterBySearchString(list) {
+        const normalizedSearch = searchString.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        return list.filter(game =>
+            game.title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(normalizedSearch)
+        );
     }
 
     function handleSort (sorting) {
@@ -96,9 +100,12 @@ const List = (props) => {
         }
         switch (property) {
             case 'title':
-            case 'platform':
                 return function (a,b) {
                     return (a[property].localeCompare(b[property])) * sortOrder;
+                }
+            case 'platform':
+                return function (a,b) {
+                    return (a[property].name.localeCompare(b[property].name)) * sortOrder;
                 }
             case 'playtime':
                 return function (a,b) {
@@ -138,7 +145,7 @@ const List = (props) => {
     const sensors = useSensors(
         useSensor(PointerSensor, {
             activationConstraint: {
-                distance: 5,
+                distance: 2,
             }
         }),
         useSensor(KeyboardSensor, {
@@ -256,7 +263,9 @@ const List = (props) => {
     ];
 
     const listCategoriesWithCounts = listCategories.map(cat => {
-        const count = mutableList.filter(cat.filter).length;
+        let filteredList = list.filter(cat.filter);
+        filteredList = filterBySearchString(filteredList);
+        const count = filteredList.length
         return {
             ...cat,
             label: isFilteredSearch ? `${cat.label} (${count})` : cat.label

@@ -19,13 +19,15 @@ const UserListContainer = () => {
 
     const {status, data} = useFirestoreDocDataOnce(userDataRef);
 
+    const [isLoaded, setIsLoaded] = useState(false);
     const [list, setList] = useState([]);
 
     useEffect(() => {
         if(status === 'success' && data !== undefined) {
             setList(JSON.parse(data.games));
+            setIsLoaded(true);
         }
-    },[status])
+    },[status, data])
 
     return (
         <Row className={isTabletOrMobile ? 'mainContainerMobile' : 'mainContainer'}>
@@ -33,7 +35,7 @@ const UserListContainer = () => {
             ?   <>
                     <ListMobile list = {list} />
                 </>
-            :   <SharedList list = {list}  userId = {userId}/>
+            :   <SharedList list = {list}  userId = {userId} isListLoaded = {isLoaded}/>
             } 
         </ Row>
     )

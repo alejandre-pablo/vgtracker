@@ -1,162 +1,180 @@
 import React, { useEffect, useState} from 'react'
-import { Tab, Nav, Col, Row, Spinner  } from 'react-bootstrap';
+import { Tab, Nav, Col, Row, Spinner, Dropdown, Form  } from 'react-bootstrap';
 import SharedGame from './SharedGame'
 import { AiFillCaretDown, AiFillCaretUp } from 'react-icons/ai';
 import { getDownloadURL, ref } from 'firebase/storage';
-import { useFirestore, useFirestoreDocDataOnce, useStorage } from 'reactfire';
-import { doc } from 'firebase/firestore';
+import { FaSortAlphaDown, FaSortAlphaUp, FaSortAmountDown, FaStar } from 'react-icons/fa';
+import { TbCalendarDown, TbCalendarUp, TbClockDown, TbClockUp } from 'react-icons/tb';
+import { useSearch } from './contexts/SearchContext';
+import SharedProfileCard from './SharedProfileCard';
 
 
 const SharedList = (props) => {
 
-    const {list, userId} = props;
+    const {list, userId, isListLoaded} = props;
 
-    const storage = useStorage();
-    const firestore = useFirestore();
+    const [mutableList, setMutableList] = useState(list);
+    const [activeTab, setActiveTab] = useState("Finished");
 
-    const [sortingCache, setSortingCache] = useState(['order', 'default']);
-    const [isSorted, setIsSorted] = useState(false);
+    const {searchString} = useSearch();
+    const [isFilteredSearch, setIsFilteredSearch] = useState(false);
 
-    const profileDataRef = doc(firestore, 'profiles', userId);
-    const {status, data: profile} = useFirestoreDocDataOnce(profileDataRef);
-    const [profilePictureURL, setProfilePictureUrl] = useState('');
+    const [sortingCache, setSortingCache] = useState(['order', 'default'])
+
+    const sortIcons = {
+        'title-asc': <FaSortAlphaDown />,
+        'title-desc': <FaSortAlphaUp />,
+        'rating-asc': <FaStar />,
+        'rating-desc': <FaStar />,
+        'playtime-asc': <TbClockUp />,
+        'playtime-desc': <TbClockDown />,
+        'playdate-asc': <TbCalendarUp />,
+        'playdate-desc': <TbCalendarDown />,
+        'order-default': <FaSortAmountDown />
+    };
+
+    useEffect(() => {
+        const updatedList = getFilteredSortedList();
+        setMutableList(updatedList);
+    }, [list, searchString, sortingCache, activeTab]);
+
+    function getFilteredSortedList() {
+        let updatedList = [...list];
+      
+        const activeCategory = listCategories.find(cat => cat.key === activeTab);
+        if (activeCategory) {
+            updatedList = updatedList.filter(activeCategory.filter);
+        }
+      
+        const hasSearch = searchString.trim() !== "";
+        if (hasSearch) {
+            updatedList = filterBySearchString(updatedList);
+            setIsFilteredSearch(true);
+        } else {
+            setIsFilteredSearch(false);
+        }
+      
+        if (sortingCache[1] !== 'default') {
+            updatedList.sort(sortByProperty(sortingCache[0], sortingCache[1]));
+        }
+      
+        return updatedList;
+    }
+
+    function filterBySearchString(list) {
+        const normalizedSearch = searchString.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        return list.filter(game =>
+            game.title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(normalizedSearch)
+        );
+    }
 
     function handleSort (sorting) {
         if(sortingCache[0] === sorting) {
             if (sortingCache[1] === 'asc') {
-                setSortingCache([sorting,'desc']);
-                setIsSorted(true);
+                setSortingCache([sorting,'desc'])
             } else {
-                setSortingCache(['order','default']);
-                setIsSorted(false);
+                setSortingCache(['order','default'])
             }
         } else {
-            setSortingCache([sorting, 'asc']);
-            setIsSorted(true);
+            setSortingCache([sorting, 'asc'])
         }
     }
 
-    useEffect(() => {
-        //Check if the user has a profile picture
-        if(status === 'success' && profile.picture !== ''){
-            // Fetch the profile picture URL from Firebase Storage
-            const imageRef =ref(storage, `images/${userId}`)
-            getDownloadURL(imageRef)
-            .then(url => {
-                // Set the profile picture URL in the state
-                setProfilePictureUrl(url);
-            })
-            .catch(error => {
-                console.error('Error fetching profile picture:', error);
-            });
+    function sortByProperty(property, way) {
+        var sortOrder = 1;
+        if(way === "desc") {
+            sortOrder = -1;
         }
-        
-    }, [status]);
-
-    const gameListAll = 
-        <ul>
-            {list.map ((game, index) => (
-                <li key = {game.id} className={index % 2 === 0 ? 'highlight' : ''}>
-                    <SharedGame key = {game.id} id={game.id} game ={game} index ={index + 1}/>
-                </li>))
-            }
-        </ul> 
-
-    const gameListFinished = 
-        <ul>
-            {list.filter(game => game.playstatus === "finished" ).map ((game, index) => (
-                <li key = {game.id} className={index % 2 === 0 ? 'highlight' : ''}>
-                    <SharedGame key = {game.id} id={game.id} game ={game} index ={index + 1}/>
-                </li>))
-            }
-        </ul>   
-
-    const gameListPlaying = 
-        <ul>
-            {list.filter(game => game.playstatus === "playing" ).map ((game, index) => (
-                <li key = {game.id} className={index % 2 === 0 ? 'highlight' : ''}>
-                    <SharedGame key = {game.id} id={game.id} game ={game} index ={index + 1}/>
-                </li>))
-            }
-        </ul>  
-
-    const gameListOnHold = 
-        <ul>
-            {list.filter(game => game.playstatus === "onhold" ).map ((game, index) => (
-                <li key = {game.id} className={index % 2 === 0 ? 'highlight' : ''}>
-                    <SharedGame key = {game.id} id={game.id} game ={game} index ={index + 1}/>
-                </li>))
-            }
-        </ul>  
-
-    const gameListDropped = 
-        <ul>
-            {list.filter(game => game.playstatus === "dropped" ).map ((game, index) => (
-                <li key = {game.id} className={index % 2 === 0 ? 'highlight' : ''}>
-                    <SharedGame key = {game.id} id={game.id} game ={game} index ={index + 1}/>
-                </li>))
-            }
-        </ul>  
-
-    const gameListOther = 
-        <ul>
-            {list.filter(game => game.playstatus === "other" ).map ((game, index) => (
-                <li key = {game.id} className={index % 2 === 0 ? 'highlight' : ''}>
-                    <SharedGame key = {game.id} id={game.id} game ={game} index ={index + 1}/>
-                </li>))
-            }
-        </ul>  
-
-    const gameListPlanToPlay = 
-        <ul>
-            {list.filter(game => game.playstatus === "plantoplay" ).map ((game, index) => (
-                <li key = {game.id} className={index % 2 === 0 ? 'highlight' : ''}>
-                    <SharedGame key = {game.id} id={game.id} game ={game} index ={index + 1}/>
-                </li>))
-            }
-        </ul>
+        switch (property) {
+            case 'title':
+                return function (a,b) {
+                    return (a[property].localeCompare(b[property])) * sortOrder;
+                }
+            case 'platform':
+                return function (a,b) {
+                    return (a[property].name.localeCompare(b[property].name)) * sortOrder;
+                }
+            case 'playtime':
+                return function (a,b) {
+                    var normalizedA = parseFloat(a[property].replace(',', '.').replace(':', '.'))
+                    var normalizedB = parseFloat(b[property].replace(',', '.').replace(':', '.'))
+                    var result = (normalizedA < normalizedB) ? -1 : (normalizedA > normalizedB) ? 1 : 0;
+                    if(result === 0 && (a[property] !== '' && b[property] !== '')) {
+                        return 1 * sortOrder;
+                    }
+                    return result * sortOrder;
+                }
+            case 'rating':
+                return function (a,b) {
+                    var normalizedA = parseFloat(a[property].reduce((partialSum, a) => partialSum + a, 0));
+                    var normalizedB = parseFloat(b[property].reduce((partialSum, a) => partialSum + a, 0));
+                    var result = (normalizedA < normalizedB) ? -1 : (normalizedA > normalizedB) ? 1 : 0;
+                    if(result === 0 && (a[property] !== '' && b[property] !== '')) {
+                        return 1 * sortOrder;
+                    }
+                    return result * sortOrder;
+                }
+            default:
+                return function (a,b) {
+                    return 1;
+                }
+        }
+    }
 
     const listHeader = 
     <Row className='listHeader'>
         <div className='columnTitle gameSortWrapper'> <span className='gameSortIndex'>#</span> </div>
         <div className='columnTitle' style={{width:'9vw'}}></div>
-        <div className='columnTitle' style={{width:'22vw', cursor: 'default'}} onClick={() => handleSort('title')}> 
+        <div className='columnTitle' style={{width:'22vw', cursor: 'pointer'}} onClick={() => handleSort('title')}> 
             TITLE 
             {sortingCache[0] !== 'title' ? <></>
             : sortingCache[1] === 'asc' ? <AiFillCaretUp/>
                 :<AiFillCaretDown/>
-            }
-            
+            }   
         </div>
-        <div className='columnTitle' style={{width:'10vw', cursor: 'default'}} onClick={() => handleSort('platform')}> 
+        <div className='columnTitle' style={{width:'10vw', cursor: 'pointer'}} onClick={() => handleSort('platform')}> 
             PLATFORM
             {sortingCache[0] !== 'platform' ? <></>
             : sortingCache[1] === 'asc' ? <AiFillCaretUp/>
                 :<AiFillCaretDown/>
             }
         </div>
-        <div className='columnTitle' style={{width:'10vw', cursor: 'default'}} onClick={() => handleSort('playtime')}> 
+        <div className='columnTitle' style={{width:'10vw', cursor: 'pointer'}} onClick={() => handleSort('playtime')}> 
             PLAYTIME
             {sortingCache[0] !== 'playtime' ? <></>
             : sortingCache[1] === 'asc' ? <AiFillCaretUp/>
                 :<AiFillCaretDown/>
             }
             </div>
-        <div className='columnTitle' style={{width:'8vw', cursor: 'default'}} onClick={() => handleSort('playdate')}>
+        <div className='columnTitle' style={{width:'8vw', cursor: 'pointer'}} onClick={() => handleSort('playdate')}>
             DATE
             {sortingCache[0] !== 'playdate' ? <></>
             : sortingCache[1] === 'asc' ? <AiFillCaretUp/>
                 :<AiFillCaretDown/>
             }
             </div>
-        <div className='columnTitle' style={{width:'12vw', cursor: 'default'}} onClick={() => handleSort('rating')}>
+        <div className='columnTitle' style={{width:'12vw', cursor: 'pointer'}} onClick={() => handleSort('rating')}>
             RATING
             {sortingCache[0] !== 'rating' ? <></>
             : sortingCache[1] === 'asc' ? <AiFillCaretUp/>
                 :<AiFillCaretDown/>
             }
             </div>
-        <div className='columnTitle' style={{width:'6vw'}}></div>
+        <div className='columnTitle' style={{flex:'1'}}>
+            <Dropdown>
+                <Dropdown.Toggle className="faIconButton" id="sortingDropdown">
+                    {sortIcons[`${sortingCache[0]}-${sortingCache[1]}`] || <FaSortAlphaDown />}
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu>
+                    <Dropdown.Item className='sortDropdownItem' onClick={() => setSortingCache(['title', 'asc'])}>Title A-Z</Dropdown.Item>
+                    <Dropdown.Item className='sortDropdownItem' onClick={() => setSortingCache(['title', 'desc'])}>Title Z-A</Dropdown.Item>
+                    <Dropdown.Item className='sortDropdownItem' onClick={() => setSortingCache(['rating', 'desc'])}>Top Rated</Dropdown.Item>
+                    <Dropdown.Item className='sortDropdownItem' onClick={() => setSortingCache(['playtime', 'desc'])}>Longest Played</Dropdown.Item>
+                    <Dropdown.Item className='sortDropdownItem' onClick={() => setSortingCache(['order', 'default'])}>Default Order</Dropdown.Item>
+                </Dropdown.Menu>
+            </Dropdown>
+        </div>
     </Row>
 
     const listHeaderPlanToPlay = 
@@ -166,113 +184,87 @@ const SharedList = (props) => {
         <div className='columnTitle' style={{width:'22vw'}}>TITLE</div>
         <div className='columnTitle' style={{width:'37vw'}}></div>
     </Row>
-    
+
+    const listCategories = [
+        { key: "All", label: "ALL GAMES", filter: () => true, header: listHeader },
+        { key: "Finished", label: "COMPLETED", filter: game => game.playstatus === "finished", header: listHeader },
+        { key: "Playing", label: "PLAYING", filter: game => game.playstatus === "playing", header: listHeader },
+        { key: "OnHold", label: "ON HOLD", filter: game => game.playstatus === "onhold", header: listHeader },
+        { key: "Dropped", label: "DROPPED", filter: game => game.playstatus === "dropped", header: listHeader },
+        { key: "Other", label: "OTHER", filter: game => game.playstatus === "other", header: listHeader },
+        { key: "PlanToPlay", label: "PLAN TO PLAY", filter: game => game.playstatus === "plantoplay", header: listHeaderPlanToPlay },
+    ];
+
+    const listCategoriesWithCounts = listCategories.map(cat => {
+        let filteredList = list.filter(cat.filter);
+        filteredList = filterBySearchString(filteredList);
+        const count = filteredList.length
+        return {
+            ...cat,
+            label: isFilteredSearch ? `${cat.label} (${count})` : cat.label
+        };
+    });
+
+    const generateGameList = (games) => (
+        <ul>
+            {games.map((game, index) => (
+                <li key={game.id} className={index % 2 === 0 ? 'highlight' : ''}>
+                <Row className='gameWrapper'>
+                    <div className='gameSortWrapper'>
+                        <span className='gameSortIndex'>
+                            {index + 1}
+                        </span>
+                    </div>
+                    <SharedGame
+                        game={game}
+                    />
+                </Row>
+            </li>
+            ))}
+        </ul>
+      );
+
     return (
         <>
-        <Tab.Container id="tabs" defaultActiveKey="Finished" className='gamesList'>
+        <Tab.Container id="tabs" className='gamesList' defaultActiveKey="Finished" activeKey={activeTab} onSelect={(key) => setActiveTab(key)}>
             <Row>
-                <Col md={2} className='sideBarColumn'>
-                    <div className='sharedProfileCard'>
-                        <img 
-                        src={profilePictureURL ? profilePictureURL : window.location.origin +'/img/profile.svg.png'} 
-                        referrerPolicy="no-referrer"  
-                        alt='Profile Pic' 
-                        style={{objectFit: 'cover',width: '100%', minHeight: '100%', borderRadius: '50%' }}/>
-                        <strong>{profile ? profile.username : ''}</strong>
-                    </div>
+                <Col className='sideBarColumn'>
+                    <SharedProfileCard userId= {userId} list={list}/>
                     <Nav variant="pills" className="flex-column tabSelectors">
-                        <Nav.Item className='tabAll'>
-                            <Nav.Link eventKey="All">ALL GAMES</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item className='tabFinished'>
-                            <Nav.Link eventKey="Finished">COMPLETED</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item className='tabPlaying'>
-                            <Nav.Link eventKey="Playing">PLAYING</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item className='tabOnHold'>
-                            <Nav.Link eventKey="OnHold">ON HOLD</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item className='tabDropped'>
-                            <Nav.Link eventKey="Dropped">DROPPED</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item className='tabOthers'>
-                            <Nav.Link eventKey="Other">OTHER</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item className='tabPlanToPlay'>
-                            <Nav.Link eventKey="PlanToPlay">PLAN TO PLAY</Nav.Link>
-                        </Nav.Item>
+                        {listCategoriesWithCounts.map(cat => (
+                            <Nav.Item key={cat.key} className={`tab${cat.key}`}>
+                            <Nav.Link eventKey={cat.key}>{cat.label}</Nav.Link>
+                            </Nav.Item>
+                        ))}
                     </Nav>
                 </Col>
                 <Col className='listColumn'>
                     <Tab.Content>
-                        <Tab.Pane eventKey="All" >
-                            {listHeader}
-                            <Row className='scrollable'> 
-                                    {!list.length ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> : 
-                                    list.length === 0 ? "No games added yet"
-                                    : gameListAll
-                                    }
+                    {listCategoriesWithCounts.map(cat => {
+                        const filteredList = mutableList.filter(cat.filter);
+                        const gameList = generateGameList(filteredList);
+
+                        return (
+                        <Tab.Pane eventKey={cat.key} key={cat.key}>
+                            {cat.header}
+                            <Row className='scrollable'>
+                                {!isListLoaded ? (
+                                <Spinner animation='grow' variant='light' style={{ marginTop: '50%', margin: 'auto' }} />
+                                ) :list.length === 0 ? (
+                                <span className='emptyListMessage'>Start by adding some games</span>
+                                ) : gameList.props.children.length === 0 ? (
+                                <span className='emptyListMessage'>No games to show in this category</span>
+                                ) : (
+                                gameList
+                                )}
                             </Row>
                         </Tab.Pane>
-                        <Tab.Pane eventKey="Finished" >
-                            {listHeader}
-                            <Row className='scrollable'> 
-                                    {!list.length ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> : 
-                                    list.length === 0 ? "No games added yet"
-                                    : gameListFinished
-                                    }
-                            </Row>
-                        </Tab.Pane>
-                        <Tab.Pane eventKey="Playing" >
-                            {listHeader}
-                            <Row className='scrollable'> 
-                                {!list.length ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
-                                    : list.length === 0 ? "No games added yet"
-                                    : gameListPlaying
-                                }
-                            </Row>
-                        </Tab.Pane>
-                        <Tab.Pane eventKey="OnHold" >
-                            {listHeader}
-                            <Row className='scrollable'> 
-                                {!list.length ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
-                                    : list.length === 0 ? "No games added yet"
-                                    : gameListOnHold
-                                }
-                            </Row>
-                        </Tab.Pane>
-                        <Tab.Pane eventKey="Dropped" >
-                            {listHeader}
-                            <Row className='scrollable'> 
-                                {!list.length ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
-                                    : list.length === 0 ? "No games added yet"
-                                    : gameListDropped
-                                }
-                            </Row>
-                        </Tab.Pane>
-                        <Tab.Pane eventKey="Other" >
-                            {listHeader}
-                            <Row className='scrollable'> 
-                                {!list.length ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
-                                    : list.length === 0 ? "No games added yet"
-                                    : gameListOther
-                                }
-                            </Row>
-                        </Tab.Pane>
-                        <Tab.Pane eventKey="PlanToPlay" >
-                            {listHeaderPlanToPlay}
-                            <Row className='scrollable'> 
-                                {!list.length ? <Spinner animation='grow' variant='light' style={{marginTop: '50%', margin: 'auto'}}/> 
-                                    : list.length === 0 ? "No games added yet"
-                                    : gameListPlanToPlay
-                                }
-                            </Row>
-                        </Tab.Pane>
+                        );
+                    })}
                     </Tab.Content>
                 </Col>
             </Row>
-        </Tab.Container>
+            </Tab.Container>
         </>
     )
 }
