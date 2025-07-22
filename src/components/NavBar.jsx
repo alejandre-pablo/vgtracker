@@ -148,22 +148,9 @@ const NavBar = () => {
         </>
         :<>
             {user? <EditProfileForm show ={showModal} handleCloseModal = {handleCloseModal}/> : <></>}
-            {/* <Row className='topMenuMobile'>
-                <Col md={1}>
-                    <button className="buttonEdit" onClick={handleShowSidebar} title="Show sidebar"><GoThreeBars/></button>
-                </Col>
-                <Col md={1}>
-                    <Link to={'/'}>
-                        <img className = 'appLogo' maxHeight='100%' width='auto' src={window.location.origin +'/img/logo_cutre.png'} alt="logo"></img>
-                    </Link>
-                </Col>
-                <Col md={10}>
-                    <Search/>
-                </Col>
-            </Row> */}
             <Navbar className='topMenuMobile' display='flex'>
                 <Col md='3' style={{position: 'relative'}}>
-                    <button className="buttonEdit" onClick={handleShowSidebar} title="Show sidebar" style={{position: 'absolute', top: "50%", transform: "translateY(-50%)"}}><RxHamburgerMenu/></button>
+                    <button className="buttonHamburguerMobile" onClick={handleShowSidebar} title="Show sidebar"><RxHamburgerMenu/></button>
                 </Col>
                 <Col md='3'>
                     <Navbar.Brand href="/" style={{height:'100%', padding:'0' }}>

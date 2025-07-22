@@ -5,6 +5,7 @@ import { useMediaQuery } from 'react-responsive';
 
 import List from '../components/List'
 import ListMobile from '../components/ListMobile';
+import ListMobileCards from '../components/ListMobileCards';
 
 const ListContainer = (props) => {
 
@@ -13,7 +14,7 @@ const ListContainer = (props) => {
     return (
         <Row className={isTabletOrMobile ? 'mainContainerMobile' : 'mainContainer'}>
             {isTabletOrMobile 
-            ? <ListMobile list = {props.list} isEmptyList = {props.isEmptyList} isListLoaded = {props.isLoaded}  handleEditItem = {props.handleEditItem} handleRemoveItem = {props.handleRemoveItem}/>
+            ? <ListMobile list = {props.list} isEmptyList = {props.isEmptyList} isListLoaded = {props.isLoaded}  handleEditItem = {props.handleEditItem} handleRemoveItem = {props.handleRemoveItem} handleOrderList = {props.handleOrderList}/>
             : <List list = {props.list} isEmptyList = {props.isEmptyList} isListLoaded = {props.isLoaded} handleEditItem = {props.handleEditItem} handleRemoveItem = {props.handleRemoveItem} handleOrderList = {props.handleOrderList}/>
             }  
         </ Row>

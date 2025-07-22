@@ -82,12 +82,7 @@ const SortableGame = (props) => {
                     </span>
                 )}
             </div>
-            <Game
-                ref={setNodeRef}
-                onClickRemoveItem={props.onClickRemoveItem}
-                onClickEditItem={props.onClickEditItem}
-                game={props.game}
-            />
+            {props.children}
         </Row>
     );
 };

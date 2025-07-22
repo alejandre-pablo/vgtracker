@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import { useFirestore, useFirestoreDocDataOnce } from 'reactfire';
 
 
-import ListMobile from '../components/ListMobile';
+import ListMobile from '../components/ListMobileCards';
 import SharedList from '../components/SharedList';
 const UserListContainer = () => {
  

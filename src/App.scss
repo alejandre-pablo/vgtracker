@@ -52,9 +52,10 @@ ul {
 }
 
 #root {
-    height: 100%;
+    height: 100vh;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 
 .flexCentered {
@@ -65,8 +66,6 @@ ul {
 
 .mainContainer {
     flex: 1;
-    height: 100vh;
-    max-height: 100vh;
     margin: 0;
     padding: 0.5rem;
     padding-top: 8.7vh;
@@ -74,11 +73,9 @@ ul {
 }
 
 .mainContainerMobile {
-    height: 105vh;
     flex: 1;
+    overflow-y: auto;
     margin: 0;
-    padding: 0.5rem;
-    padding-top: 8vh;
     background-color: rgba(17, 17, 17, 0.363)
 }
 
@@ -389,6 +386,12 @@ ul {
     visibility: visible !important;
 }
 
+.dragOverlayWrapper {
+    display: flex;
+    align-items: center;
+    margin-left: 3vw;
+}
+
 .gameSortIndex{
     position: absolute;
     top: 50%;
@@ -398,6 +401,21 @@ ul {
     vertical-align: middle;
     font-weight: bold;
     color: var(--darkAccent);
+}
+
+.gameSortIndexInput {
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.gameSortHandle{
+    outline: none;
+    border: none;
+    background: none;
+    font-size: 1.2rem;
 }
 
 .gameMobile {
@@ -414,26 +432,48 @@ ul {
     border: none;
     border-radius: 16px;
 }
-.gameCardInfo {
-    background: rgb(45,51,60);
-    background: linear-gradient(90deg, var(--darkBase) 0%, rgba(0,0,0,0) 600%);
-    color: var(--darkAccent);
-    border-radius: 0;
-    padding: 0.5rem;
-    padding-left: 1rem;
-}
-
-.gameCardInfoCollapsed {
-    height: 27%;
+.gameGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+    width: 100%;
+  }
+  
+  .aspect-ratio-box {
+    position: relative;
+    width: 100%;
+    padding-top: 66.66%; /* 3:2 ratio */
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .aspect-ratio-inner {
     position: absolute;
-    top:76%;
-    background: rgb(45,51,60);
-    background: linear-gradient(90deg, var(--darkBase) 0%, rgba(0,0,0,0) 600%);
-    color: var(--darkAccent);
-    border-radius: 0;
-    padding: 0.2rem;
-    padding-left: 1rem;
-}
+    top: 0; left: 0;
+    right: 0; bottom: 0;
+  }
+  
+  .gameCardInfo,
+  .gameCardInfoCollapsed {
+    color: white;
+    background: rgba(0, 0, 0, 0.6);
+    overflow-y: auto;
+  }
+  
+  .textButtonMobile {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0 4px;
+  }
+  
+  .textButtonMobile:hover {
+    text-decoration: underline;
+  }
 
 .collapseInfoButton {
     display: inline-block;
@@ -514,6 +554,7 @@ ul {
 }
 
 .gameTitle {
+    color: white;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -638,6 +679,19 @@ ul {
     justify-content: center;
     align-items: center;
     gap: 0.5rem;
+}
+
+.buttonHamburguerMobile {
+    outline: none;
+    border: none;
+    background: none;
+    font-size: 1.5rem;
+    color: var(--darkAccent);
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
 }
 
 /* --------------------- ADD GAME MODAL ---------------------*/
@@ -995,7 +1049,8 @@ label::after {
 .topMenuMobile {
     margin: 0;
     padding: 0;
-    position: fixed;
+    position: sticky;
+    top: 0;
     width: 100%;
     z-index: 999;
     background-color: var(--darkBase);
@@ -1149,10 +1204,43 @@ label::after {
     margin: 2px;
 }
 
+.gameListMobileImage {
+    border-radius: 8px;
+    width: 13vw;
+    height: auto;
+    margin: 0.6vh;
+}
+
 .gameImageWrapper {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.gameListMobileData {
+    color: white;
+    padding-left: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.gameListMobileDataSecondary {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.9rem;
+    margin-right: 0.8rem;
+}
+
+.gameListMobileDataSecondary * {
+    margin: 0 0.2rem;
+}
+
+.gameListMobileHandler {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 1.2rem;
 }
 
 .col-md-10 .col-md-1, .col-md-10 .col-md-3, .col-md-10 .col-md-2 {
