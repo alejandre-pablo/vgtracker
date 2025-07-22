@@ -2,6 +2,8 @@
 
 :root {
 
+    --rsbs-bg: #1a1c24;
+
     --lightBase: #e4e4e4;
     --lightAccent: #542375;
     --lightAccentTranslucid: #54237588;
@@ -250,6 +252,7 @@ ul {
     display: flex;
     align-items: center;
     text-align: center;
+    font-weight: bold;
 }
 
 
@@ -421,6 +424,38 @@ ul {
 .gameMobile {
     padding: 0.5rem;
     z-index: 20;
+}
+
+.bottomSheetHeaderRow {
+    justify-content: flex-start;
+    padding-left: 5%;
+}
+
+.bottomSheetGameTitle {
+    flex: 1;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: white;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.bottomSheetOption {
+    background: none !important;
+    border: none !important;
+    background-color:transparent !important;
+    color: white !important;
+    display: flex;
+    align-items: center;
+    padding: 0.6rem 1rem;
+    font-size: 1.1rem;
+}
+
+.bottomSheetOption svg {
+    margin-right: 0.5rem;
+    font-weight: bolder;
+    font-size: larger;
 }
 
 .gameCard{
@@ -1056,7 +1091,7 @@ label::after {
     background-color: var(--darkBase);
     border-bottom-right-radius: 16px;
     border-bottom-left-radius: 16px;
-    height: 7vh;
+    height: 8vh;
     display: flex;
     justify-content: space-around;
 }
@@ -1344,7 +1379,7 @@ label::after {
 
 .dropdown-menu .dropdown-item:not(:last-child) {
     border-bottom: 2px solid var(--darkBgAccent);
-  }
+}
 
 
 .statsMainRow .dropdown-menu {
@@ -1544,6 +1579,12 @@ a:hover {
 .offcanvas-header {
     margin: 0 0.5rem 0 0.5rem;
     border-bottom: 1px solid var(--darkAccent);
+}
+
+[data-rsbs-content] {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
 }
 
 /* --------------------- SCROLLBARS ---------------------*/

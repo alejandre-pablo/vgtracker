@@ -7,7 +7,7 @@ import { FaRegClock } from 'react-icons/fa'
 import { IMAGES_SERVER_URL } from '../constants/urls';
 import { platformNameMap } from '../constants/platforms';
 
-const GameMobile = forwardRef(({ game, style, onClickEditItem, onClickRemoveItem }, ref) => {
+const GameMobile = forwardRef(({ game, style, onClickOpenGameInfo }, ref) => {
   const [isCollapsed, setCollapsed] = useState(true);
 
   const getCleanPlatformName = (name) => platformNameMap[name] || name;
@@ -31,7 +31,7 @@ const GameMobile = forwardRef(({ game, style, onClickEditItem, onClickRemoveItem
             
         </Col>
         <Col xs='1' className='gameListMobileHandler'>
-            <span><HiDotsVertical /></span>
+            <button className='faIconButton' onClick={(e) => onClickOpenGameInfo(game.id)}><HiDotsVertical/></button>
         </Col>
         
         
@@ -68,7 +68,7 @@ const GameMobile = forwardRef(({ game, style, onClickEditItem, onClickRemoveItem
                     <div>Played on {getCleanPlatformName(game.platform.name)}</div>
                     <div>{game.playtime} hours</div>
                     <div>
-                    <button
+                    {/* <button
                         className="textButtonMobile"
                         onClick={() => onClickEditItem(game.id)}
                         title="Edit entry"
@@ -82,7 +82,7 @@ const GameMobile = forwardRef(({ game, style, onClickEditItem, onClickRemoveItem
                         title="Delete entry"
                     >
                         Remove
-                    </button>
+                    </button> */}
                     </div>
                 </Card.Body>
                 </Card.ImgOverlay>

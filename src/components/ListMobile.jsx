@@ -1,15 +1,20 @@
 import React, { useState } from 'react'
 import { useEffect } from 'react';
 import { useSearch } from './contexts/SearchContext';
-import { Tab, Col, Row, Spinner, Dropdown } from 'react-bootstrap';
-import { AiFillCaretDown, AiFillCaretUp } from 'react-icons/ai'
+import { Tab, Col, Row, Spinner, Dropdown, Button } from 'react-bootstrap';
+import { AiFillCaretDown, AiFillCaretUp, AiOutlineEdit } from 'react-icons/ai'
 import { TbCalendarUp, TbCalendarDown, TbClockUp, TbClockDown } from 'react-icons/tb'
-import { FaSortAlphaDown, FaSortAlphaUp, FaSortAmountDown, FaStar, FaUndo } from 'react-icons/fa';
+import { FaRegClock, FaSort, FaSortAlphaDown, FaSortAlphaUp, FaSortAmountDown, FaStar, FaUndo } from 'react-icons/fa';
 import EditForm from './forms/EditForm';
-import SortableGame from './SortableGame';
 import { arrayMove } from '@dnd-kit/sortable';
-import Game from './Game';
 import GameMobile from './GameMobile';
+import { BottomSheet } from 'react-spring-bottom-sheet';
+
+import 'react-spring-bottom-sheet/dist/style.css'
+import { IMAGES_SERVER_URL } from '../constants/urls';
+import { FiInfo } from 'react-icons/fi';
+import { platformNameMap } from '../constants/platforms';
+import { MdClose } from 'react-icons/md';
 
 
 const ListMobile = (props) => {
@@ -25,7 +30,10 @@ const ListMobile = (props) => {
     const [isSorted, setIsSorted] = useState(false);
 
     const [gameData, setGameData] = useState({});
+    const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
     const [showModal, setShowModal] = useState(false);
+
+    const getCleanPlatformName = (name) => platformNameMap[name] || name;
 
     const sortIcons = {
         'title-asc': <FaSortAlphaDown />,
@@ -151,6 +159,15 @@ const ListMobile = (props) => {
         setShowModal(false);
     }
 
+    function handleOpenGameInfo (id) {
+        setGameData(list.find(game => game.id === id));
+        setBottomSheetOpen(true);
+    }
+
+    function handleCloseGameInfo () {
+        setBottomSheetOpen(false);
+    }
+
     const listHeader = 
     <Row className='listHeader'>
         <div className='columnTitle gameSortWrapper'> <span className='gameSortIndex'>#</span> </div>
@@ -238,14 +255,9 @@ const ListMobile = (props) => {
     const generateGameList = (games) => (
         <ul>
             {games.map((game, index) => (
-                <li key={game.id} className={index % 2 === 0 ? 'highlight' : ''}>
-                    <GameMobile
-                        game={game}
-                        style="list"
-                        onClickRemoveItem={handleRemoveItem}
-                        onClickEditItem={handleShowEditModal}
-                    />
-            </li>
+                <li key={game.id}>
+                    <GameMobile game={game} style="list" onClickOpenGameInfo = {handleOpenGameInfo} />
+                </li>
             ))}
         </ul>
       );
@@ -253,6 +265,35 @@ const ListMobile = (props) => {
     return (
         <>
         <EditForm show ={showModal} handleCloseModal = {handleCloseModal} gameData = {gameData} updateItemHandler = {handleEditItem}/>
+        <BottomSheet open={bottomSheetOpen} onDismiss={handleCloseGameInfo} 
+            defaultSnap={({ snapPoints }) =>
+                Math.min(...snapPoints)
+            }
+            snapPoints={({ minHeight}) => [
+                minHeight * 1.1
+            ]}
+            header = {gameData && gameData.id ? (
+                <Row className='bottomSheetHeaderRow'>
+                    <Col xs='2' className="gameImageWrapper">
+                        <img className='gameListMobileImage' src={IMAGES_SERVER_URL.T_THUMB + gameData.imageId + '.jpg'} alt=''/>
+                    </Col>
+                    <Col xs='8' className='bottomSheetGameTitle'>
+                        {gameData.title}
+                    </Col>
+                </Row>
+            ) : <></>}
+        >
+            {gameData && gameData.id ? (
+            <>
+            <button disabled style={{opacity: "0.3"}} className="bottomSheetOption" onClick={(e) => { }} title="Move entry" ><FaSort /> Reorder</button>
+            <button className="bottomSheetOption" onClick={(e) => { handleShowEditModal(gameData.id) }} title="Edit entry"><AiOutlineEdit /> Edit info</button>
+            <button className="bottomSheetOption" onClick={(e) => { handleRemoveItem(gameData.id) }} title="Delete entry" ><MdClose /> Remove from list</button>
+            <button disabled style={{opacity: "0.3"}} className="bottomSheetOption" onClick={(e) => { }} title="Game Info" ><FiInfo /> Game Info</button>
+            </> )
+            : (
+                <Spinner animation="border" variant="light" className="my-3 mx-auto d-block" />
+              )}
+        </BottomSheet>
         <Tab.Container id="tabs" className='gamesList' defaultActiveKey="Finished" activeKey={activeTab} onSelect={(key) => setActiveTab(key)}>
                 {/* <Col className='sideBarColumn'>
                 <Nav variant="pills" className="flex-column tabSelectors">
