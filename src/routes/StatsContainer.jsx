@@ -58,205 +58,89 @@ const StatsContainer = () => {
             <Dropdown.Item eventKey={'All Time'}>All Time</Dropdown.Item>
         </DropdownButton>
 
-    const genres =  useMemo(() => Object.values( 
-        list.filter(game => game.playstatus !== 'plantoplay')
-        .reduce((genres, item) => {
-        item.genres.forEach(genre => {
-            genres[genre.id] = genres[genre.id] || {"id": genre.id, "name": genre.name, "count": 0};
-            genres[genre.id].count++;
-        });
-        return genres;
-        }, {})).sort((a,b) => b.count - a.count)
-        .filter(genre => genre.name !== 'Indie')
-        .slice(0, 5),
-        [list]);
+    const getTopRankedItems = (list, key, filterFn = () => true, excludeNames = [], maxItems = 5) => {
+        const counts = list
+            .filter(game => game[key] && game.playstatus !== 'plantoplay' && filterFn(game))
+            .reduce((acc, game) => {
+                game[key].forEach(item => {
+                    if (!excludeNames.includes(item.name)) {
+                        acc[item.id] = acc[item.id] || { id: item.id, name: item.name, count: 0 };
+                        acc[item.id].count++;
+                    }
+                });
+                return acc;
+            }, {});
 
-    const genresList = useMemo(() => <div className="statsRanking">
-        {genres.map((genre, index)=> {
-            switch (index) {
-                case 0:
-                    return <Row key={index}>
-                    <Col md={2} sm={3} className="flexCentered">
-                        <img className = 'topPositionIcon' src={window.location.origin +'/img/gold_medal.png'} alt="first position"/>
-                    </Col>
-                    <Col md={10} sm={9}>
-                        <span>{genre.name} </span>
-                        <span>({genre.count} games)</span>
-                    </Col>
-                    
-                </Row>
-                case 1:
-                    return <Row key={index}>
-                    <Col md={2} sm={3} className="flexCentered">
-                        <img className = 'topPositionIcon' src={window.location.origin +'/img/silver_medal.png'} alt="second position"/>
-                    </Col>
-                    <Col md={10} sm={9}>
-                        <span>{genre.name} </span>
-                        <span>({genre.count} games)</span>
-                    </Col>
-                    
-                </Row>
-                case 2:
-                    return <Row key={index}>
-                        <Col md={2} sm={3} className="flexCentered">
-                            <img className = 'topPositionIcon' src={window.location.origin +'/img/bronze_medal.png'} alt="third position"/>
-                        </Col>
-                        <Col md={10} sm={9}>
-                            <span>{genre.name} </span>
-                            <span>({genre.count} games)</span>
-                        </Col>
-                        
-                    </Row>
-                default:
-                    return <Row key={index}>
-                        <Col md={2} sm={3} className="flexCentered">
-                            <span className="topPositionText">{index + 1}. </span>
-                        </Col>
-                        <Col md={10} sm={9}>
-                            <span>{genre.name} </span>
-                            <span>({genre.count} games)</span>
-                        </Col>
-                    </Row>
-            }
-        })}
-        </div>,
-        [genres]);
+        return Object.values(counts)
+            .sort((a, b) => b.count - a.count)
+            .slice(0, maxItems);
+    };
 
-    const devs =  useMemo(() => Object.values( 
-        list.filter(game => (game.developer && game.playstatus !== 'plantoplay' ))
-        .reduce((devs, item) => {
-        item.developer.forEach(dev => {
-            devs[dev.id] = devs[dev.id] || {"id": dev.id, "name": dev.name, "count": 0};
-            devs[dev.id].count++;
-        });
-        return devs;
-        }, {})).sort((a,b) => b.count - a.count)
-        .slice(0, 5),
-        [list]);
+    const renderRankedList = (items) => (
+        <div className="statsRanking">
+            {items.map((item, index) => {
+                let icon;
+                switch (index) {
+                    case 0:
+                        icon = '/img/gold_medal.png'; break;
+                    case 1:
+                        icon = '/img/silver_medal.png'; break;
+                    case 2:
+                        icon = '/img/bronze_medal.png'; break;
+                    default:
+                        icon = null;
+                }
     
-    const devsList = useMemo(() => <div className="statsRanking">
-        {devs.map((dev, index)=> {
-            switch (index) {
-            case 0:
-                return <Row key={index}>
-                <Col md={1} sm={2} className="flexCentered">
-                    <img className = 'topPositionIcon' src={window.location.origin +'/img/gold_medal.png'} alt="first position"/>
-                </Col>
-                <Col md={11} sm={10}>
-                    <span>{dev.name} </span>
-                    <span>({dev.count} games)</span>
-                </Col>
-                
-            </Row>
-            case 1:
-                return <Row key={index}>
-                <Col md={1} sm={2} className="flexCentered">
-                    <img className = 'topPositionIcon' src={window.location.origin +'/img/silver_medal.png'} alt="second position"/>
-                </Col>
-                <Col md={11} sm={10}>
-                    <span>{dev.name} </span>
-                    <span>({dev.count} games)</span>
-                </Col>
-                
-            </Row>
-            case 2:
-                return <Row key={index}>
-                    <Col md={1} sm={2} className="flexCentered">
-                        <img className = 'topPositionIcon' src={window.location.origin +'/img/bronze_medal.png'} alt="third position"/>
-                    </Col>
-                    <Col md={11} sm={10}>
-                        <span>{dev.name} </span>
-                        <span>({dev.count} games)</span>
-                    </Col>
-                    
-                </Row>
-            default:
-                return <Row key={index}>
-                    <Col md={1} sm={2} className="flexCentered">
-                        <span className="topPositionText">{index + 1}. </span>
-                    </Col>
-                    <Col md={11} sm={10}>
-                        <span>{dev.name} </span>
-                        <span>({dev.count} games)</span>
-                    </Col>
-                </Row>
-            }
-        })}
-        </div>,
-        [devs]);
+                return (
+                    <Row key={index}>
+                        <Col xs={2} style={{display: 'flex', justifyContent: 'center'}}>
+                            {icon ? (
+                                <img className='topPositionIcon' src={window.location.origin + icon} alt={`position ${index + 1}`} />
+                            ) : (
+                                <span>{index + 1}. </span>
+                            )}
+                        </Col>
+                        <Col xs={10}>
+                            <span>{item.name} </span>
+                            <span>({item.count} games)</span>
+                        </Col>
+                    </Row>
+                );
+            })}
+        </div>
+    );
 
-    const pubs =  useMemo(() =>Object.values( 
-        list.filter(game => (game.publisher && game.playstatus !== 'plantoplay'))
-        .reduce((pubs, item) => {
-        item.publisher.forEach(pub => {
-            pubs[pub.id] = pubs[pub.id] || {"id": pub.id, "name": pub.name, "count": 0};
-            pubs[pub.id].count++;
-        });
-        return pubs;
-        }, {})).sort((a,b) => b.count - a.count)
-        .slice(0, 5),
-        [list]);
-
-    const pubsList = useMemo(() => <div className="statsRanking">
-        {pubs.map((pub, index)=> {
-            switch (index) {
-            case 0:
-                return <Row key={index}>
-                <Col md={1} sm={2} className="flexCentered">
-                    <img className = 'topPositionIcon' src={window.location.origin +'/img/gold_medal.png'} alt="first position"/>
-                </Col>
-                <Col md={11} sm={10}>
-                    <span>{pub.name} </span>
-                    <span>({pub.count} games)</span>
-                </Col>
-                
-            </Row>
-            case 1:
-                return <Row key={index}>
-                <Col md={1} sm={2} className="flexCentered">
-                    <img className = 'topPositionIcon' src={window.location.origin +'/img/silver_medal.png'} alt="second position"/>
-                </Col>
-                <Col md={11} sm={10}>
-                    <span>{pub.name} </span>
-                    <span>({pub.count} games)</span>
-                </Col>
-                
-            </Row>
-            case 2:
-                return <Row key={index}>
-                    <Col md={1} sm={2} className="flexCentered">
-                        <img className = 'topPositionIcon' src={window.location.origin +'/img/bronze_medal.png'} alt="third position"/>
-                    </Col>
-                    <Col md={11} sm={10}>
-                        <span>{pub.name} </span>
-                        <span>({pub.count} games)</span>
-                    </Col>
-                    
-                </Row>
-            default:
-                return <Row key={index}>
-                    <Col md={1} sm={2} className="flexCentered">
-                        <span className="topPositionText">{index + 1}. </span>
-                    </Col>
-                    <Col md={11} sm={10}>
-                        <span>{pub.name} </span>
-                        <span>({pub.count} games)</span>
-                    </Col>
-                </Row>
-            }
-        })}
-        </div>,
-        [pubs]);
+    const genresList = renderRankedList(getTopRankedItems(list, 'genres', () => true, ['Indie']));
+    const devsList = renderRankedList(getTopRankedItems(list, 'developer'));
+    const pubsList = renderRankedList(getTopRankedItems(list, 'publisher'));
 
     function clickBarHandler(e) {
         handleYearSelect(e.year);
     }
 
+    const numbersToAnimate = [
+        {
+            label: "Games Played", 
+            value: activeList.length ? activeList.length : 0
+        },
+        {
+            label: "Hours Spent", 
+            value: parseFloat(activeList.map(game => parseFloat(game.playtime.replace(',', '.')))
+                .reduce((partialSum, a) => partialSum + a, 0)
+                .toFixed(1)),
+        },
+        {
+            label: "Average Rating", 
+            value: (Math.round(((activeList.map(game => game.rating.reduce((a, b) => a + b, 0) / game.rating.length)
+                .reduce((a, b) => a + b, 0) /(activeList.length)) + Number.EPSILON)*100)/100)
+        }
+    ]
+
     return (
         <Container fluid>
-            <Row className="statsContainer">
-                <Col md={9}>
-                    <div className="statsBox" style={{ height: '42%'}}>
+            <Row className="statsContainer" style={isTabletOrMobile ? {paddingTop: '1rem'} : {paddingTop: '9vh'}}>
+                <Col md={9} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', paddingBottom: '3vh'}}>
+                    <div className="statsBox" style={{ height: '42vh'}}>
                         <Row className="statsMainRow">
                             <h3> Games Played</h3>
                         </Row>
@@ -264,7 +148,7 @@ const StatsContainer = () => {
                             <StatsBarChart data={yearsCount} handleBarClick={clickBarHandler}/>
                         </div>
                     </div>
-                    <div className="statsBox" style={{margin: 'auto', marginTop:'1rem', height: '54%', paddingBottom: '0'}}>
+                    <div className="statsBox" style={{height: '45vh'}}>
                         <Row className="statsMainRow">
                             <Col md={9}>
                                 <h3> {activeYear} Play Stats</h3>
@@ -273,10 +157,11 @@ const StatsContainer = () => {
                                 {yearTags}
                             </Col>}
                         </Row>
-                        <Row style={{height: '90%'}}>
-                            <Col md={5} className='flexCentered' style={{flexDirection: 'column', padding: '1rem'}}>
-                                <Row className='statDivRow'>
-                                    <AnimatedNumbers
+                        <Row style={{display: 'flex', flex: '1', alignItems:'center'}}>
+                            <Col md={5} style={{flexDirection: 'column', padding: '1rem'}}>
+                                {numbersToAnimate.map((number) => (
+                                    <Row className='statDivRow' key={number.label}>
+                                        <AnimatedNumbers
                                         fontStyle={{
                                             fontSize: '2.2rem',
                                             fontWeight: 'bold',
@@ -286,83 +171,40 @@ const StatsContainer = () => {
                                         }}
                                         locale="es-ES"
                                         configs={[{ mass: 1, tension: 300, friction: 50 }]}
-                                        animateToNumber={activeList.length ? activeList.length : 0}
-                                    />
-                                    <h4>Games Played</h4>
-                                </Row>
-                                <Row className='statDivRow'>
-                                    <AnimatedNumbers
-                                        fontStyle={{
-                                            fontSize: '2.2rem',
-                                            fontWeight: 'bold',
-                                            transition: '0.8s ease-out',
-                                            paddingRight: '0',
-                                            transitionProperty: 'background-color, color, opacity'
-                                        }}
-                                        locale="es-ES"
-                                        configs={[{ mass: 1, tension: 300, friction: 50}]}
-                                        animateToNumber={parseFloat(activeList.map(game => parseFloat(game.playtime.replace(',', '.')))
-                                            .reduce((partialSum, a) => partialSum + a, 0)
-                                            .toFixed(1))}
-                                    />
-                                    <h4>Hours Spent</h4>
-                                </Row>
-                                <Row className='statDivRow'>
-                                    <AnimatedNumbers
-                                        fontStyle={{
-                                            fontSize: '2.2rem',
-                                            fontWeight: 'bold',
-                                            transition: '0.8s ease-out',
-                                            paddingRight: '0',
-                                            transitionProperty: 'background-color, color, opacity'
-                                        }}
-                                        locale="es-ES"
-                                        configs={[{ mass: 1, tension: 300, friction: 50 }]}
-                                        initialValue={0}
-                                        animateToNumber={(Math.round(((activeList.map(game => game.rating.reduce((a, b) => a + b, 0) / game.rating.length)
-                                        .reduce((a, b) => a + b, 0) /(activeList.length)) + Number.EPSILON)*100)/100)}
-                                    />
-                                    {/* <span style={{fontSize: '1.8rem',fontWeight: 'bold', display: 'inline-block', width: 'min-content', padding: '0'}}> /5</span> */}
-                                    {/* <Rating 
-                                        readonly={true} 
-                                        size={30} 
-                                        ratingValue={activeList.map(game => game.rating.reduce((a, b) => a + b, 0) / game.rating.length)
-                                        .reduce((partialSum, a) => partialSum + a, 0)/activeList.length} 
-                                        fillColor ={'#fff'} 
-                                        emptyColor={'#000'}/> */}
-                                    <h4>Average Rating</h4>
-                                </Row>
+                                        animateToNumber={number.value}
+                                        />
+                                        <h4>{number.label}</h4>
+                                    </Row>
+                                ))}
                             </Col>
                             {!isTabletOrMobile ? 
-                            <Col md={7} className='statDivChart'>
-                                <div style={{width: '100%', height: '100%'}}>
-                                    <StatsPieChart data={activeYearCount} />
-                                </div>
+                            <Col md={7} style={{height: '100%'}}>
+                                <StatsPieChart data={activeYearCount} />
                             </Col>
                             : <></>}
                         </Row>
                     </div>
                 </Col>
-                <Col style={{ height:'99%'}}>
-                    <div className="statsBox" style={{ height: '30%'}}>
+                <Col style={isTabletOrMobile ? {} : { display: 'flex', flexDirection: 'column', justifyContent: 'space-between', paddingBottom: '3vh'}}>
+                    <div className="statsBox">
                         <h5 style={{paddingBottom: '0.5rem', borderBottom: '1px solid var(--darkAccent)', display: 'flex', alignItems: 'center'}}> <AiOutlineTrophy />&nbsp;Top Genres</h5>
-                        <div style={{margin: 'auto', height: '85%', padding: '0.5rem 0 1rem 1.5rem'}}>
+                        <div style={{padding: '0.5rem 0 1rem 1.5rem', flex: '1', display: 'flex', alignItems:'center'}}>
                             {genresList}
                         </div>
                     </div>
-                    <div className="statsBox" style={{ marginTop: '2.3rem', height: '30%'}}>
+                    <div className="statsBox">
                         <h5 style={{paddingBottom: '0.5rem', borderBottom: '1px solid var(--darkAccent)', display: 'flex', alignItems: 'center'}}> <AiOutlineTrophy />&nbsp;Top Devs</h5>
-                        <div style={{margin: 'auto', height: '85%', padding: '0.5rem 0 1rem 1.5rem'}}>
+                        <div style={{padding: '0.5rem 0 1rem 1.5rem', flex: '1', display: 'flex', alignItems:'center'}}>
                             {devsList}
                         </div>
                     </div>
-                    <div className="statsBox" style={{ marginTop: '2.3rem', height: '30%'}}>
+                    <div className="statsBox" >
                         <h5 style={{paddingBottom: '0.5rem', borderBottom: '1px solid var(--darkAccent)', display: 'flex', alignItems: 'center'}}> <AiOutlineTrophy />&nbsp;Top Publishers</h5>
-                        <div style={{margin: 'auto', height: '85%', padding: '0.5rem 0 1rem 1.5rem'}}>
+                        <div style={{padding: '0.5rem 0 1rem 1.5rem', flex: '1', display: 'flex', alignItems:'center'}}>
                             {pubsList}
                         </div>
                     </div>
-                </Col>
+                </Col>                
             </Row>
         </Container>
         

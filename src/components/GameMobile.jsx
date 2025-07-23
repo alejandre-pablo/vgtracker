@@ -7,16 +7,14 @@ import { FaRegClock } from 'react-icons/fa'
 import { IMAGES_SERVER_URL } from '../constants/urls';
 import { platformNameMap } from '../constants/platforms';
 
-const GameMobile = forwardRef(({ game, style, onClickOpenGameInfo }, ref) => {
+const GameMobile = forwardRef(({ game, displayStyle, onClickOpenGameInfo }, ref) => {
   const [isCollapsed, setCollapsed] = useState(true);
 
   const getCleanPlatformName = (name) => platformNameMap[name] || name;
 
   const handleAccordion = () => setCollapsed(!isCollapsed);
 
-  const averageRating = game.rating.reduce((a, b) => a + b, 0) / game.rating.length;
-
-  return style === "list"
+  return displayStyle === "list"
     ? (<Row>
         <Col xs='2' className="gameImageWrapper">
             <img className='gameListMobileImage' src={IMAGES_SERVER_URL.T_THUMB + game.imageId + '.jpg'} alt=''/>

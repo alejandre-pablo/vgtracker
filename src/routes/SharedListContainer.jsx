@@ -6,9 +6,9 @@ import { useParams } from 'react-router-dom';
 import { useFirestore, useFirestoreDocDataOnce } from 'reactfire';
 
 
-import ListMobile from '../components/ListMobileCards';
-import SharedList from '../components/SharedList';
-const UserListContainer = () => {
+import ListMobile from '../components/ListMobile';
+import List from '../components/List';
+const SharedListContainer = () => {
  
     const isTabletOrMobile = useMediaQuery({query: '(max-width: 1224px)'})
 
@@ -32,13 +32,11 @@ const UserListContainer = () => {
     return (
         <Row className={isTabletOrMobile ? 'mainContainerMobile' : 'mainContainer'}>
             {isTabletOrMobile 
-            ?   <>
-                    <ListMobile list = {list} />
-                </>
-            :   <SharedList list = {list}  userId = {userId} isListLoaded = {isLoaded}/>
+            ?  <ListMobile editable={false} userId={userId} list={list} isListLoaded={isLoaded}/>
+            :  <List editable={false} userId={userId} list={list} isListLoaded={isLoaded}/>
             } 
         </ Row>
     )
 }
 
-export default UserListContainer
+export default SharedListContainer

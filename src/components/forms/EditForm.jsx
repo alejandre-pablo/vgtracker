@@ -5,6 +5,7 @@ import { useMediaQuery } from 'react-responsive';
 import { gameReducer, defaultGame }from './utils/gameFormReducer';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { IMAGES_SERVER_URL } from '../../constants/urls';
+import { MdHeight } from 'react-icons/md';
 
 const EditForm = (props) => {
 
@@ -137,12 +138,16 @@ const EditForm = (props) => {
             <Modal.Title style={{color: 'white'}}>Edit Game</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            <Form>
-                <Row className='gameDetailsWrapper'>
-                    <Col md='3' className='formImageWrapper'>
+            <Form style={{height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly'}}>
+                <Row className={isTabletOrMobile ?' formGroupBordered' : 'gameDetailsWrapper'} >
+                    {!isTabletOrMobile 
+                    ? <Col xs='3' className='formImageWrapper'>
                         <img className='formImage' src={IMAGES_SERVER_URL.T_720P + game.imageId + '.jpg'} alt='Game Cover'/>
                     </Col>
-                    <Col md='9' className='formGroupGameDetails'>    
+                    : <></>
+                    }
+
+                    <Col xs='9' className='formGroupGameDetails'>    
                         <Form.Label className='formHeader'> Game Details </Form.Label>
                         <Form.Group className='mb-3'>
                             <FloatingLabel
@@ -165,7 +170,7 @@ const EditForm = (props) => {
                         </Form.Group>
                     </Col>
                 </Row>
-                <Row className='formGroupBordered' style={{paddingBottom: '0'}}>
+                <Row className='formGroupBordered'>
                 <Form.Label className='formHeader'> Play Details </Form.Label>
 
                 <Form.Group className='mb-3'>
@@ -341,6 +346,9 @@ const EditForm = (props) => {
             </Form>
         </Modal.Body>
         <Modal.Footer>
+            <button className="buttonCancel" onClick={handleClose}>
+                Cancel
+            </button>
             <button className="buttonAdd" onClick={handleFormSubmit} disabled={ enableButton ? "" : "disabled"}>
                 Edit
             </button>

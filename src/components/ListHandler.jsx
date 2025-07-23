@@ -27,7 +27,6 @@ const ListHandler = ({children}) => {
     }, [location.state])
 
     useEffect(() => {
-        // Update list and session storage when Firestore data changes
         if (status === 'success') {
             if (!data || !data.games) {
                 setIsEmptyList(true);

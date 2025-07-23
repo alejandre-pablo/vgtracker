@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import Game from './Game';
 import { Row, Form } from 'react-bootstrap';
 
 const SortableGame = (props) => {

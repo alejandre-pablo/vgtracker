@@ -60,12 +60,6 @@ ul {
     overflow: hidden;
 }
 
-.flexCentered {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .mainContainer {
     flex: 1;
     margin: 0;
@@ -423,7 +417,12 @@ ul {
 
 .gameMobile {
     padding: 0.5rem;
-    z-index: 20;
+}
+
+.bottomSheetImage {
+    border-radius: 8px;
+    width: auto;
+    height: 15vh;
 }
 
 .bottomSheetHeaderRow {
@@ -439,6 +438,13 @@ ul {
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    margin-bottom: 0.6rem;
+}
+
+.bottomSheetDataSecondary {
+    display: inline-flex;
+    align-items: center;
+    color: white;
 }
 
 .bottomSheetOption {
@@ -614,12 +620,21 @@ ul {
     align-items: center;
 }
 
+.buttonCancel {
+    display: block;
+    outline: none;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    border: 0px solid;
+    color: var(--darkAccent);
+    background-color: transparent;
+}
+
 .buttonAdd {
     display: block;
     outline: none;
     padding-left: 2rem;
     padding-right: 2rem;
-    font-size: 15px;
     border: 0px solid;
     border-radius: 5px;
     color: white;
@@ -753,7 +768,6 @@ ul {
     padding: 0;
     height: 100%;
     width: 100%;
-    z-index: 50;
 }
 
 /* --------------------- ADD GAME FORM --------------------- */
@@ -994,10 +1008,10 @@ label::after {
     padding: 0;
 }
 .tabSelectors {
-    margin-right: 0.5rem;
     margin-top: 5rem;
     background-color: var(--darkBase);
-    border-radius: 12px;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
 }
 
 .nav-link {
@@ -1073,7 +1087,7 @@ label::after {
     margin: 0;
     position: fixed;
     width: 100%;
-    z-index: 999;
+    z-index: 2;
     background-color: var(--darkBase);
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
@@ -1087,7 +1101,7 @@ label::after {
     position: sticky;
     top: 0;
     width: 100%;
-    z-index: 999;
+    z-index: 2;
     background-color: var(--darkBase);
     border-bottom-right-radius: 16px;
     border-bottom-left-radius: 16px;
@@ -1140,7 +1154,7 @@ label::after {
     justify-content: center;
     align-items: center;
     position: absolute;
-    z-index: 999;
+    z-index: 5;
     height: 5vh;
     width: 15vw;
     top: 80vh;
@@ -1265,10 +1279,7 @@ label::after {
     align-items: center;
     font-size: 0.9rem;
     margin-right: 0.8rem;
-}
-
-.gameListMobileDataSecondary * {
-    margin: 0 0.2rem;
+    color: white;
 }
 
 .gameListMobileHandler {
@@ -1325,14 +1336,27 @@ label::after {
 .statsContainer {
     height: 100vh;
     max-height: 100vh;
-    padding-top: 9.5vh;
-    /* background-color: var(--darkBgBase); */
+    overflow: auto;
 }
 
 .statsBox {
+    height: 30%;
+    display: flex;
+    flex-direction: column;
     padding: 1rem;
     border-radius: 12px;
     background-color: var(--darkBase);
+}
+
+.statsBoxMobile {
+    padding: 1rem;
+    border-radius: 12px;
+    background-color: var(--darkBase);
+}
+
+.statsBoxMobile div {
+    display: flex;
+    flex-direction: column;
 }
 
 .statsMainRow {
@@ -1408,7 +1432,7 @@ label::after {
 }
 
 .statDivRow {
-    margin: auto;
+    margin: 0 auto;
     margin-left: 3rem;
     padding: 0.5rem;
     display: flex;
@@ -1419,6 +1443,11 @@ label::after {
 
 .statDivRow .animated-container {
     color: white;
+}
+
+.statsRanking {
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .statsRanking > .row  {
@@ -1561,11 +1590,11 @@ a:hover {
     left: 1rem !important;
 }
 
-.slick-arrow {
+/* .slick-arrow {
     z-index: 100;
     background: none;
     top: 2.9vh !important;
-}
+} */
 
 .btn-dark:focus, .btn-dark:hover, .show > .btn-dark.dropdown-toggle {
     background: none !important;
@@ -1632,6 +1661,10 @@ a:hover {
 
     ::-webkit-scrollbar {
         display: none;
+    }
+
+    .statsBox {
+        margin-top: 1rem;
     }
 }
 

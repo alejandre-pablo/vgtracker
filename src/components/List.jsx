@@ -1,35 +1,56 @@
-import { DndContext, KeyboardSensor, useSensor, useSensors, closestCenter, DragOverlay, PointerSensor } from '@dnd-kit/core';
-import { restrictToVerticalAxis, restrictToWindowEdges } from '@dnd-kit/modifiers';
-import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import React, { useState } from 'react'
-import { useEffect } from 'react';
-import { useSearch } from './contexts/SearchContext';
+import React, { useEffect, useState } from 'react';
 import { Tab, Nav, Col, Row, Spinner, Dropdown } from 'react-bootstrap';
-import { AiFillCaretDown, AiFillCaretUp } from 'react-icons/ai'
-import { TbCalendarUp, TbCalendarDown, TbClockUp, TbClockDown } from 'react-icons/tb'
-import { FaSort, FaSortAlphaDown, FaSortAlphaUp, FaSortAmountDown, FaStar, FaUndo } from 'react-icons/fa';
-import EditForm from './forms/EditForm';
-import Game from './Game'
+import { AiFillCaretDown, AiFillCaretUp } from 'react-icons/ai';
+import { TbCalendarUp, TbCalendarDown, TbClockUp, TbClockDown } from 'react-icons/tb';
+import { FaSortAlphaDown, FaSortAlphaUp, FaSortAmountDown, FaStar, FaSort } from 'react-icons/fa';
+
+import { useSearch } from './contexts/SearchContext';
+import SharedGame from './SharedGame';
+import Game from './Game';
 import SortableGame from './SortableGame';
+import SharedProfileCard from './SharedProfileCard';
+import EditForm from './forms/EditForm';
 
+import { DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors, closestCenter, DragOverlay } from '@dnd-kit/core';
+import { sortableKeyboardCoordinates, arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { restrictToVerticalAxis, restrictToWindowEdges } from '@dnd-kit/modifiers';
+import useListLogic from '../hooks/useListLogic';
 
-const List = (props) => {
-    const {list, isEmptyList, isListLoaded, handleEditItem, handleRemoveItem, handleOrderList} = props;
+const List = ({list, userId = null, editable = false, isListLoaded, isEmptyList, onEditItem, onRemoveItem, onReorderList }) => {
 
-    const [mutableList, setMutableList] = useState(list);
-    const [activeTab, setActiveTab] = useState("Finished");
-
-    const {searchString} = useSearch();
-    const [isFilteredSearch, setIsFilteredSearch] = useState(false);
-
-    const [sortingCache, setSortingCache] = useState(['order', 'default'])
-    const [isSorted, setIsSorted] = useState(false);
+    const {mutableList,
+        activeTab,
+        activeId,
+        dragGame,
+        listCategoriesWithCounts,
+        sortingCache,
+        setSortingCache,
+        isSorted,
+        isFilteredSearch,
+        setActiveTab,
+        handleSort,
+        handleChangeIndex,
+        handleDragStart,
+        handleDragEnd
+    } = useListLogic(list, { editable, onReorderList });
 
     const [gameData, setGameData] = useState({});
     const [showModal, setShowModal] = useState(false);
 
-    const [activeId, setActiveId] = useState(null);
-    const [dragGame, setDragGame] = useState({});
+    function handleShowEditModal(id) {
+        setGameData(list.find(game => game.id === id));
+        setShowModal(true);
+    }
+
+    function handleCloseModal() {
+        setShowModal(false);
+    }
+
+
+    const sensors = useSensors(
+        useSensor(PointerSensor, { activationConstraint: { distance: 2 } }),
+        useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+    );
 
     const sortIcons = {
         'title-asc': <FaSortAlphaDown />,
@@ -43,221 +64,48 @@ const List = (props) => {
         'order-default': <FaSortAmountDown />
     };
 
-    useEffect(() => {
-        const updatedList = getFilteredSortedList();
-        setMutableList(updatedList);
-    }, [list, searchString, sortingCache, activeTab]);
-
-    function getFilteredSortedList() {
-        const hasSearch = searchString.trim() !== "";
-        const activeCategory = listCategories.find(cat => cat.key === activeTab);
-
-        let updatedList = [...list];
-
-        /* //Prevents losing proper ordering as a result of filter () => true 
-        if (activeCategory?.key === "All" && !isSorted && !hasSearch) {
-            setIsFilteredSearch(false);
-            return updatedList;
-        }
- */
-        if (activeCategory) {
-            updatedList = updatedList.filter(activeCategory.filter);
-        }
-      
-        if (hasSearch) {
-            updatedList = filterBySearchString(updatedList);
-            setIsFilteredSearch(true);
-        } else {
-            setIsFilteredSearch(false);
-        }
-      
-        if (isSorted) {
-            updatedList.sort(sortByProperty(sortingCache[0], sortingCache[1]));
-        }
-      
-        return updatedList;
-    }
-
-    function filterBySearchString(list) {
-        const normalizedSearch = searchString.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        return list.filter(game =>
-            game.title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(normalizedSearch)
-        );
-    }
-
-    function handleSort (sorting) {
-        if(sortingCache[0] === sorting) {
-            if (sortingCache[1] === 'asc') {
-                setSortingCache([sorting,'desc'])
-                setIsSorted(true);
-            } else {
-                setSortingCache(['order','default'])
-                setIsSorted(false);
-            }
-        } else {
-            setSortingCache([sorting, 'asc'])
-            setIsSorted(true);
-        }
-    }
-
-    function sortByProperty(property, way) {
-        var sortOrder = 1;
-        if(way === "desc") {
-            sortOrder = -1;
-        }
-        switch (property) {
-            case 'title':
-                return function (a,b) {
-                    return (a[property].localeCompare(b[property])) * sortOrder;
-                }
-            case 'platform':
-                return function (a,b) {
-                    return (a[property].name.localeCompare(b[property].name)) * sortOrder;
-                }
-            case 'playtime':
-                return function (a,b) {
-                    var normalizedA = parseFloat(a[property].replace(',', '.').replace(':', '.'))
-                    var normalizedB = parseFloat(b[property].replace(',', '.').replace(':', '.'))
-                    var result = (normalizedA < normalizedB) ? -1 : (normalizedA > normalizedB) ? 1 : 0;
-                    if(result === 0 && (a[property] !== '' && b[property] !== '')) {
-                        return 1 * sortOrder;
-                    }
-                    return result * sortOrder;
-                }
-            case 'rating':
-                return function (a,b) {
-                    var normalizedA = parseFloat(a[property].reduce((partialSum, a) => partialSum + a, 0));
-                    var normalizedB = parseFloat(b[property].reduce((partialSum, a) => partialSum + a, 0));
-                    var result = (normalizedA < normalizedB) ? -1 : (normalizedA > normalizedB) ? 1 : 0;
-                    if(result === 0 && (a[property] !== '' && b[property] !== '')) {
-                        return 1 * sortOrder;
-                    }
-                    return result * sortOrder;
-                }
-            default:
-                return function (a,b) {
-                    return 1;
-                }
-        }
-    }
-
-    function handleShowEditModal(id) {
-        setGameData(list.find(game => game.id === id));
-        setShowModal(true);
-    }
-    function handleCloseModal() {
-        setShowModal(false);
-    }
-
-    const sensors = useSensors(
-        useSensor(PointerSensor, {
-            activationConstraint: {
-                distance: 2,
-            }
-        }),
-        useSensor(KeyboardSensor, {
-            coordinateGetter: sortableKeyboardCoordinates,
-          })
-    )
-    
-    function handleDragStart(event) {
-        setDragGame(list.find(game => game.id === event.active.id))
-        setActiveId(event.active.id);
-    }
-    
-    function handleDragEnd(event) {
-        if(!isSorted && !isFilteredSearch) {
-            const { active, over } = event;
-            if ((active && over) && (active.id !== over.id)) {
-                //Filter logic beforehand so that waiting for the rerender doesn't cause UI lag
-                const oldIndexMutated = mutableList.findIndex(item => item.id === active.id);
-                const newIndexMutated = mutableList.findIndex(item => item.id === over.id);
-                setMutableList(arrayMove(mutableList, oldIndexMutated, newIndexMutated));
-
-                const oldIndex = list.findIndex(item => item.id === active.id);
-                const newIndex = list.findIndex(item => item.id === over.id);
-                const tmpList =  arrayMove(list, oldIndex, newIndex);
-                handleOrderList(tmpList);
-            };
-        };
-    }
-
-    function handleChangeIndex(id, newIndex) {
-        const targetIndexMutated = newIndex - 1;
-        //Filter logic beforehand so that waiting for the rerender doesn't cause UI lag
-        const oldIndexMutated = list.findIndex(item => item.id === id);
-        const correctedNewIndexMutated = list.findIndex(item => item.id ===  mutableList[targetIndexMutated].id);
-        setMutableList(arrayMove(mutableList, oldIndexMutated, correctedNewIndexMutated));
-
-        const oldIndex = list.findIndex(item => item.id === id);
-        const correctedNewIndex = list.findIndex(item => item.id ===  mutableList[targetIndexMutated].id);
-        const newList = arrayMove(list, oldIndex, correctedNewIndex);
-        handleOrderList(newList);
-    }
-
-    const listHeader = 
-    <Row className='listHeader'>
-        <div className='columnTitle gameSortWrapper'> <span className='gameSortIndex'>#</span> </div>
-        <div className='columnTitle' style={{width:'9vw'}}></div>
-        <div className='columnTitle' style={{width:'22vw', cursor: 'pointer'}} onClick={() => handleSort('title')}> 
-            TITLE 
-            {sortingCache[0] !== 'title' ? <></>
-            : sortingCache[1] === 'asc' ? <AiFillCaretUp/>
-                :<AiFillCaretDown/>
-            }   
-        </div>
-        <div className='columnTitle' style={{width:'10vw', cursor: 'pointer'}} onClick={() => handleSort('platform')}> 
-            PLATFORM
-            {sortingCache[0] !== 'platform' ? <></>
-            : sortingCache[1] === 'asc' ? <AiFillCaretUp/>
-                :<AiFillCaretDown/>
-            }
-        </div>
-        <div className='columnTitle' style={{width:'10vw', cursor: 'pointer'}} onClick={() => handleSort('playtime')}> 
-            PLAYTIME
-            {sortingCache[0] !== 'playtime' ? <></>
-            : sortingCache[1] === 'asc' ? <AiFillCaretUp/>
-                :<AiFillCaretDown/>
-            }
+    const listHeader =
+        <Row className='listHeader'>
+            <div className='columnTitle gameSortWrapper'>#</div>
+            <div className='columnTitle' style={{ width: '9vw' }}></div>
+            <div className='columnTitle' style={{ width: '22vw', cursor: 'pointer' }} onClick={() => handleSort('title')}>
+                TITLE {sortingCache[0] === 'title' && (sortingCache[1] === 'asc' ? <AiFillCaretUp /> : <AiFillCaretDown />)}
             </div>
-        <div className='columnTitle' style={{width:'8vw', cursor: 'pointer'}} onClick={() => handleSort('playdate')}>
-            DATE
-            {sortingCache[0] !== 'playdate' ? <></>
-            : sortingCache[1] === 'asc' ? <AiFillCaretUp/>
-                :<AiFillCaretDown/>
-            }
+            <div className='columnTitle' style={{ width: '10vw', cursor: 'pointer' }} onClick={() => handleSort('platform')}>
+                PLATFORM {sortingCache[0] === 'platform' && (sortingCache[1] === 'asc' ? <AiFillCaretUp /> : <AiFillCaretDown />)}
             </div>
-        <div className='columnTitle' style={{width:'12vw', cursor: 'pointer'}} onClick={() => handleSort('rating')}>
-            RATING
-            {sortingCache[0] !== 'rating' ? <></>
-            : sortingCache[1] === 'asc' ? <AiFillCaretUp/>
-                :<AiFillCaretDown/>
-            }
+            <div className='columnTitle' style={{ width: '10vw', cursor: 'pointer' }} onClick={() => handleSort('playtime')}>
+                PLAYTIME {sortingCache[0] === 'playtime' && (sortingCache[1] === 'asc' ? <AiFillCaretUp /> : <AiFillCaretDown />)}
             </div>
-        <div className='columnTitle' style={{flex:'1'}}>
-            <Dropdown>
-                <Dropdown.Toggle className="faIconButton" id="sortingDropdown">
+            <div className='columnTitle' style={{ width: '8vw', cursor: 'pointer' }} onClick={() => handleSort('playdate')}>
+                DATE {sortingCache[0] === 'playdate' && (sortingCache[1] === 'asc' ? <AiFillCaretUp /> : <AiFillCaretDown />)}
+            </div>
+            <div className='columnTitle' style={{ width: '12vw', cursor: 'pointer' }} onClick={() => handleSort('rating')}>
+                RATING {sortingCache[0] === 'rating' && (sortingCache[1] === 'asc' ? <AiFillCaretUp /> : <AiFillCaretDown />)}
+            </div>
+            <div className='columnTitle' style={{ flex: 1 }}>
+                <Dropdown>
+                <Dropdown.Toggle className="faIconButton">
                     {sortIcons[`${sortingCache[0]}-${sortingCache[1]}`] || <FaSortAlphaDown />}
                 </Dropdown.Toggle>
-
                 <Dropdown.Menu>
-                    <Dropdown.Item className='sortDropdownItem' onClick={() => setSortingCache(['title', 'asc'])}>Title A-Z</Dropdown.Item>
-                    <Dropdown.Item className='sortDropdownItem' onClick={() => setSortingCache(['title', 'desc'])}>Title Z-A</Dropdown.Item>
-                    <Dropdown.Item className='sortDropdownItem' onClick={() => setSortingCache(['rating', 'desc'])}>Top Rated</Dropdown.Item>
-                    <Dropdown.Item className='sortDropdownItem' onClick={() => setSortingCache(['playtime', 'desc'])}>Longest Played</Dropdown.Item>
-                    <Dropdown.Item className='sortDropdownItem' onClick={() => setSortingCache(['order', 'default'])}>Default Order</Dropdown.Item>
+                    <Dropdown.Item onClick={() => setSortingCache(['title', 'asc'])}>Title A-Z</Dropdown.Item>
+                    <Dropdown.Item onClick={() => setSortingCache(['title', 'desc'])}>Title Z-A</Dropdown.Item>
+                    <Dropdown.Item onClick={() => setSortingCache(['rating', 'desc'])}>Top Rated</Dropdown.Item>
+                    <Dropdown.Item onClick={() => setSortingCache(['playtime', 'desc'])}>Longest Played</Dropdown.Item>
+                    <Dropdown.Item onClick={() => setSortingCache(['order', 'default'])}>Default Order</Dropdown.Item>
                 </Dropdown.Menu>
-            </Dropdown>
-        </div>
-    </Row>
+                </Dropdown>
+            </div>
+        </Row>;
 
-    const listHeaderPlanToPlay = 
-    <Row className='listHeader'>
-        <div className='columnTitle gameSortWrapper'> <span className='gameSortIndex'>#</span> </div>
-        <div className='columnTitle' style={{width:'9vw'}}></div>
-        <div className='columnTitle' style={{width:'22vw'}}>TITLE</div>
-        <div className='columnTitle' style={{width:'37vw'}}></div>
-    </Row>
+    const listHeaderPlanToPlay =
+        <Row className='listHeader'>
+        <div className='columnTitle gameSortWrapper'>#</div>
+        <div className='columnTitle' style={{ width: '9vw' }}></div>
+        <div className='columnTitle' style={{ width: '22vw' }}>TITLE</div>
+        <div className='columnTitle' style={{ width: '37vw' }}></div>
+        </Row>;
 
     const listCategories = [
         { key: "All", label: "ALL GAMES", filter: () => true, header: listHeader },
@@ -266,114 +114,108 @@ const List = (props) => {
         { key: "OnHold", label: "ON HOLD", filter: game => game.playstatus === "onhold", header: listHeader },
         { key: "Dropped", label: "DROPPED", filter: game => game.playstatus === "dropped", header: listHeader },
         { key: "Other", label: "OTHER", filter: game => game.playstatus === "other", header: listHeader },
-        { key: "PlanToPlay", label: "PLAN TO PLAY", filter: game => game.playstatus === "plantoplay", header: listHeaderPlanToPlay },
+        { key: "PlanToPlay", label: "PLAN TO PLAY", filter: game => game.playstatus === "plantoplay", header: listHeaderPlanToPlay }
     ];
-
-    const listCategoriesWithCounts = listCategories.map(cat => {
-        let filteredList = list.filter(cat.filter);
-        filteredList = filterBySearchString(filteredList);
-        const count = filteredList.length
-        return {
-            ...cat,
-            label: isFilteredSearch ? `${cat.label} (${count})` : cat.label
-        };
-    });
 
     const generateGameList = (games) => (
         <ul>
-            {games.map((game, index) => (
-                <li key={game.id} className={index % 2 === 0 ? 'highlight' : ''}>
+        {games.map((game, index) => (
+            <li key={game.id} className={index % 2 === 0 ? 'highlight' : ''}>
+            {editable ? (
                 <SortableGame
-                    key={game.id}
-                    id={game.id}
-                    onChangeIndex={handleChangeIndex}
-                    index={index + 1}
-                    isFiltered={isSorted || isFilteredSearch}
+                id={game.id}
+                onChangeIndex={handleChangeIndex}
+                index={index + 1}
+                isFiltered={isSorted || isFilteredSearch}
                 >
-                    <Game
-                        game={game}
-                        onClickRemoveItem={handleRemoveItem}
-                        onClickEditItem={handleShowEditModal}
-                    />
+                <Game game={game} onClickEditItem={onEditItem && handleShowEditModal} onClickRemoveItem={onRemoveItem} />
                 </SortableGame>
+            ) : (
+                <Row className='gameWrapper'>
+                <div className='gameSortWrapper'><span className='gameSortIndex'>{index + 1}</span></div>
+                <SharedGame game={game} />
+                </Row>
+            )}
             </li>
-            ))}
+        ))}
         </ul>
-      );
+    );
 
     return (
         <>
-        <EditForm show ={showModal} handleCloseModal = {handleCloseModal} gameData = {gameData} updateItemHandler = {handleEditItem}/>
-        <Tab.Container id="tabs" className='gamesList' defaultActiveKey="Finished" activeKey={activeTab} onSelect={(key) => setActiveTab(key)}>
-            <Row>
+        {editable && <EditForm show={showModal} handleCloseModal={handleCloseModal} gameData={gameData} updateItemHandler={onEditItem} />}
+        <Tab.Container activeKey={activeTab} onSelect={setActiveTab}>
+                <Row>
                 <Col className='sideBarColumn'>
-                <Nav variant="pills" className="flex-column tabSelectors">
+                    {editable && !userId ? null : <SharedProfileCard userId={userId} list={list} />}
+                    <Nav variant="pills" className="flex-column tabSelectors">
                     {listCategoriesWithCounts.map(cat => (
-                        <Nav.Item key={cat.key} className={`tab${cat.key}`}>
-                        <Nav.Link eventKey={cat.key}>{cat.label}</Nav.Link>
-                        </Nav.Item>
+                        <Nav.Item key={cat.key}><Nav.Link eventKey={cat.key}>{cat.label}</Nav.Link></Nav.Item>
                     ))}
-                </Nav>
+                    </Nav>
                 </Col>
                 <Col className='listColumn'>
-                    <DndContext
-                        sensors={sensors}
-                        collisionDetection={closestCenter}
-                        onDragStart={handleDragStart}
-                        onDragEnd={handleDragEnd}
-                        modifiers={[restrictToVerticalAxis]}
-                    >
+                    {editable ? (
+                        <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd} modifiers={[restrictToVerticalAxis]}>
+                            <Tab.Content>
+                                <Tab.Pane eventKey={activeTab}>
+                                    {(() => {
+                                    const category = listCategories.find(cat => cat.key === activeTab);
+                                    const games = mutableList.filter(category.filter);
+                                    return (
+                                        <>
+                                        {category.header}
+                                        <Row className='scrollable'>
+                                            <SortableContext items={games.map(g => g.id)} strategy={verticalListSortingStrategy}>
+                                            {!isListLoaded ? (
+                                                <Spinner animation='grow' variant='light' style={{ marginTop: '50%', margin: 'auto' }}/>
+                                            ) : isEmptyList ? (
+                                                <span className='emptyListMessage'>Start by adding some games</span>
+                                            ) : games.length === 0 ? (
+                                                <span className='emptyListMessage'>No games to show</span>
+                                            ) : generateGameList(games)}
+                                            </SortableContext>
+                                        </Row>
+                                        </>
+                                    );
+                                    })()}
+                                </Tab.Pane>
+                            </Tab.Content>
+                            <DragOverlay wrapperElement="div" modifiers={[restrictToWindowEdges]} dropAnimation={null}>
+                                {activeId && (
+                                    <div className='dragOverlayWrapper'>
+                                        <span className='gameSortHandle'><FaSort /></span>
+                                        <Game game={dragGame} onClickEditItem={onEditItem && handleShowEditModal} onClickRemoveItem={onRemoveItem} />
+                                    </div>
+                                )}
+                            </DragOverlay>
+                        </DndContext>
+                    ) : (
                         <Tab.Content>
-                        <Tab.Pane eventKey={activeTab}>
-                            {(() => {
-                            const activeCategory = listCategoriesWithCounts.find(cat => cat.key === activeTab);
-                            const filteredList = mutableList.filter(activeCategory.filter);
-                            const gameList = generateGameList(filteredList);
-
+                            {listCategoriesWithCounts.map(cat => {
+                            const games = mutableList.filter(cat.filter);
                             return (
-                                <>
-                                {activeCategory.header}
+                                <Tab.Pane eventKey={cat.key} key={cat.key}>
+                                {activeTab === 'PlanToPlay' ? listHeaderPlanToPlay : listHeader}
                                 <Row className='scrollable'>
-                                    <SortableContext
-                                    items={filteredList.map(game => game.id)}
-                                    strategy={verticalListSortingStrategy}
-                                    >
                                     {!isListLoaded ? (
-                                        <Spinner animation='grow' variant='light' style={{ marginTop: '50%', margin: 'auto' }} />
-                                    ) : isEmptyList ? (
-                                        <span className='emptyListMessage'>Start by adding some games</span>
-                                    ) : gameList.props.children.length === 0 ? (
-                                        <span className='emptyListMessage'>No games to show in this category</span>
-                                    ) : (
-                                        gameList
-                                    )}
-                                    </SortableContext>
+                                    <Spinner animation='grow' variant='light' style={{ marginTop: '50%', margin: 'auto' }}/>
+                                    ) : list.length === 0 ? (
+                                    <span className='emptyListMessage'>Start by adding some games</span>
+                                    ) : games.length === 0 ? (
+                                    <span className='emptyListMessage'>No games to show</span>
+                                    ) : generateGameList(games)}
                                 </Row>
-                                </>
+                                </Tab.Pane>
                             );
-                            })()}
-                        </Tab.Pane>
+                            })}
                         </Tab.Content>
-
-                        <DragOverlay wrapperElement="div" modifiers={[restrictToWindowEdges]} dropAnimation={null}>
-                        {activeId ? (
-                            <div className='dragOverlayWrapper'>
-                                <span className='gameSortHandle'><FaSort /></span>
-                                <Game
-                                    game={dragGame}
-                                    onClickEditItem={handleShowEditModal}
-                                    onClickRemoveItem={handleRemoveItem}
-                                />
-                            </div>
-                            
-                        ) : null}
-                        </DragOverlay>
-                    </DndContext>
+                    )}
                 </Col>
             </Row>
-            </Tab.Container>
+        </Tab.Container>
         </>
-    )
-}
+    );
+};
 
-export default List
+export default List;
