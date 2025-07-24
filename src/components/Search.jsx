@@ -39,7 +39,7 @@ const Search = () => {
                         <FaTimes />
                     </Button>
                 )}
-                <Button type='submit' className='faIconButton'> <FaSearch/></Button> 
+                <Button type='submit' className='faIconButton' style={{height: '100%', display: 'flex', alignItems: 'center'}}> <FaSearch/></Button> 
             </InputGroup>
         </Form>
     )
