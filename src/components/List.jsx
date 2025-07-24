@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Tab, Nav, Col, Row, Spinner, Dropdown } from 'react-bootstrap';
 import { AiFillCaretDown, AiFillCaretUp } from 'react-icons/ai';
+import { LuListTodo } from 'react-icons/lu';
 import { TbCalendarUp, TbCalendarDown, TbClockUp, TbClockDown } from 'react-icons/tb';
-import { FaSortAlphaDown, FaSortAlphaUp, FaSortAmountDown, FaStar, FaSort } from 'react-icons/fa';
+import { FaSortAlphaDown, FaSortAlphaUp, FaSortAmountDown, FaStar, FaSort, FaCheck, FaPause, FaTrashAlt, FaList, FaQuestion, FaArrowUp, FaArrowDown } from 'react-icons/fa';
 
 import { useSearch } from './contexts/SearchContext';
 import SharedGame from './SharedGame';
@@ -15,10 +16,12 @@ import { DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors, close
 import { sortableKeyboardCoordinates, arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { restrictToVerticalAxis, restrictToWindowEdges } from '@dnd-kit/modifiers';
 import useListLogic from '../hooks/useListLogic';
+import { IoLogoGameControllerA } from 'react-icons/io';
 
 const List = ({list, userId = null, editable = false, isListLoaded, isEmptyList, onEditItem, onRemoveItem, onReorderList }) => {
 
-    const {mutableList,
+    const {
+        mutableList,
         activeTab,
         activeId,
         dragGame,
@@ -64,6 +67,14 @@ const List = ({list, userId = null, editable = false, isListLoaded, isEmptyList,
         'order-default': <FaSortAmountDown />
     };
 
+    const sortKeys = [
+        { key: "title", label: "Title" },
+        { key: "platform", label: "Platform" },
+        { key: "playtime", label: "Playtime" },
+        { key: "playdate", label: "Playdate" },
+        { key: "rating", label: "Rating" },
+    ];
+
     const listHeader =
         <Row className='listHeader'>
             <div className='columnTitle gameSortWrapper'>#</div>
@@ -85,15 +96,24 @@ const List = ({list, userId = null, editable = false, isListLoaded, isEmptyList,
             </div>
             <div className='columnTitle' style={{ flex: 1 }}>
                 <Dropdown>
-                <Dropdown.Toggle className="faIconButton">
-                    {sortIcons[`${sortingCache[0]}-${sortingCache[1]}`] || <FaSortAlphaDown />}
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                    <Dropdown.Item onClick={() => setSortingCache(['title', 'asc'])}>Title A-Z</Dropdown.Item>
-                    <Dropdown.Item onClick={() => setSortingCache(['title', 'desc'])}>Title Z-A</Dropdown.Item>
-                    <Dropdown.Item onClick={() => setSortingCache(['rating', 'desc'])}>Top Rated</Dropdown.Item>
-                    <Dropdown.Item onClick={() => setSortingCache(['playtime', 'desc'])}>Longest Played</Dropdown.Item>
-                    <Dropdown.Item onClick={() => setSortingCache(['order', 'default'])}>Default Order</Dropdown.Item>
+                    <Dropdown.Toggle className="faIconButton">
+                        {sortIcons[`${sortingCache[0]}-${sortingCache[1]}`] || <FaSortAlphaDown />}
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                    {sortKeys.map(({ key, label }) => (
+                    <Dropdown.Item key={key} onClick={() => handleSort(key)} className='floatingMobileSortItem'>
+                        {label}
+                        {sortingCache[0] === key && (sortingCache[1] === "asc" ? (
+                            <FaArrowUp />
+                        ) : (
+                            <FaArrowDown />
+                        ))}
+                    </Dropdown.Item>
+                    ))}
+
+                    <Dropdown.Item onClick={() => setSortingCache(['order', 'default'])}>
+                        Default
+                    </Dropdown.Item>
                 </Dropdown.Menu>
                 </Dropdown>
             </div>
@@ -108,13 +128,13 @@ const List = ({list, userId = null, editable = false, isListLoaded, isEmptyList,
         </Row>;
 
     const listCategories = [
-        { key: "All", label: "ALL GAMES", filter: () => true, header: listHeader },
-        { key: "Finished", label: "COMPLETED", filter: game => game.playstatus === "finished", header: listHeader },
-        { key: "Playing", label: "PLAYING", filter: game => game.playstatus === "playing", header: listHeader },
-        { key: "OnHold", label: "ON HOLD", filter: game => game.playstatus === "onhold", header: listHeader },
-        { key: "Dropped", label: "DROPPED", filter: game => game.playstatus === "dropped", header: listHeader },
-        { key: "Other", label: "OTHER", filter: game => game.playstatus === "other", header: listHeader },
-        { key: "PlanToPlay", label: "PLAN TO PLAY", filter: game => game.playstatus === "plantoplay", header: listHeaderPlanToPlay }
+        { key: "All", label: "ALL GAMES", icon: FaList, filter: () => true, header: listHeader },
+        { key: "Finished", label: "COMPLETED", icon: FaCheck, filter: game => game.playstatus === "finished", header: listHeader },
+        { key: "Playing", label: "PLAYING", icon: IoLogoGameControllerA, filter: game => game.playstatus === "playing", header: listHeader },
+        { key: "OnHold", label: "ON HOLD", icon: FaPause, filter: game => game.playstatus === "onhold", header: listHeader },
+        { key: "Dropped", label: "DROPPED", icon: FaTrashAlt, filter: game => game.playstatus === "dropped", header: listHeader },
+        { key: "Other", label: "OTHER", icon: FaQuestion, filter: game => game.playstatus === "other", header: listHeader },
+        { key: "PlanToPlay", label: "PLAN TO PLAY", icon: LuListTodo, filter: game => game.playstatus === "plantoplay", header: listHeaderPlanToPlay }
     ];
 
     const generateGameList = (games) => (

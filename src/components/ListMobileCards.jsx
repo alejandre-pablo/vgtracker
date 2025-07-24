@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
 import { Col, Row, Spinner } from 'react-bootstrap';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
 import EditForm from './forms/EditForm';
 import GameMobile from './GameMobile';
 
@@ -40,7 +37,7 @@ const ListMobileCards = ({ list, isEmptyList, isListLoaded, handleEditItem, hand
         gameData={gameData}
         updateItemHandler={handleEditItem}
       />
-      <Col className="listColumn">
+      {/* <Col className="listColumn">
         <Slider asNavFor={nav2} ref={setNav1} className="mobileTabTitleWrapper">
           {categories.map((cat, idx) => (
             <Row key={idx} className="mobileTabTitle">
@@ -85,7 +82,7 @@ const ListMobileCards = ({ list, isEmptyList, isListLoaded, handleEditItem, hand
             );
           })}
         </Slider>
-      </Col>
+      </Col> */}
     </>
   );
 };

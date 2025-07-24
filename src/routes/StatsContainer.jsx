@@ -52,11 +52,11 @@ const StatsContainer = () => {
             other: {"status": "other", "count": 0}
         }))
 
-    const yearTags = 
+    /* const yearTags = 
         <DropdownButton onSelect={handleYearSelect} className="statsYearDropdown" title={activeYear} variant='dark'>
             {yearsCount.map(year => <Dropdown.Item key={year.year} eventKey={year.year}>{year.year}</Dropdown.Item>)}
             <Dropdown.Item eventKey={'All Time'}>All Time</Dropdown.Item>
-        </DropdownButton>
+        </DropdownButton> */
 
     const getTopRankedItems = (list, key, filterFn = () => true, excludeNames = [], maxItems = 5) => {
         const counts = list
@@ -138,7 +138,7 @@ const StatsContainer = () => {
 
     return (
         <Container fluid>
-            <Row className="statsContainer" style={isTabletOrMobile ? {paddingTop: '1rem'} : {paddingTop: '9vh'}}>
+            <Row className="statsContainer" style={{paddingTop: '9vh'}}>
                 <Col md={9} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', paddingBottom: '3vh'}}>
                     <div className="statsBox" style={{ height: '42vh'}}>
                         <Row className="statsMainRow">
@@ -153,9 +153,9 @@ const StatsContainer = () => {
                             <Col md={9}>
                                 <h3> {activeYear} Play Stats</h3>
                             </Col>
-                            {<Col>
+                            {/* <Col>
                                 {yearTags}
-                            </Col>}
+                            </Col> */}
                         </Row>
                         <Row style={{display: 'flex', flex: '1', alignItems:'center'}}>
                             <Col md={5} style={{flexDirection: 'column', padding: '1rem'}}>

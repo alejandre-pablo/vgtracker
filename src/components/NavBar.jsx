@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Row, Col, Offcanvas, Dropdown, Toast, Navbar} from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import Search from './Search'
@@ -12,12 +12,14 @@ import { RxHamburgerMenu } from 'react-icons/rx'
 import { useMediaQuery } from 'react-responsive';
 import { useState } from 'react';
 import EditProfileForm from './forms/EditProfileForm';
+import useScrollVisibility from '../hooks/useScrollVisibility';
 
 const { version } = require('../../package.json');
 
 const NavBar = () => {
 
     const isTabletOrMobile = useMediaQuery({query: '(max-width: 1224px)'})
+    const visible = useScrollVisibility();
 
     const app = useFirebaseApp();
     const auth = getAuth(app);
@@ -148,7 +150,7 @@ const NavBar = () => {
         </>
         :<>
             {user? <EditProfileForm show ={showModal} handleCloseModal = {handleCloseModal}/> : <></>}
-            <Navbar className='topMenuMobile' display='flex'>
+            <Navbar className={`topMenuMobile ${visible ? "visible" : "hidden"}`}>
                 <Col md='3' style={{position: 'relative'}}>
                     <button className="buttonHamburguerMobile" onClick={handleShowSidebar} title="Show sidebar"><RxHamburgerMenu/></button>
                 </Col>

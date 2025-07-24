@@ -1,6 +1,8 @@
 import { useState, useEffect, useMemo } from 'react';
 import { arrayMove } from '@dnd-kit/sortable';
 import { useSearch } from '../components/contexts/SearchContext';
+import { FaCheck, FaGamepad, FaList, FaPause, FaQuestion, FaTrashAlt } from 'react-icons/fa';
+import { FaListCheck } from 'react-icons/fa6';
 
 const useListLogic = (list, { editable = false, onReorderList = null } = {}) => {
     const [mutableList, setMutableList] = useState(list);
@@ -15,15 +17,15 @@ const useListLogic = (list, { editable = false, onReorderList = null } = {}) => 
     const [activeId, setActiveId] = useState(null);
     const [dragGame, setDragGame] = useState({});
 
-    const listCategories = useMemo(() => [
-        { key: 'All', label: 'ALL GAMES', filter: () => true },
-        { key: 'Finished', label: 'COMPLETED', filter: game => game.playstatus === 'finished'},
-        { key: 'Playing', label: 'PLAYING', filter: game => game.playstatus === 'playing'},
-        { key: 'OnHold', label: 'ON HOLD', filter: game => game.playstatus === 'onhold'},
-        { key: 'Dropped', label: 'DROPPED', filter: game => game.playstatus === 'dropped'},
-        { key: 'Other', label: 'OTHER', filter: game => game.playstatus === 'other'},
-        { key: 'PlanToPlay', label: 'PLAN TO PLAY', filter: game => game.playstatus === 'plantoplay'},
-    ], []);
+    const listCategories = [
+        { key: "All", label: "ALL GAMES", icon: FaList, filter: () => true },
+        { key: "Finished", label: "COMPLETED", icon: FaCheck, filter: game => game.playstatus === "finished"},
+        { key: "Playing", label: "PLAYING", icon: FaGamepad, filter: game => game.playstatus === "playing" },
+        { key: "OnHold", label: "ON HOLD", icon: FaPause, filter: game => game.playstatus === "onhold" },
+        { key: "Dropped", label: "DROPPED", icon: FaTrashAlt, filter: game => game.playstatus === "dropped"},
+        { key: "Other", label: "OTHER", icon: FaQuestion, filter: game => game.playstatus === "other" },
+        { key: "PlanToPlay", label: "PLAN TO PLAY", icon: FaListCheck, filter: game => game.playstatus === "plantoplay"}
+    ];
 
     useEffect(() => {
         setMutableList(getFilteredSortedList());
@@ -89,16 +91,16 @@ const useListLogic = (list, { editable = false, onReorderList = null } = {}) => 
 
     function handleSort(property) {
         if (sortingCache[0] === property) {
-        if (sortingCache[1] === 'asc') {
-            setSortingCache([property, 'desc']);
+            if (sortingCache[1] === 'asc') {
+                setSortingCache([property, 'desc']);
+                if (editable) setIsSorted(true);
+            } else {
+                setSortingCache(['order', 'default']);
+                if (editable) setIsSorted(false);
+            }
+        } else {
+            setSortingCache([property, 'asc']);
             if (editable) setIsSorted(true);
-        } else {
-            setSortingCache(['order', 'default']);
-            if (editable) setIsSorted(false);
-        }
-        } else {
-        setSortingCache([property, 'asc']);
-        if (editable) setIsSorted(true);
         }
     }
 
@@ -148,6 +150,7 @@ const useListLogic = (list, { editable = false, onReorderList = null } = {}) => 
     activeTab,
     setActiveTab,
     sortingCache,
+    setSortingCache,
     isSorted,
     isFilteredSearch,
     searchString,
