@@ -1160,6 +1160,7 @@ label::after {
 
 .bottomMenuMobileItem {
     display: flex;
+    text-wrap: nowrap;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
@@ -1369,8 +1370,13 @@ label::after {
     display: inline-flex;
     align-items: center;
     font-size: 0.9rem;
-    margin-right: 0.8rem;
+    margin-right: 1rem;
     color: white;
+}
+
+.gameListMobileDataSecondary svg {
+    margin-right: 0.2rem;
+    color: var(--darkAccent);
 }
 
 .gameListMobileHandler {

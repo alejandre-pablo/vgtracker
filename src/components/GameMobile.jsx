@@ -3,7 +3,7 @@ import { Card, Col, Row } from 'react-bootstrap';
 import { RiArrowDropUpLine, RiArrowDropDownLine } from 'react-icons/ri';
 import { HiDotsVertical } from 'react-icons/hi'
 import { IoGameController } from 'react-icons/io5'
-import { FaRegClock } from 'react-icons/fa'
+import { FaClock } from 'react-icons/fa'
 import { IMAGES_SERVER_URL } from '../constants/urls';
 import { platformNameMap } from '../constants/platforms';
 
@@ -24,7 +24,7 @@ const GameMobile = forwardRef(({ game, displayStyle, onClickOpenGameInfo }, ref)
             <strong className='gameTitle'> {game.title}</strong>
             <div style={{display: 'flex', justifyContent: 'flex-start'}}>
                 <span className='gameListMobileDataSecondary'> <IoGameController />{getCleanPlatformName(game.platform.name)} </span>
-                <span className='gameListMobileDataSecondary'> <FaRegClock /> {game.playtime} h </span>
+                <span className='gameListMobileDataSecondary'> <FaClock /> {game.playtime} h </span>
             </div>
             
         </Col>
