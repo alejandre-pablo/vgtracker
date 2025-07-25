@@ -1257,7 +1257,7 @@ label::after {
 }
 /* --------------------- SEARCH BAR ---------------------*/
 
-.searchBarField, searchBar:focus {
+.searchBar:focus {
     background: none;
     border: none;
     color:var(--darkAccent);

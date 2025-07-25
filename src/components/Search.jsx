@@ -25,11 +25,10 @@ const Search = () => {
     }
     return (
         <Form className="d-flex searchBar" onSubmit={onSubmit}>
-            <InputGroup>
+            <InputGroup style={{ flexWrap: 'nowrap' }}>
                 <Form.Control
                     type='text'
                     placeholder='Search'
-                    className='searchBarField'
                     aria-label="Search"
                     value={searchString}
                     onChange={(e) => setSearchString(e.target.value)}
@@ -39,7 +38,7 @@ const Search = () => {
                         <FaTimes />
                     </Button>
                 )}
-                <Button type='submit' className='faIconButton' style={{height: '100%', display: 'flex', alignItems: 'center'}}> <FaSearch/></Button> 
+                <Button type='submit' className='faIconButton' style={{height: '100%', display: 'flex', alignItems: 'center', margin: '0'}}> <FaSearch/></Button> 
             </InputGroup>
         </Form>
     )
