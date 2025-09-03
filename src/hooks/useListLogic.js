@@ -81,6 +81,9 @@ const useListLogic = (list, { editable = false, onReorderList = null } = {}) => 
         case 'playtime':
             return (a, b) =>
             (parseFloat(a.playtime.replace(',', '.')) - parseFloat(b.playtime.replace(',', '.'))) * sortOrder;
+        case 'playdate':
+            return (a, b) => 
+            (parseInt(a.playdate, 10) - parseInt(b.playdate, 10)) * sortOrder;
         case 'rating':
             const ratingSum = arr => arr.reduce((sum, r) => sum + r, 0);
             return (a, b) => (ratingSum(a.rating) - ratingSum(b.rating)) * sortOrder;
